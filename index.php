@@ -25,9 +25,16 @@
 
     <!-- OWN CSS IS HERE! -->
     <style>
-        body {
-            margin: 0;
-            padding: 0;
+      
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+
+        body, html {
+        font-family: Arial, sans-serif;
+        overflow-x: hidden;
         }
 
         
@@ -40,6 +47,7 @@
             width: 100%;
             z-index: 999;
             transition: background-color 0.3s ease-in-out;
+            
         }
 
         #homeNav a, #homeNav a:visited, #homeNav a:hover, #homeNav a:active {
@@ -47,87 +55,186 @@
             text-decoration: none;
         }
 
+        #homeNav a:hover {
+            color: black !important;
+            text-decoration: none;
+        }
+
         #homeNav .nav-link {
             color: white !important;
             text-decoration: none;
         }
+
         
-        .welcome-text {
-            min-height: 80vh;
+                
+                
+        .section {
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+          text-align: center;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
         }
-        .welcome-text img {
-            height: 90px;
-            width: 135px;
+
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1); /* White with 50% transparency */
+            z-index: 1;
         }
-        .welcome-text h4 {
+
+        .content {
+            position: relative;
+            z-index: 2; /* Ensure content is above the overlay */
+            text-align: center;
+            color: black;
+        }
+        h4{
             color: #eee;
-            font-size: 51px;
-            font-family: "Lobster", sans-serif;
+            font-size: 30px;
+            font-family: "Bebas Neue", sans-serif;
+        
+            color:  white;
         }
-        .welcome-text p {
-            color: white;
-            background-color: rgb(102, 153, 255);
-            padding: 5px;
-            border-radius: 4px;
+        p{
+            text-align: justify;
         }
+
+        .home {
+          background-image: url('./assets/images/home_bg.png');
+        }
+
+        .about {
+          background-image: url('./assets/images/about_bg.jpg');
+        }
+
+        .why-us {
+          background-image: url('./assets/images/windows.jpg');
+        }
+
         #about {
-            min-height: 100vh;
+        min-height: 100vh;
         }
-        #about .card-1 {
-            max-width: 600px;
-            width: 90%;
-            background: white;
+        #about .card-1{
+        max-width: 600px;
+        width:90%;
+        /* MAKE THE BACKGROUND TRANSPARENT */
+        /* background: rgba(255,255,255, 0.7); */
+        background: white;
             padding: 20px;
             border-radius: 20px;
         }
-        #about .card-1 h5 {
-            font-family: "Lobster", sans-serif;
-            font-size: 25px;
+        #about .card-1 h5{
+         font-family: "Bebas Neue", sans-serif;
+        font-size: 25px;
+        
         }
-        #contacts {
-            min-height: 100vh;
+
+        #why-us {
+        min-height: 100vh;
         }
-        #contacts form {
-            max-width: 600px;
-            width: 90%;
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
+        #why-us .card-1{
+        max-width: 600px;
+        width:90%;
+        /* MAKE THE BACKGROUND TRANSPARENT */
+        /* background: rgba(255,255,255, 0.7); */
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
         }
-        #contacts form h3 {
-            text-align: center;
-            font-family: "Lobster", sans-serif;
+        #why-us .card-1 h5{
+         font-family: "Bebas Neue", sans-serif;
+        font-size: 25px;
+        
         }
-        textarea {
-            resize: none;
+
+
+        #contact {
+        min-height: 100vh;
+        background-image: url('./assets/images/side_windows.jpg');
+    }
+        #contact form {
+        max-width: 600px;
+        width: 90%;
+        /* TRANSPARENCY */
+        /* background: rgba(255,255,255, 0.7); */ 
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
         }
-        #logintxt {
-            transition: background-color 0.3s ease-in-out;
+        #contact form h3{
+        text-align:center;
+        font-family: "Bebas Neue", sans-serif;
+        color: black;
         }
-        .welcome-div {
-          width: 100%;
-            height: 100vh;
+        #contact form label {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('./assets/images/home_bg.png');
-            background-size: cover;
-            background-position: center;
-            text-align: center;
+            justify-content: start;
+            color: #252525;
         }
+        .form-text{
+            display: flex;
+            justify-content: start;
+        }
+        textarea{
+        resize:none;
+        }
+
+         /* MEDIA QUERIES */
+
+         /* Custom responsive typography */
+         @media (max-width: 768px) {
+            .card-text {
+                font-size: 14px; /* Smaller font size on mobile */
+            }
+        }
+        @media (min-width: 769px) {
+            .card-text{
+                font-size: 15px; /* Larger font size on tablets and above */
+            }
+        }
+        @media (min-width: 1200px) {
+            .card-text {
+                font-size: 17px; /* Even larger font size on larger screens */
+            }
+        }
+
+         /* Custom responsive image control */
+         .img-fluid {
+            max-width: 100%; /* Ensures the image resizes to the parent width */
+        }
+
+        /* Control the height on small screens */
         @media (max-width: 768px) {
-            #welcome {
-                height: auto;
-                padding: 20px;
+            .responsive-image {
+                max-height: 280px; /* Set a max height for smaller screens */
+                object-fit: cover; /* Make sure the image covers the area without stretching */
+            }
+        }
+
+        /* For larger screens */
+        @media (min-width: 769px) {
+            .responsive-image {
+                max-height: 500px; /* Set a larger max-height for larger screens */
+                object-fit: contain; /* Keep the entire image visible within the container */
             }
         }
     </style>
 </head>
-<body class="body-home">
-<div class="black-fill">
-    <br>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="homeNav">
+<body>
+
+
+                                <!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary" id="homeNav">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><img src="./assets/images/logo.png" width="95" height="55"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,7 +249,7 @@
                             <a class="nav-link" href="#about">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#contacts">Contact</a>
+                            <a class="nav-link" href="#contact">Contact</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav me-right mb-2 mb-lg-0">
@@ -153,65 +260,151 @@
                 </div>
             </div>
         </nav>
-        <div data-aos="zoom-in" class="welcome-div">
-            <section id="welcome" class="welcome-text d-flex justify-content-center align-items-center flex-column">
-                <img src="./assets/images/logo.png">
-                <h4>Welcome to Hidalgo's Apartment</h4>
-                <p>Since 1980's</p>
-            </section>
-        </div>
-        <section id="about" class="d-flex justify-content-center align-items-center flex-column">
-            <div data-aos="fade-up">
-                <div class="card mb-3 card-1">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="./assets/images/logo.png" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">About</h5>
-                                <p class="card-text">A well-preserved property that was built from around the 1980s. Located in the neighborhood of Alunos Subdivision, Barangay Sto. Domingo in Biñan City. The property has 2 single-floor and 3 up-and-down space apartments with a single space garage to park your motorcycle or any small vehicle. </p>
-                                <p class="card-text"><small class="text-body-secondary"></small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+
+    
+
+
+    <main>
+        <section id="home" class="section home d-flex justify-content-center align-items-center flex-column">
+            <div class="content" data-aos="zoom-in">
+            <img src="./assets/images/logo.png" class="img-fluid">
+            <h4>Since 1980's</h4>
+
             </div>
         </section>
-        <section id="contacts" class="d-flex justify-content-center align-items-center flex-column">
-            <form method="post" action="req/contact.php">
-                <h3>Reach us!</h3>
-                <?php if (isset($_GET['error'])) { ?>
+        <section id="about" class="section about">
+            <div class="content d-flex justify-content-center align-items-center" data-aos="fade-up">
+
+            <div class="card mb-3 card-1">
+            <div class="row g-0">
+                <div class="col-md-4">
+                <img src="./assets/images/logo.png" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">About</h5>
+                    <p class="card-text text-justify">
+
+                    A well-preserved property that was built from around the 1980s. Located in the neighborhood of 
+                    Alunos Subdivision, Barangay Sto. Domingo in Biñan City. The property has 2 single-floor and 3 up-and-down space 
+                    apartments with a single space garage to park your motorcycle or any small vehicle. 
+                    </p>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            </div>
+        </section>
+        
+        <section id="why-us" class="section why-us">
+            <div class="content d-flex justify-content-center align-items-center" data-aos="fade-up">
+
+                <div class="card mb-3 card-1">
+            <div class="row g-0">
+                <div class="col-md-4">
+                <img src="./assets/images/stairs.jpg" class="img-fluid responsive-image rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Why Hidalgo's Apartment? </h5>
+                    <p class="card-text">
+
+                    Hidalgo's apartment offers comfort and convenience. Situated in a perfect location that is at reach from the plaza of Biñan City. That means you could get to the palengke quickly for your grocery and essential needs. 
+
+The location is also an ideal choice as it is located near bus and jeep terminals. In just a walk away, you already have access to get around the city. 
+
+The convenience that our apartment offers makes Hidalgo's apartment the ideal choice when it comes to calling your space the perfect home.
+                    </p>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            </div>
+        </section>
+
+
+        <section id="contact" class="section contact">
+           <!-- CONTACTS FORM -->
+        <form method="post" action="req/contact.php">
+        <h3>Reach us!</h3>
+
+        <!-- ERROR HANDLING  -->
+        <?php if (isset($_GET['error'])) { ?>
                     <div class="alert alert-danger" role="alert">
-                        <?=$_GET['error']?>
+                    <?=$_GET['error']?>
                     </div>
-                <?php } ?>
-                <?php if (isset($_GET['success'])) { ?>
-                    <div class="alert alert-info mt-3 n-table" role="alert">
+            <?php } ?>
+
+            <!-- SUCCESS HANDLING FOR TEACHER-DELETE -->
+            <?php if (isset($_GET['success'])) { ?>
+                        <div class="alert alert-info mt-3 n-table" role="alert">
                         <?=$_GET['success']?>
                     </div>
-                <?php } ?>
-                <div class="mb-1">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" name="full_name" class="form-control" id="exampleInputPassword1">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Message</label>
-                    <textarea class="form-control" name="message" rows="4"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Send</button>
-            </form>
-        </section>
-        <div class="text-center text-light">
-            Copyright &copy; 2024. All rights reserved.
+                    <?php } ?>
+
+        <div class="mb-1">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
-    </div>
-</div>
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="full_name" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea class="form-control"name="message" rows="4"></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary d-flex justify-content-start">Send</button>
+        </form>
+        
+        </section>
+
+
+    </main>
+
+      <!-- Footer -->
+      <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+              
+
+                <!-- Column 2: Links -->
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#home" class="text-white">Home</a></li>
+                        <li><a href="#about" class="text-white">About</a></li>
+                        <li><a href="#contact" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Social Media -->
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Facebook</a></li>
+                        <li><a href="#" class="text-white">Twitter</a></li>
+                        <li><a href="#" class="text-white">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright Section -->
+            <div class="row">
+                <div class="col text-center mt-4">
+                    <p>&copy; 2024 Hidalgo Apartment's</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+      
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- ANIMATE ON SCROLL -->
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
