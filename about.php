@@ -327,33 +327,11 @@
 <body>
 
 
-                                <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="homeNav">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img src="./assets/images/logov2.png" width="55" height="40" class="img-fluid"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="about.php">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="contact.php">Contact Us</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav me-right mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.php" id="logintxt">Login</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+<?php
+
+include "components/navbar.php";
+
+?>       
 
 
     
@@ -367,7 +345,7 @@
             <div class="card mb-3 card-1">
             <div class="row g-0">
                 <div class="col-md-4">
-                <img src="./assets/images/logo.png" class="img-fluid rounded-start" alt="...">
+                <img src="./assets/images/logoblack.png" class="img-fluid rounded-start" alt="...">
                 </div>
                 <div class="col-md-8">
                 <div class="card-body">
