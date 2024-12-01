@@ -51,6 +51,11 @@
         overflow-x: hidden;
         }
 
+         /* Hide scrollbar for Chrome, Safari, and Opera */
+         body::-webkit-scrollbar { 
+            display: none;
+        }
+
         
         #homeNav {
             background-color: rgb(102, 153, 255) !important;
@@ -321,7 +326,7 @@
                             <a class="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#about">About</a>
+                            <a class="nav-link" href="about.php">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#contact">Contact Us</a>
@@ -459,7 +464,6 @@ The convenience that our apartment offers makes Hidalgo's apartment the ideal ch
 
             </div>
         </section>
-
 
 
     </main>
