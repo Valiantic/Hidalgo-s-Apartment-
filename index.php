@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hidalgo's Apartment</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="shortcut icon" href="./assets/images/logo.png">
+    <link rel="shortcut icon" href="./assets/images/logov2.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,8 +20,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
     <!-- ANIMATE ON SCROLL -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- BOOTSTRAP -->
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
 
     <!-- OWN CSS IS HERE! -->
     <style>
@@ -47,12 +61,14 @@
             width: 100%;
             z-index: 999;
             transition: background-color 0.3s ease-in-out;
+       
             
         }
 
         #homeNav a, #homeNav a:visited, #homeNav a:hover, #homeNav a:active {
             color: white !important;
-            text-decoration: none;
+            text-decoration: black;
+
         }
 
         #homeNav a:hover {
@@ -64,7 +80,7 @@
             color: white !important;
             text-decoration: none;
         }
-
+  
         
                 
                 
@@ -88,7 +104,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.1); /* White with 50% transparency */
             z-index: 1;
         }
 
@@ -105,39 +120,66 @@
         
             color:  white;
         }
+
+        .content img {
+            display: block; /* Remove extra space caused by inline-block behavior */
+            margin: 0; /* Ensure no default margin */
+        }
+
+        .content h4 {
+            margin: 0; /* Remove any margin on the heading */
+        }
         p{
             text-align: justify;
         }
 
         .home {
-          background-image: url('./assets/images/home_bg.png');
-        }
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./assets/images/home_bg.png'); /* Dark overlay and image */        }
 
-        .about {
-          background-image: url('./assets/images/about_bg.jpg');
+        .highlight {
+            background-color: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
         }
 
         .why-us {
-          background-image: url('./assets/images/windows.jpg');
+          background-image: url('./assets/images/skyshot.jpg');
         }
 
-        #about {
-        min-height: 100vh;
+        #hightlight {
+            min-height: 100vh;
         }
-        #about .card-1{
-        max-width: 600px;
-        width:90%;
-        /* MAKE THE BACKGROUND TRANSPARENT */
-        /* background: rgba(255,255,255, 0.7); */
-        background: white;
-            padding: 20px;
-            border-radius: 20px;
+        .carousel-inner {
+            max-width: 800px; /* Set the max width */
+            margin: 0 auto; /* Center the carousel */
         }
-        #about .card-1 h5{
-         font-family: "Bebas Neue", sans-serif;
-        font-size: 25px;
-        
+        .carousel-img {
+            border-radius: 10px; /* Add border-radius to images */
+             max-height: 90vh; /* Set max-height for larger screens */ 
+            /* object-fit: contain; Ensure the entire image is visible without cropping */
+            object-fit: cover; /* Cover the entire area */
         }
+        .carousel-caption h5 {
+            font-family: "Bebas Neue", sans-serif;
+            font-size: 25px;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            padding: 10px; /* Padding around text */
+            border-radius: 10px; /* Rounded corners */
+        }
+        .carousel-control-prev, .carousel-control-next 
+        { 
+        width: 45px; /* Adjust width */ 
+        height: 45px; /* Adjust height */ 
+        background-color: rgb(102, 153, 255) !important;
+        border-radius: 50%; /* Rounded corners */ 
+        padding: 10px; /* Padding for a more modern look */ 
+        top: 50%; /* Center vertically */ 
+        transform: translateY(-50%); } 
+
+        .carousel-control-prev i, .carousel-control-next i 
+        { 
+            font-size: 4px; /* Smaller size for the arrow */ 
+            color: white; /* Arrow color */
+        }
+
 
         #why-us {
         min-height: 100vh;
@@ -161,7 +203,7 @@
         #contact {
         min-height: 100vh;
         background-image: url('./assets/images/side_windows.jpg');
-    }
+        }
         #contact form {
         max-width: 600px;
         width: 90%;
@@ -181,6 +223,7 @@
             justify-content: start;
             color: #252525;
         }
+
         .form-text{
             display: flex;
             justify-content: start;
@@ -189,10 +232,39 @@
         resize:none;
         }
 
+                                /* Back to Top Button */
+        #backToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed/sticky position */
+            bottom: 50px; /* Place the button at the bottom of the page */
+            right: 50px; /* Place the button 20px from the right */
+            z-index: 99; /* Make sure it does not overlap */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: rgb(102, 153, 255) !important;
+            color: white; /* White text (arrow) color */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 10px; /* Some padding */
+            border-radius: 50%; /* Rounded corners */
+            font-size: 16px; /* Font size for the arrow */
+            width: 40px; /* Set width */
+            height: 40px; /* Set height */
+        }
+
+        #backToTopBtn:hover {
+            background-color: darkblue; /* Change background on hover */
+        }
+
+        /* Arrow Icon */
+        .fas.fa-arrow-up {
+            font-size: 20px; /* Adjust size of the arrow */
+        }
+
+
          /* MEDIA QUERIES */
 
-         /* Custom responsive typography */
-         @media (max-width: 768px) {
+        /* CARD TEXT SIZE */
+        @media (max-width: 768px) {
             .card-text {
                 font-size: 14px; /* Smaller font size on mobile */
             }
@@ -213,7 +285,7 @@
             max-width: 100%; /* Ensures the image resizes to the parent width */
         }
 
-        /* Control the height on small screens */
+        /* IMAGE SIZE  */
         @media (max-width: 768px) {
             .responsive-image {
                 max-height: 280px; /* Set a max height for smaller screens */
@@ -228,15 +300,18 @@
                 object-fit: contain; /* Keep the entire image visible within the container */
             }
         }
+
+     
+
     </style>
 </head>
 <body>
 
 
                                 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary" id="homeNav">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="homeNav">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img src="./assets/images/logo.png" width="95" height="55"></a>
+                <a class="navbar-brand" href="#"><img src="./assets/images/logov2.png" width="55" height="40" class="img-fluid"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -249,7 +324,7 @@
                             <a class="nav-link" href="#about">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#contact">Contact</a>
+                            <a class="nav-link" href="#contact">Contact Us</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav me-right mb-2 mb-lg-0">
@@ -263,48 +338,108 @@
 
 
     
-
+        <!-- MAIN SECTION -->
 
     <main>
-        <section id="home" class="section home d-flex justify-content-center align-items-center flex-column">
+
+        <!-- LOGO AND TEXT -->
+        <section id="home" class="section home d-flex justify-content-start flex-column">
             <div class="content" data-aos="zoom-in">
-            <img src="./assets/images/logo.png" class="img-fluid">
+            <img src="./assets/images/logov2.png" class="img-fluid">
             <h4>Since 1980's</h4>
 
             </div>
         </section>
-        <section id="about" class="section about">
-            <div class="content d-flex justify-content-center align-items-center" data-aos="fade-up">
 
-            <div class="card mb-3 card-1">
-            <div class="row g-0">
-                <div class="col-md-4">
-                <img src="./assets/images/logo.png" class="img-fluid rounded-start" alt="...">
+        <!-- HIGHLIGHT CAROUSEL -->
+        <section id="hightlight" class="section hightlight">
+        <div class="container" data-aos="fade-up">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Carousel Item 1 -->
+                <div class="carousel-item active">
+                    <img src="./assets/images/rooms/door.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 1">
+                    <div class="carousel-caption d-block">
+                        <h5>Main Door</h5>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">About</h5>
-                    <p class="card-text text-justify">
+                <!-- Carousel Item 2 -->
+                <div class="carousel-item">
+                    <img src="./assets/images/rooms/frontwindow.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 2">
+                    <div class="carousel-caption d-block">
+                        <h5>Lounge Window</h5>
+                    </div>
+                </div>
+                <!-- Carousel Item 3 -->
+                <div class="carousel-item">
+                    <img src="./assets/images/rooms/kitchen.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 3">
+                    <div class="carousel-caption d-block">
+                        <h5>Kitchen</h5>
+                    </div>
+                </div>
+                <!-- Carousel Item 4 -->
+                <div class="carousel-item">
+                    <img src="./assets/images/rooms/stairs.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
+                    <div class="carousel-caption d-block">
+                        <h5>Stairs</h5>
+                    </div>
+                </div>
 
-                    A well-preserved property that was built from around the 1980s. Located in the neighborhood of 
-                    Alunos Subdivision, Barangay Sto. Domingo in Biñan City. The property has 2 single-floor and 3 up-and-down space 
-                    apartments with a single space garage to park your motorcycle or any small vehicle. 
-                    </p>
+                 <!-- Carousel Item 5 -->
+                 <div class="carousel-item">
+                    <img src="./assets/images/rooms/windows.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
+                    <div class="carousel-caption d-block">
+                        <h5>Windows</h5>
+                    </div>
                 </div>
+
+                 <!-- Carousel Item 6 -->
+                 <div class="carousel-item">
+                    <img src="./assets/images/rooms/side_windows.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
+                    <div class="carousel-caption d-block">
+                        <h5>Side Windows</h5>
+                    </div>
                 </div>
-            </div>
-            </div>
+
+                 <!-- Carousel Item 7 -->
+                 <div class="carousel-item">
+                    <img src="./assets/images/rooms/cabinetone.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
+                    <div class="carousel-caption d-block">
+                        <h5>Cabinet One</h5>
+                    </div>
+                </div>
+
+                 <!-- Carousel Item 8 -->
+                 <div class="carousel-item">
+                    <img src="./assets/images/rooms/cabinettwo.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
+                    <div class="carousel-caption d-block">
+                        <h5>Cabinet Two</h5>
+                    </div>
+                </div>
 
             </div>
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        </div>
         </section>
-        
+
+
+        <!-- WHY US CARD -->
         <section id="why-us" class="section why-us">
             <div class="content d-flex justify-content-center align-items-center" data-aos="fade-up">
 
                 <div class="card mb-3 card-1">
             <div class="row g-0">
                 <div class="col-md-4">
-                <img src="./assets/images/stairs.jpg" class="img-fluid responsive-image rounded-start" alt="...">
+                <img src="./assets/images/logoblack.png" class="img-fluid responsive-image rounded-start" alt="...">
                 </div>
                 <div class="col-md-8">
                 <div class="card-body">
@@ -326,90 +461,91 @@ The convenience that our apartment offers makes Hidalgo's apartment the ideal ch
         </section>
 
 
-        <section id="contact" class="section contact">
-           <!-- CONTACTS FORM -->
-        <form method="post" action="req/contact.php">
-        <h3>Reach us!</h3>
-
-        <!-- ERROR HANDLING  -->
-        <?php if (isset($_GET['error'])) { ?>
-                    <div class="alert alert-danger" role="alert">
-                    <?=$_GET['error']?>
-                    </div>
-            <?php } ?>
-
-            <!-- SUCCESS HANDLING FOR TEACHER-DELETE -->
-            <?php if (isset($_GET['success'])) { ?>
-                        <div class="alert alert-info mt-3 n-table" role="alert">
-                        <?=$_GET['success']?>
-                    </div>
-                    <?php } ?>
-
-        <div class="mb-1">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Full Name</label>
-            <input type="text" name="full_name" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Message</label>
-            <textarea class="form-control"name="message" rows="4"></textarea>
-        </div>
-        
-        <button type="submit" class="btn btn-primary d-flex justify-content-start">Send</button>
-        </form>
-        
-        </section>
-
 
     </main>
 
-      <!-- Footer -->
-      <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-              
-
-                <!-- Column 2: Links -->
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#home" class="text-white">Home</a></li>
-                        <li><a href="#about" class="text-white">About</a></li>
-                        <li><a href="#contact" class="text-white">Contact</a></li>
-                    </ul>
-                </div>
-
-                <!-- Column 3: Social Media -->
-                <div class="col-md-4">
-                    <h5>Follow Us</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Facebook</a></li>
-                        <li><a href="#" class="text-white">Twitter</a></li>
-                        <li><a href="#" class="text-white">Instagram</a></li>
-                    </ul>
-                </div>
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+  
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <!-- Column 1: Location -->
+            <div class="col-md-3">
+                <h5>Location</h5>
+                <ul class="list-unstyled">
+                    <li><p>Alunos Subdivision Barangay Sto. Domingo Biñan City.</p></li>
+                </ul>
             </div>
 
-            <!-- Copyright Section -->
-            <div class="row">
-                <div class="col text-center mt-4">
-                    <p>&copy; 2024 Hidalgo Apartment's</p>
-                </div>
+            <!-- Column 2: Links -->
+            <div class="col-md-2">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#home" class="text-white">Home</a></li>
+                    <li><a href="#about" class="text-white">About</a></li>
+                    <li><a href="#contact" class="text-white">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Social Media -->
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://www.facebook.com/mchidalgo66" class="text-white">Facebook</a></li>
+                </ul>
+            </div>
+
+                 <!-- Copyright Section -->
+        <div class="row">
+            <div class="col text-center mt-4 d-flex justify-content-center">
+                <p>&copy; 2024 Hidalgo Apartment's All Right's Reserved.</p>
             </div>
         </div>
-    </footer>
+
+                     <!-- Back to Top Button -->
+            <button id="backToTopBtn" title="Go to top">
+            <i class="fas fa-arrow-up"></i>
+            </button>
 
 
-      
+        </div>
+    </div>
+</footer>
+
+
+
+<!-- BOOTSTRAP -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- ANIMATE ON SCROLL -->
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
     AOS.init();
+
+
+            // Get the button
+        let mybutton = document.getElementById("backToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+        scrollFunction();
+        };
+
+        function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        mybutton.addEventListener("click", function() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        });
+
 </script>
 </body>
+
 </html>
