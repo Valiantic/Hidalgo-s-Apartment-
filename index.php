@@ -371,7 +371,7 @@
                  <div class="carousel-item">
                     <img src="./assets/images/rooms/windows.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
                     <div class="carousel-caption d-block">
-                        <h5>Windows</h5>
+                        <h5>Second Floor Window</h5>
                     </div>
                 </div>
 
@@ -379,7 +379,7 @@
                  <div class="carousel-item">
                     <img src="./assets/images/rooms/side_windows.jpg" class="d-block w-100 img-fluid carousel-img" alt="Image 4">
                     <div class="carousel-caption d-block">
-                        <h5>Side Windows</h5>
+                        <h5>Second Floor Window Room No.2</h5>
                     </div>
                 </div>
 

@@ -62,6 +62,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="contact.php">Contact Us</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Tenant View</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav me-right mb-2 mb-lg-0">
                         <li class="nav-item">
