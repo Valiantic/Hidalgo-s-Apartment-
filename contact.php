@@ -1,6 +1,43 @@
 <?php
-   include "connections.php";
+include 'connections.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // SEND REQUEST 
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $full_name = mysqli_real_escape_string($conn, $_POST['full_name']);
+    $message = mysqli_real_escape_string($conn, $_POST['message']);
+
+    // STORE MESSAGE ON THE DATABASE 
+    $sql = "INSERT INTO contactinfo (email, full_name, message) VALUES ('$email', '$full_name', '$message')";
+
+    // ALERT MESSAGE DISPLAY
+    if (mysqli_query($conn, $sql)) {
+        echo "
+         <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
+        <script>
+            Swal.fire({
+                title: 'Thank you!',
+                text: 'Your message has been sent successfully!',
+                icon: 'success'
+            });
+        </script>";
+    } else {
+        echo "
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred: " . mysqli_error($conn) . "',
+                icon: 'error'
+            });
+        </script>";
+    }
+}
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +72,12 @@
     <!-- Bootstrap JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- sweetalert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 
     <!-- OWN CSS IS HERE! -->
@@ -264,25 +307,26 @@ include "components/navbar.php";
 
     <section id="contact" class="section contact">
            <!-- CONTACTS FORM -->
-        <form method="" action="" data-aos="fade-up">
+        <form method="post" action="" data-aos="fade-up">
         <h3>Reach us!</h3>
 
     
         <div class="mb-1">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
         <div class="mb-3">
             <label class="form-label">Full Name</label>
-            <input type="text" name="full_name" class="form-control" id="exampleInputPassword1">
+            <input type="text" name="full_name" class="form-control" id="exampleInputPassword1" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Message</label>
-            <textarea class="form-control"name="message" rows="4"></textarea>
+            <textarea class="form-control"name="message" rows="4" required></textarea>
         </div>
         
         <button type="submit" class="btn btn-primary d-flex justify-content-start">Send</button>
+        
         </form>
         
         </section>
