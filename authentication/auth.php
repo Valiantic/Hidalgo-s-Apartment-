@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatibel" content="'IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./assets/images/logov3.png">
+    <link rel="shortcut icon" href="../assets/images/logov3.png">
     <title>Hidalgo's Apartment</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="./assets/css/login.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 
 <body>
@@ -16,7 +16,7 @@
         <div class="form-box login">
             <form action="">
                 <div class="logo">
-                    <a href="index.php"> <img src="./assets/images/logov3.png" alt="logo"></a>
+                    <a href="../index.php"> <img src="../assets/images/logov3.png" alt="logo"></a>
                 </div>
                 <h1>Login</h1>
                 <div class="input-box">
@@ -28,7 +28,7 @@
                     <i class='bx bxs-lock-alt'></i>
                 </div>    
                 <div class="forgot-link">
-                    <a href="#">Forgot Password?</a>
+                    <a href="forgot-password.php">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn">Login</button>
             </form>
@@ -75,7 +75,7 @@
         </div>    
     </div>
 
-    <script src="./assets/js/login.js"></script>
+    <script src="../assets/js/login.js"></script>
 </body>
 
 
