@@ -1,3 +1,46 @@
+<?php
+include '.././connections.php';
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header('Location: forgot-password.php?error=' . urlencode('Please provide your email address first.'));
+    exit;
+}
+
+if (isset($_POST['reset'])) {
+    // Ensure that the password field is being sent as a POST request
+    if (isset($_POST['new_password']) && !empty($_POST['new_password'])) {
+        $email = $_SESSION['email'];
+        $newPassword = mysqli_real_escape_string($conn, $_POST['new_password']);  // New password input
+
+        // Check password strength
+        if (strlen($newPassword) <= 7) {
+            header('Location: reset-password.php?error=' . urlencode('Password must be longer than 7 characters.'));
+            exit;
+        } elseif (!preg_match('/[\W_]/', $newPassword)) {
+            header('Location: reset-password.php?error=' . urlencode('Password must include at least one special character.'));
+            exit;
+        }
+
+        // Hash the new password before storing it in the database
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        // Prepare the SQL query to update the user's password
+        $updateQuery = "UPDATE users SET password = '$hashedPassword' WHERE email = '$email'";
+
+        // Execute the query and check for success
+        if (mysqli_query($conn, $updateQuery)) {
+            unset($_SESSION['email']); // Clear session email after password reset
+            echo "<script>alert('Password reset successful!'); window.location.href = 'auth.php';</script>";
+        } else {
+            echo "<script>alert('Error resetting password. Please try again.');</script>";
+        }
+    } else {
+        echo "<script>alert('New password cannot be empty.');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +50,13 @@
     <title>Hidalgo's Apartment</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- BOX ICONS -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+      <!-- BOX ICONS -->
+      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- GOOGLE FONTS POPPINS  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
@@ -57,7 +98,7 @@
             font-size: 36px;
             font-weight: 600;
         }
-        h3{
+        h3 {
             text-align: center;
             font-family: 'Poppins', 'sans-serif';
             font-size: 26px;
@@ -135,32 +176,45 @@
             cursor: pointer;
             color: #6c757d;
         }
-        
-
+        .notify {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="left-panel">
-        <h2>Let's Now Set your <span>New Password!</span></h2>
-            
+            <h2>Let's Now Set your <span>New Password!</span></h2>
         </div>
         <div class="right-panel">
             <h3>Kindly Enter your New Password</h3>
-            <form>
+            <form method="post" action="">
                 <div class="input-box">
-                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <input type="password" id="password" name="new_password" placeholder="Password" required>
                     <i class="toggle-password bi bi-eye-slash"></i>
                 </div>    
-                <button class="btn">Reset Password</button>
+              
+                <div class="notify">
+                    <!-- ERROR AND SUCCESS HANDLING -->
+                    <?php if (isset($_GET['error'])) { ?>
+                        <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
+                    <?php } ?>
+                    <?php if (isset($_GET['success'])) { ?>
+                        <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
+                    <?php } ?>
+                </div>
+
+                <button class="btn" name="reset">Reset Password</button>
             </form>
         </div>
     </div>
 
-      <!-- Bootstrap Icons -->
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-      <script>
+    <script>
         // PASSWORD TOGGLE 
         const togglePassword = document.querySelector('.toggle-password');
         const passwordField = document.querySelector('#password');

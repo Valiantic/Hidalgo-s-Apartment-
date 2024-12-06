@@ -1,64 +1,49 @@
 <?php
-include '.././connections.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'phpmailer/src/Exception.php';
-require 'phpmailer/src/PHPMailer.php';
-require 'phpmailer/src/SMTP.php';
-
 session_start();
+include '.././connections.php';
 
-if (isset($_POST['send'])) {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+if (!isset($_SESSION['email']) || !isset($_SESSION['verification_code'])) {
+    echo "
+    <script>
+        alert('Session expired or verification code not found. Please try again.');
+        window.location.href = 'forgot-password.php';
+    </script>
+    ";
+    exit;
+}
 
-    $query = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $query);
+$email = $_SESSION['email'];
 
-    if (mysqli_num_rows($result) > 0) {
-        $verificationCode = rand(100000, 999999);
-        $_SESSION['email'] = $email;
-        $_SESSION['verification_code'] = $verificationCode;
 
-        $mail = new PHPMailer(true);
+if (isset($_POST['verify'])) {
+    $inputCode = trim($_POST['verification_code']); 
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'hidalgosapartment@gmail.com';
-            $mail->Password = 'xecqkpbyajbrjmun';
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port = 465;
 
-            $mail->setFrom('hidalgosapartment@gmail.com','Verification Code');
-            $mail->addAddress($email);
 
-            $mail->isHTML(true);
-            $mail->Subject = 'Password Reset Verification Code';
-            $mail->Body = "Your verification code is: <b>$verificationCode</b>";
-
-            $mail->send();
-
-            echo "
-            <script>
-                window.location.href = 'verify.php';
-            </script>
-            ";
-        } catch (Exception $e) {
-            echo "Error sending email: {$mail->ErrorInfo}";
-        }
+    if ((string)$inputCode === (string)$_SESSION['verification_code']) {
+        echo "
+        <script>
+            window.location.href = 'reset-password.php';
+        </script>
+        ";
+        exit;
     } else {
-        echo "<script>alert('Email not found!');</script>";
+        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Incorrect Verification Code!" . mysqli_error($conn) . "',
+                icon: 'error'
+            });
+        </script>";
     }
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/images/logov3.png">
     <title>Hidalgo's Apartment</title>
@@ -70,7 +55,7 @@ if (isset($_POST['send'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    
+
     <style>
         body {
             background-color: #e0e7ff;
@@ -108,7 +93,7 @@ if (isset($_POST['send'])) {
             margin-bottom: 20px;
             text-align: center;
             font-family: 'Poppins', 'sans-serif';
-            font-size: 36px;
+            font-size: 25px;
             font-weight: 600;
         }
         h3{
@@ -185,16 +170,17 @@ if (isset($_POST['send'])) {
     </style>
 </head>
 <body>
+   
     <div class="container">
         <div class="left-panel">
-            <h2>Let's Help you Recover your Account!</h2>
+            <h2>We're Almost there! A verification code has been sent to your email: <strong><?php echo htmlspecialchars($email); ?></strong> </h2>
             
         </div>
         <div class="right-panel">
-            <h3>Kindly Enter your Email</h3>
+            <h3>Enter Verification Code</h3>
             <form method="post" action="">
                 <div class="input-box">
-                    <input type="text" name="email" placeholder="Email" required>
+                    <input type="text" name="verification_code" id="verification_code" required>
                     <i class='bx bxs-user'></i> 
                 </div>    
 
@@ -210,7 +196,7 @@ if (isset($_POST['send'])) {
 
                 </div>
 
-                <button class="btn" name="send">Send Verification Email</button>
+                <button class="btn" name="verify">Verify Code</button>
             </form>
         </div>
     </div>
