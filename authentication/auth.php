@@ -87,8 +87,6 @@
                     <input type="password" id="password" name="password"  placeholder="Password" required onkeyup="checkPasswordStrength()">
                     <i class='bx bxs-lock-alt'></i>
                 </div>   
-
-                <small id="password-strength" style="color: gray;">Enter a strong password</small><br>
                 
                   <!-- ERROR AND SUCCESS HANDLING -->
                   <?php if (isset($_GET['error'])) { ?>
