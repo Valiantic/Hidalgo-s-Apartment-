@@ -14,49 +14,61 @@
     
     <div class="container">
         <div class="form-box login">
-            <form action="">
+            <form action="./req/login.php" method="POST">
                 <div class="logo">
                     <a href="../index.php"> <img src="../assets/images/logov3.png" alt="logo"></a>
                 </div>
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Email" required>
+                    <input type="text" name="email" placeholder="Email" required>
                     <i class='bx bxs-user'></i> 
                 </div>    
                 <div class="input-box">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" name="password" placeholder="Password" required>
                     <i class='bx bxs-lock-alt'></i>
                 </div>    
                 <div class="forgot-link">
                     <a href="forgot-password.php">Forgot Password?</a>
                 </div>
+
+                   <!-- ERROR AND SUCCESS HANDLING -->
+                   <?php if (isset($_GET['error'])) { ?>
+                    <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
+                <?php } ?>
+                <?php if (isset($_GET['success'])) { ?>
+                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
+                <?php } ?>
+
                 <button type="submit" class="btn">Login</button>
             </form>
         </div>
         
         <div class="form-box register">
-            <form action="">
+            <!-- NOTE: METHOD POST MUST REMEMBER TO PASS DATA TO BACKEND -->
+            <form action="./req/signup.php" method="POST">
                 <h1>Registration</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Full Name" required>
+                    <input type="text" name="fullname" placeholder="Full Name" required>
                     <i class='bx bxs-user'></i> 
                 </div>
                 <div class="input-box">
-                    <input type="number" placeholder="Phone Number" required>
+                    <input type="number" name="phone_number" placeholder="Phone Number" required>
                     <i class='bx bxs-phone' ></i> 
                 </div> 
                 <div class="input-box">
-                    <input type="text" placeholder="Workplace" required>
+                    <input type="text" name="workplace" placeholder="Workplace" required>
                     <i class='bx bx-current-location' ></i>
                 </div>        
                 <div class="input-box">
-                    <input type="email" placeholder="Email" required>
+                    <input type="email" name="email"  placeholder="Email" required>
                     <i class='bx bxs-envelope' ></i>
                 </div>   
                 <div class="input-box">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" id="password" name="password"  placeholder="Password" required onkeyup="checkPasswordStrength()">
                     <i class='bx bxs-lock-alt'></i>
-                </div>    
+                </div>   
+
+             
                 <button type="submit" class="btn">Register</button>
             </form>
         </div>
@@ -76,6 +88,7 @@
     </div>
 
     <script src="../assets/js/login.js"></script>
+
 </body>
 
 

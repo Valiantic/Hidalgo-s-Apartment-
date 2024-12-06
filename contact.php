@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = mysqli_real_escape_string($conn, $_POST['message']);
 
     // STORE MESSAGE ON THE DATABASE 
-    $sql = "INSERT INTO contactinfo (email, full_name, message) VALUES ('$email', '$full_name', '$message')";
+    $sql = "INSERT INTO contact_us (email, full_name, message) VALUES ('$email', '$full_name', '$message')";
 
     // ALERT MESSAGE DISPLAY
     if (mysqli_query($conn, $sql)) {
