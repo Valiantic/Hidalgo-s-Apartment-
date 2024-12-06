@@ -8,6 +8,26 @@
     <title>Hidalgo's Apartment</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../assets/css/login.css">
+
+      <!-- Bootstrap CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+</style>
+
 </head>
 
 <body>
@@ -24,8 +44,8 @@
                     <i class='bx bxs-user'></i> 
                 </div>    
                 <div class="input-box">
-                    <input type="password" name="password" placeholder="Password" required>
-                    <i class='bx bxs-lock-alt'></i>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <i class="toggle-password bi bi-eye-slash"></i>
                 </div>    
                 <div class="forgot-link">
                     <a href="forgot-password.php">Forgot Password?</a>
@@ -68,6 +88,16 @@
                     <i class='bx bxs-lock-alt'></i>
                 </div>   
 
+                <small id="password-strength" style="color: gray;">Enter a strong password</small><br>
+                
+                  <!-- ERROR AND SUCCESS HANDLING -->
+                  <?php if (isset($_GET['error'])) { ?>
+                    <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
+                <?php } ?>
+                <?php if (isset($_GET['success'])) { ?>
+                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
+                <?php } ?>
+
              
                 <button type="submit" class="btn">Register</button>
             </form>
@@ -87,7 +117,24 @@
         </div>    
     </div>
 
+
+     <!-- Bootstrap Icons -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <script src="../assets/js/login.js"></script>
+
+    <script>
+        // PASSWORD TOGGLE 
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordField = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+    </script>
 
 </body>
 

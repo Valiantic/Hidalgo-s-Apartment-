@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             background-color: #e0e7ff;
@@ -121,6 +124,18 @@
         span{
             display: block;
         }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+        }
+        
 
     </style>
 </head>
@@ -134,12 +149,28 @@
             <h3>Kindly Enter your New Password</h3>
             <form>
                 <div class="input-box">
-                    <input type="password" placeholder="New Password" required>
-                    <i class='bx bxs-lock-alt'></i>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <i class="toggle-password bi bi-eye-slash"></i>
                 </div>    
                 <button class="btn">Reset Password</button>
             </form>
         </div>
     </div>
+
+      <!-- Bootstrap Icons -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+      <script>
+        // PASSWORD TOGGLE 
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordField = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+    </script>
 </body>
 </html>

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: ../auth.php?error=' . urlencode('The email is already registered. Please use a different email.'));
             exit;
         } 
-    
+
         else {
             // Proceed to insert the new user
             $stmt = $pdo->prepare("INSERT INTO users (fullname, phone_number, workplace, email, password, role) VALUES (?, ?, ?, ?, ?, ?)");
