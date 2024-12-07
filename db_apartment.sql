@@ -1,3 +1,6 @@
+-- DATABASE CREATION
+CREATE DATABASE db_apartment;
+
 --FOR CONTACT US
 CREATE TABLE contact_us (
   email varchar(100) NOT NULL,
