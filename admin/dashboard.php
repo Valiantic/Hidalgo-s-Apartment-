@@ -58,6 +58,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     
     .mainHead{
         margin-left: 15px;
+        
     }
     
     img{
@@ -75,7 +76,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         margin-left: 0px;
         padding: 10px 0px;
         font-family: 'Poppins', 'sans-serif';
-        font-size: 20px;
+        font-size: 17px;
         font-weight: 500;
     }
     
@@ -100,7 +101,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     }
     
     .logout-btn{
-        margin-top: 50px;
+        margin-top: 30px;
         color: #B70202;
     }
     
@@ -153,9 +154,28 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         color: inherit;
     }
     .height-img {
-    max-height: 200px; /* Adjust this value as needed */
+    max-height: 300px; /* Adjust this value as needed */
     width: auto;
     }
+    .card-text{
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .card-title{
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 30px;
+        font-weight: 500;
+    }
+    a{
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 17px;
+        font-weight: 300;
+    }
+    .custom-btn-font {
+    font-size: 1.35rem; /* Adjust the size as needed */
+    }
+
 
 </style>
 
@@ -197,7 +217,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         </li>
 
         <li class="items logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i>
+            <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
+            <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
             <p class="para"><a href="logout.php">Log-out</a></p>
         </li>
     </div>
@@ -210,37 +231,43 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     </div>
 
     <div class="content">
-        <div class="container-fluid mt-5">
+        <div class="container-fluid mt-4">
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/tenant_house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all_tenants.png" alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">12</h5>
+                            <h1 class="card-title">12</h1>
                             <p class="card-text">All Tenants</p>
-                            <a href="#" class="btn btn-primary">See more Info</a>
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+                            </div>
 
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/money_bag.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/bag_money.png" alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">₱25,000</h5>
+                            <h1 class="card-title">₱25,000</h1>
                             <p class="card-text">Monthly Earnings</p>
-                            <a href="#" class="btn btn-primary">See more Info</a>
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+                            </div>
 
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/calendar.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/schedule.png" alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">0</h5>
+                            <h1 class="card-title">0</h1>
                             <p class="card-text">Today's Due Date</p>
-                            <a href="#" class="btn btn-primary">See more Info</a>
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+                            </div>
 
                         </div>
                     </div>

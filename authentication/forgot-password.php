@@ -180,6 +180,10 @@ if (isset($_POST['send'])) {
             justify-content: center;
             align-items: center;
         }
+        .forgot-link{
+            text-align: center;
+            margin-top: 20px;
+        }
         
 
     </style>
@@ -211,6 +215,11 @@ if (isset($_POST['send'])) {
                 </div>
 
                 <button class="btn" name="send">Send Verification Email</button>
+
+
+                <div class="forgot-link">
+                    <a href="auth.php">Head back to Login</a>
+                </div>
             </form>
         </div>
     </div>
