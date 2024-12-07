@@ -1,8 +1,13 @@
-<style>
-    .container{
+
+<!-- NOT USE DUE TO RESPONSIVENESS PROBLEM -->
+
+<!-- <style>
+    .menu{
         height: 100%;
         width: 100%;
         position: relative;
+        border: solid 2px red;
+
     }
     
     .sidebar{
@@ -14,6 +19,7 @@
         justify-content: space-evenly;
         overflow: hidden;
         transition: all 0.5s ease;
+        border: solid 2px red;
     }
     
     .mainHead{
@@ -70,8 +76,8 @@
     .toggler{
         position: absolute;
         top: 0;
-        left: 60px;
-        padding: 10px 15px;
+        left: 0px;
+        padding: 10px 1px;
         font-size: 1.4rem;
         transition: all 0.5s ease;
     }
@@ -109,10 +115,10 @@
     
 </style>
 
-<div class="container">
+<div class="menu">
         <div class="sidebar">
             <div class="logo items">
-                <img src="../assets/images/logov3.png" alt="">
+               
                 <span class="mainHead para">
                     <h5>Hidalgo's</h5>
                     <h4>Apartment</h4>
@@ -123,6 +129,7 @@
                 <i class="fa-solid fa-chart-simple"></i>
                 <p class="para">Dashboard</p>
             </li>
+
             <li class="items">
                 <i class="fa-solid fa-home"></i>
                 <p class="para">Units</p>
@@ -142,10 +149,13 @@
             </li>
         </div>
 
+
         <div class="toggler">
-            <i class="fa-solid fa-bars" id="toggle-bars"></i>
-            <i class="fa-solid fa-xmark" id="toggle-cross"></i>
-        </div>
+                <i id="toggle-bars">                <img src="../assets/images/logov3.png" alt="">
+                </i>
+                <i class="fa-solid fa-xmark" id="toggle-cross"></i>
+            </div>
+      
 
     </div>
 
@@ -162,4 +172,4 @@ const showFull = () => {
 }
 
 showFull()
-</script>
+</script> -->
