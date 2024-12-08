@@ -60,7 +60,7 @@ if (isset($_POST['send'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../assets/images/logov3.png">
+    <link rel="shortcut icon" href="../assets/images/logov5.png">
     <title>Hidalgo's Apartment</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     

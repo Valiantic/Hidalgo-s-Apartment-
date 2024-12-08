@@ -53,7 +53,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         flex-direction: column;
         justify-content: space-evenly;
         transition: all 0.5s ease;
-        
     }
     
     .mainHead{
@@ -132,7 +131,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     }
     
     .active.toggler {
-        left: 190px;
+        left: 150px;
     }
     
     .active.sidebar {
@@ -153,9 +152,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         text-decoration: none;
         color: inherit;
     }
-    
-     /* CARD STYLING */
-     .height-img {
+
+    /* CARD STYLING */
+    .height-img {
     max-height: 220px; 
     width: auto;
     }
@@ -177,6 +176,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         font-size: 30px;
         font-weight: 500;
     }
+
     a{
         font-family: 'Poppins', 'sans-serif';
         font-size: 17px;
@@ -186,7 +186,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     font-size: 1.35rem; /* Adjust the size as needed */
     }
 
-     /* MEDIA QUERIES */
+    /* MEDIA QUERIES */
 
     /* // FOR TABLET AND MOBILE VIEW */
     @media (max-width: 768px) {
@@ -283,43 +283,108 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all_tenants.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">12</h1>
-                            <p class="card-text">All Tenants</p>
+
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info?</a>
+                            <div class="d-block mb-2">
+                            <h1 class="card-title">Unit 1</h1>
+                            <p class="card-text">Available</p>
+                            </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
                     </div>
                 </div>
+
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/bag_money.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">₱25,000</h1>
-                            <p class="card-text">Monthly Earnings</p>
+
+                             <div class="d-flex justify-content-center">
+                            <div class="d-block mb-2">
+                            <h1 class="card-title">Unit 2</h1>
+                            <p class="card-text">Rented</p>
+                            </div>
+                            </div>
+
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info?</a>
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
                     </div>
                 </div>
+
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/schedule.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">0</h1>
-                            <p class="card-text">Today's Due Date</p>
+
+                             <div class="d-flex justify-content-center">
+                            <div class="d-block mb-2">
+                            <h1 class="card-title">Unit 3</h1>
+                            <p class="card-text">Available</p>
+                            </div>
+                            </div>
+
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info?</a>
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
                     </div>
                 </div>
+
+                
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-center">
+                            <div class="d-block mb-2">
+                            <h1 class="card-title">Unit 4</h1>
+                            <p class="card-text">Rented</p>
+                            </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-center">
+                            <div class="d-block mb-2">
+                            <h1 class="card-title">Unit 5</h1>
+                            <p class="card-text">Available</p>
+                            </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            
+
             </div>
         </div>
     </div>

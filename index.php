@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hidalgo's Apartment</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="shortcut icon" href="./assets/images/logov3.png">
+    <link rel="shortcut icon" href="./assets/images/logov5.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
