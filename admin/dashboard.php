@@ -153,7 +153,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         text-decoration: none;
         color: inherit;
     }
-    
+
      /* CARD STYLING */
      .height-img {
     max-height: 220px; 
@@ -198,7 +198,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         flex-direction: column;
         justify-content: space-evenly;
         transition: all 0.5s ease;
-        border: 1px solid red;
     }
 
     .active.toggler {
@@ -337,6 +336,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             sidebar.classList.toggle('active')
         })
     }
+
 
     showFull()
 </script>

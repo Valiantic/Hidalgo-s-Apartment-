@@ -198,7 +198,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         flex-direction: column;
         justify-content: space-evenly;
         transition: all 0.5s ease;
-        border: 1px solid red;
     }
 
     .active.toggler {
@@ -309,7 +308,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                              <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 2</h1>
-                            <p class="card-text">Rented</p>
+                            <p class="card-text">Occupied</p>
                             </div>
                             </div>
 
@@ -350,7 +349,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                             <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 4</h1>
-                            <p class="card-text">Rented</p>
+                            <p class="card-text">Occupied</p>
                             </div>
                             </div>
 

@@ -74,10 +74,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
     
     <!-- sweetalert2 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+      <!-- GOOGLE FONTS POPPINS  -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
 
     <!-- OWN CSS IS HERE! -->
@@ -99,7 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: none;
         }
 
-        #homeNav {
+       /* NAVBAR */
+
+       #homeNav {
             background-color: rgb(102, 153, 255) !important;
             border-radius: 20px;
             position: fixed;
@@ -128,10 +134,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: none;
         }
 
+        #homeNav {
+            background-color: rgb(102, 153, 255) !important;
+            border-radius: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            transition: background-color 0.3s ease-in-out;
+           
+            
+        }
+
+        #homeNav a, #homeNav a:visited, #homeNav a:hover, #homeNav a:active {
+            color: white !important;
+            text-decoration: black;
+
+        }
+
+        #homeNav a:hover {
+            color: black !important;
+            text-decoration: none;
+        }
+
+        #homeNav .nav-link {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        
         .nav-link.active {
         text-decoration: underline;
         color: white !important;
         }
+        a{
+            font-family: 'Poppins', 'sans-serif';
+        font-size: 17px;
+        font-weight: 500;
+        }
+
 
   
         

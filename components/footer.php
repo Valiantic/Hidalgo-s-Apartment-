@@ -23,6 +23,8 @@
                     <li><a href="index.php" class="text-white">Home</a></li>
                     <li><a href="about.php" class="text-white">About</a></li>
                     <li><a href="contact.php" class="text-white">Contact</a></li>
+                    <li><a href="tenant_view.php" class="text-white">Tenant View</a></li>
+
                 </ul>
             </div>
 
