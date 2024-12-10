@@ -277,32 +277,12 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house2.png" alt="Card image cap">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 1</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
-                        <div class="card-body">
-
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 2</h1>
                             <p class="card-text">Occupied</p>
                             </div>
                             </div>
@@ -317,13 +297,33 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/rent-house2.png" alt="Card image cap">
+                        <div class="card-body">
+
+                             <div class="d-flex justify-content-center">
+                            <div class="d-block mb-2">
+                            <h1 class="card-title">Unit 2</h1>
+                            <p class="card-text">Available</p>
+                            </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house2.png" alt="Card image cap">
                         <div class="card-body">
 
                              <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 3</h1>
-                            <p class="card-text">Available</p>
+                            <p class="card-text">Occupied</p>
                             </div>
                             </div>
 
@@ -338,7 +338,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                 
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house1.png" alt="Card image cap">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-center">
@@ -359,7 +359,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                 
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/rent-house1.png" alt="Card image cap">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-center">

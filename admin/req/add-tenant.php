@@ -55,9 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        // STEVEN'S GMAIL ACCOUNT USED FOR SENDING EMAIL NOTIFICATIONS
-        $mail->Username = 'stevenmadali17@gmail.com'; // Your Gmail address
-        $mail->Password = 'odei efvp hufg rccu'; // Your app password
+        $mail->Username = 'stevenmadali17@gmail.com'; 
+        $mail->Password = 'odei efvp hufg rccu'; 
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 

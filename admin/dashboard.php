@@ -295,7 +295,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/bag_money.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house-income.png" alt="Card image cap">
                         <div class="card-body">
                             <h1 class="card-title">₱25,000</h1>
                             <p class="card-text">Monthly Earnings</p>
@@ -308,7 +308,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/schedule.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/deadline.png" alt="Card image cap">
                         <div class="card-body">
                             <h1 class="card-title">0</h1>
                             <p class="card-text">Today's Due Date</p>

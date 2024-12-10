@@ -269,13 +269,13 @@
                     <br/>
                     <div class="card mt-4 shadow-lg">
                   
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house2.png" alt="Card image cap">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 1</h1>
-                            <p class="card-text">Available</p>
+                            <p class="card-text">Occupied</p>
                             </div>
                             </div>
 
@@ -295,13 +295,13 @@
                     <br/>
 
                     <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/key.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/rent-house2.png" alt="Card image cap">
                         <div class="card-body">
 
                              <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 2</h1>
-                            <p class="card-text">Occupied</p>
+                            <p class="card-text">Available</p>
                             </div>
                             </div>
 
@@ -319,13 +319,13 @@
                     <br/>
 
                     <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house2.png" alt="Card image cap">
                         <div class="card-body">
 
                              <div class="d-flex justify-content-center">
                             <div class="d-block mb-2">
                             <h1 class="card-title">Unit 3</h1>
-                            <p class="card-text">Available</p>
+                            <p class="card-text">Occupied</p>
                             </div>
                             </div>
 
@@ -343,7 +343,7 @@
                     <br/>
                     <br/>
                     <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/key.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house1.png" alt="Card image cap">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-center">
@@ -367,7 +367,7 @@
                     <br/>
                     <br/>
                     <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/rent-house1.png" alt="Card image cap">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-center">
