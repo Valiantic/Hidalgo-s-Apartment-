@@ -185,6 +185,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     .custom-btn-font {
     font-size: 1.35rem; /* Adjust the size as needed */
     }
+    h4, h5 {
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 20px;
+        font-weight: 500;
+    }
 
     /* MEDIA QUERIES */
 

@@ -138,7 +138,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     }
     
     .active.toggler {
-        left: 150px;
+        left: 170px;
     }
     
     .active.sidebar {
@@ -158,6 +158,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     a {
         text-decoration: none;
         color: inherit;
+    }
+    h4, h5 {
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 20px;
+        font-weight: 500;
     }
 
     /* CARD STYLING */
@@ -191,6 +196,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     }
     .custom-btn-font {
     font-size: 1.35rem; /* Adjust the size as needed */
+    }
+    .btn {
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 17px;
+        font-weight: 500;
     }
 
     /* MEDIA QUERIES */
@@ -289,7 +299,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
           
 
         <a href="add-tenant.php"
-        class="btn btn-dark mb-3">Add New Tenant</a>
+        class="btn btn-light mb-3">Add New Tenant</a>
 
           <!-- SEARCH BUTTON  -->
           <form action="teacher-search.php" class="smt-3 n-table" method="get">

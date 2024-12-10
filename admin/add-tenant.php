@@ -47,6 +47,7 @@ if ($result->num_rows > 0) {
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
 
+
 <style>
     *{
         margin: 0;
@@ -155,7 +156,7 @@ if ($result->num_rows > 0) {
     }
     
     .active.toggler {
-        left: 150px;
+        left: 190px;
     }
     
     .active.sidebar {
@@ -175,6 +176,11 @@ if ($result->num_rows > 0) {
     a {
         text-decoration: none;
         color: inherit;
+    }
+    h4, h5 {
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 20px;
+        font-weight: 500;
     }
 
     /* CARD STYLING */
@@ -208,6 +214,32 @@ if ($result->num_rows > 0) {
     }
     .custom-btn-font {
     font-size: 1.35rem; /* Adjust the size as needed */
+    }
+
+    .form-w{
+        max-width:600px;
+        width: 100%;
+        background-color: #f8f9fa; /* Light gray background */
+        background-color: #f8f9fa; /* Light gray background */
+        padding: 20px; /* Add padding */
+        border-radius: 8px; /* Add rounded corners */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+        
+    }
+    .form-label {
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 17px;
+        font-weight: 300;
+    }
+    h3{
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 40px;
+        font-weight: 500;
+    }
+    .btn{
+        font-family: 'Poppins', 'sans-serif';
+        font-size: 17px;
+        font-weight: 300;
     }
 
     /* MEDIA QUERIES */
@@ -251,6 +283,8 @@ if ($result->num_rows > 0) {
         -webkit-appearance: none;
         margin: 0;
     }
+
+
 
 
 
@@ -309,53 +343,91 @@ if ($result->num_rows > 0) {
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="content">
-        <div class="container-fluid mt-4">
-          
-        <div classname="row justify-content-center">
+<div class="content">
+    <div class="container-fluid ">
+        <div class="row justify-content-center">
+            <form class="shadow p-4  mb-3 bg-light rounded" method="post" action="req/add-tenant.php" style="max-width: 600px; width: 100%;">
+                <hr>
+                <h3 class="text-center">Add New Tenant</h3>
+                <hr>
 
+                <!-- ERROR HANDLING -->
+                <?php if (isset($_GET['error'])) { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= $_GET['error'] ?>
+                    </div>
+                <?php } ?>
 
-    
-    <form action="./req/add-tenant.php" method="POST">
-        <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" required><br><br>
+                <!-- SUCCESS HANDLING -->
+                <?php if (isset($_GET['success'])) { ?>
+                    <div class="alert alert-success" role="alert">
+                        <?= $_GET['success'] ?>
+                    </div>
+                <?php } ?>
 
-        <label for="phone_number">Phone Number:</label>
-        <input type="number" id="phone_number" name="phone_number" required><br><br>
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullname" name="fullname" required>
+                </div>
 
-        <label for="work">Work:</label>
-        <input type="text" id="work" name="work"><br><br>
+                <!-- Phone Number -->
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="number" class="form-control" id="phone_number" name="phone_number" required>
+                </div>
 
-        <label for="downpayment">Downpayment:</label>
-        <input type="number" id="downpayment" name="downpayment" min="0" required><br><br>
+                <!-- Work -->
+                <div class="mb-3">
+                    <label class="form-label">Work</label>
+                    <input type="text" class="form-control" id="work" name="work" required>
+                </div>
 
-        <label>Unit:</label><br>
-        <?php
-          
-            $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
+                <!-- Downpayment -->
+                <div class="mb-3">
+                    <label class="form-label">Downpayment</label>
+                    <input type="number" class="form-control" id="downpayment" name="downpayment" min="0" required>
+                </div>
 
-            foreach ($allUnits as $unit) {
-                $isOccupied = in_array($unit, $occupiedUnits);
-                echo '<label' . ($isOccupied ? ' class="disabled-unit"' : '') . '>';
-                echo '<input type="radio" name="units" value="' . $unit . '"' . ($isOccupied ? ' disabled' : '') . '>';
-                echo $unit;
-                echo '</label><br>';
-            }
-            ?><br>
+                <!-- Units -->
+                <div class="mb-3">
+                    <label class="form-label">Unit:</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        <?php
+                        $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
+                        foreach ($allUnits as $unit) {
+                            $isOccupied = in_array($unit, $occupiedUnits ?? []);
+                            echo '<div class="form-check">';
+                            echo '<input class="form-check-input" type="radio" name="units" value="' . $unit . '"' . ($isOccupied ? ' disabled' : '') . '>';
+                            echo '<label class="form-check-label' . ($isOccupied ? ' text-muted' : '') . '">' . $unit . '</label>';
+                            echo '</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
 
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" required><br><br>
+                <!-- Email Address -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="password" name="password">
+                        <button class="btn btn-secondary" type="button" id="gBtn">Generate Password</button>
+                    </div>
+                </div>
 
-        <button type="submit">Submit</button>
-    </form>
-       
-        </div>
-        
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Add</button>
+            </form>
         </div>
     </div>
+</div>
+
 
 </div>
 
@@ -376,6 +448,26 @@ if ($result->num_rows > 0) {
     }
 
     showFull()
+
+      // RANDOM PASSWORD GENERATOR 
+      function makePass(length) {
+            var result           = '';
+            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < length; i++ ) {
+              result += characters.charAt(Math.floor(Math.random() * 
+         charactersLength));
+
+           }
+           var passInput = document.getElementById('password');
+           passInput.value = result;
+        }
+
+        var gBtn = document.getElementById('gBtn');
+        gBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          makePass(7); // just adjust the number to increase the character length of the password generator
+        });
 </script>
 
 </body>
