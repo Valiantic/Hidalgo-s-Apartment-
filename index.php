@@ -285,7 +285,7 @@
         resize:none;
         }
 
-                                /* Back to Top Button */
+        /* Back to Top Button */
         #backToTopBtn {
             display: none; /* Hidden by default */
             position: fixed; /* Fixed/sticky position */

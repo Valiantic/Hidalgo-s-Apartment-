@@ -81,7 +81,7 @@
                     <i class='bx bxs-phone' ></i> 
                 </div> 
                 <div class="input-box">
-                    <input type="text" name="workplace" placeholder="Work" required>
+                    <input type="text" name="work" placeholder="Work" required>
                     <i class='bx bx-current-location' ></i>
                 </div>        
                 <div class="input-box">

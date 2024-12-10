@@ -16,6 +16,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+       <!-- Bootstrap CSS -->
+       <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Bootstrap JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
 
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,7 +235,12 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 </head>
 <body>
     
-   
+    <!-- ADMIN SIDEBAR COMPONENT -->
+    <?php
+
+    // include "../components/admin_sidebar.php";
+
+    ?> 
 
 <div class="menu">
     <div class="sidebar">
@@ -274,112 +286,161 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
     <div class="content">
         <div class="container-fluid mt-4">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
-                        <div class="card-body">
+          
 
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 1</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
+        <a href="add-tenant.php"
+        class="btn btn-dark mb-3">Add New Tenant</a>
 
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
+          <!-- SEARCH BUTTON  -->
+          <form action="teacher-search.php" class="smt-3 n-table" method="get">
 
-                        </div>
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" name="searchKey" placeholder="Search...">
+        <button class="btn btn-primary" id="gBtn">
+        Search
+        <!-- Search button svg icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg> 
+
+        </button>
+        </div>
+
+        </form>
+
+         <!-- ERROR HANDLING  -->
+         <?php if (isset($_GET['error'])) { ?>
+                <div class="alert alert-danger mt-3 n-table" role="alert">
+                <?=$_GET['error']?>
+              </div>
+             <?php } ?>
+
+                         <!-- SUCCESS HANDLING FOR TEACHER-DELETE -->
+             <?php if (isset($_GET['success'])) { ?>
+                <div class="alert alert-info mt-3 n-table" role="alert">
+                <?=$_GET['success']?>
+              </div>
+        <?php } ?>
+
+
+        <div class="table-responsive">
+              <table class="table table-bordered mt-3 n-table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <!--CREATE THIS FOR LOOP TO DISPLAY THE DATABASE DATA ON THE TABLE -->
+                  <?php $i = 0; foreach ($teachers as $teacher ) { 
+                    $i++; ?>
+                    
+                  <tr>
+                    <!-- Table heading for id iteration -->
+                    <th scope="row"><?=$i?></th>
+                    <td><?=$teacher['teacher_id']?></td>
+                    <!-- CLICK TO REDIRECT TO TEACHER-VIEW -->
+                    <td><a href="teacher-view.php?teacher_id=<?=$teacher['teacher_id']?>"><?=$teacher['fname']?></a></td>
+                    <td><?=$teacher['lname']?></td>
+                    <td><?=$teacher['username']?></td>
+                    <td>
+                       <?php 
+                           $s = '';
+                           $subjects = str_split(trim($teacher['subjects']));
+                           foreach ($subjects as $subject) {
+                              $s_temp = getSubjectById($subject, $conn);
+                              if ($s_temp != 0) 
+                                $s .=$s_temp['subject_code'].', ';
+                           }
+                           echo $s;
+                        ?>
+                    </td>
+                    <td>
+                    <?php 
+                           $g = '';
+                           $grades = str_split(trim($teacher['grades']));
+                           foreach ($grades as $grade) {
+                              $g_temp = getGradeById($grade, $conn);
+                              if ($g_temp != 0) 
+                                $g .=
+                                     
+                                     $g_temp['grade'].', ';
+                           }
+                           echo $g;
+                        ?>
+
+                    </td>
+                    <td>
+                    <?php 
+                           $s = '';
+                           $sections = str_split(trim($teacher['section']));
+                           foreach ($sections as $section) {
+                              $s_temp = getSectionById($section, $conn);
+                              if ($s_temp != 0) 
+                                $s .=$s_temp['section'].', ';
+                                     
+                           }
+                           echo $s;
+                        ?>
+
+                    </td>
+
+
+                    <!-- <td>
+                      <?php 
+                          //  $c = '';
+                          //  $classes = str_split(trim($teacher['class']));
+
+                          //  foreach ($classes as $class_id) {
+                          //      $class = getClassById($class_id, $conn);
+
+                          //     $c_temp = getGradeById($class['grade'], $conn);
+                          //     $section = getSectionById($class['section'], $conn);
+                          //     if ($c_temp != 0) 
+                          //       $c .=$c_temp['grade_code'].'-'.
+                          //            $c_temp['grade'].$section['section'].', ';
+                          //  }
+                          //  echo $c;
+                          //  // FIX THIS
+                        ?>
+                    </td> -->
+                   
+                    
+                  <!-- continue 59:25; -->
+                    <td>
+
+                    <div class="d-grid gap-2">
+
+                     <a href="teacher-edit.php?teacher_id=<?=$teacher['teacher_id']?>"
+                           class="btn btn-warning">Edit</a>
+                              
+
+                       
+                       
+                          <a href="teacher-delete.php?teacher_id=<?=$teacher['teacher_id']?>"
+                           class="btn btn-danger">Delete</a>
+                           
+    
                     </div>
-                </div>
+          
+                           
+                    </td>
+                  </tr>
+                <?php } ?>
+                </tbody>
+              </table>
+           </div>
 
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
-                        <div class="card-body">
 
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 2</h1>
-                            <p class="card-text">Occupied</p>
-                            </div>
-                            </div>
 
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
-                        <div class="card-body">
-
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 3</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 4</h1>
-                            <p class="card-text">Occupied</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 5</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            
-
-            </div>
         </div>
     </div>
 

@@ -5,7 +5,24 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('Location: ../authentication/auth.php');
     exit;
 }
+
+include "../connections.php";
+
+
+// Fetch the units that are already assigned to tenants
+$query = "SELECT units FROM tenant";
+$result = $conn->query($query);
+
+$occupiedUnits = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $occupiedUnits[] = $row['units'];
+    }
+}
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +33,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
 
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -221,6 +245,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         font-weight: 500;
     }
     }
+    /* Hide the spinner for Chrome, Safari, and Edge */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
 
 
 </style>
@@ -228,7 +259,12 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 </head>
 <body>
     
-   
+    <!-- ADMIN SIDEBAR COMPONENT -->
+    <?php
+
+    // include "../components/admin_sidebar.php";
+
+    ?> 
 
 <div class="menu">
     <div class="sidebar">
@@ -272,119 +308,61 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         <i class="fa-solid fa-xmark" id="toggle-cross"></i>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="content">
         <div class="container-fluid mt-4">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
-                        <div class="card-body">
+          
+        <div classname="row justify-content-center">
 
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 1</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
 
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
+    
+    <form action="./req/add-tenant.php" method="POST">
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required><br><br>
 
-                        </div>
-                    </div>
-                </div>
+        <label for="phone_number">Phone Number:</label>
+        <input type="number" id="phone_number" name="phone_number" required><br><br>
 
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
-                        <div class="card-body">
+        <label for="work">Work:</label>
+        <input type="text" id="work" name="work"><br><br>
 
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 2</h1>
-                            <p class="card-text">Occupied</p>
-                            </div>
-                            </div>
+        <label for="downpayment">Downpayment:</label>
+        <input type="number" id="downpayment" name="downpayment" min="0" required><br><br>
 
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
+        <label>Unit:</label><br>
+        <?php
+          
+            $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
 
-                        </div>
-                    </div>
-                </div>
+            foreach ($allUnits as $unit) {
+                $isOccupied = in_array($unit, $occupiedUnits);
+                echo '<label' . ($isOccupied ? ' class="disabled-unit"' : '') . '>';
+                echo '<input type="radio" name="units" value="' . $unit . '"' . ($isOccupied ? ' disabled' : '') . '>';
+                echo $unit;
+                echo '</label><br>';
+            }
+            ?><br>
 
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
-                        <div class="card-body">
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required><br><br>
 
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 3</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
 
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/key.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 4</h1>
-                            <p class="card-text">Occupied</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 5</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            
-
-            </div>
+        <button type="submit">Submit</button>
+    </form>
+       
+        </div>
+        
         </div>
     </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
+
+
+
+<!-- BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     const toggler = document.querySelector('.toggler')

@@ -280,7 +280,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
@@ -306,7 +306,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
@@ -330,7 +330,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
@@ -354,7 +354,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>
@@ -378,7 +378,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">Info</a>
+                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
                             </div>
 
                         </div>

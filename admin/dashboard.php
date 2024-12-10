@@ -255,12 +255,12 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         </li>
 
         <li class="items">
-            <i class="fa-solid fa-user"></i>
-            <p class="para">Tenants</p>
+            <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
+            <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
         <li class="items">
-            <i class="fa-solid fa-envelope"></i>
-            <p class="para">Message</p>
+            <a href="message.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="message.php">Message</a></p>
         </li>
 
         <li class="items logout-btn">

@@ -3,12 +3,12 @@ include '../../connections.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Check if all required fields are set
-    if (isset($_POST['fullname'], $_POST['phone_number'], $_POST['workplace'], $_POST['email'], $_POST['password'])) {
+    if (isset($_POST['fullname'], $_POST['phone_number'], $_POST['work'], $_POST['email'], $_POST['password'])) {
         
         // Retrieve form data
         $fullname = $_POST['fullname'];
         $phone_number = $_POST['phone_number'];
-        $workplace = $_POST['workplace'];
+        $work = $_POST['work'];
         $email = $_POST['email'];
         $password = $_POST['password'];
 
@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         } else {
             // Proceed to insert the new user
-            $stmt = $pdo->prepare("INSERT INTO users (fullname, phone_number, workplace, email, password, role) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO users (fullname, phone_number, work, email, password, role) VALUES (?, ?, ?, ?, ?, ?)");
             try {
-                $stmt->execute([$fullname, $phone_number, $workplace, $email, $hashedPassword, 'user']);
+                $stmt->execute([$fullname, $phone_number, $work, $email, $hashedPassword, 'user']);
                 session_start();
                 // Set session variables
                 $_SESSION['user_id'] = $pdo->lastInsertId();
