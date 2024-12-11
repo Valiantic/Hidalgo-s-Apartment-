@@ -19,6 +19,7 @@ if ($result->num_rows > 0) {
         $occupiedUnits[] = $row['units'];
     }
 }
+$current_page = basename($_SERVER['PHP_SELF']); 
 
 ?>
 
@@ -287,6 +288,14 @@ if ($result->num_rows > 0) {
       margin-left: 10px;
     }
 
+    .sidebar .active-menu {
+        background: black;
+        color: white;
+    }
+    .sidebar .active-menu a {
+        color: white;
+    }
+
 
 
 
@@ -322,7 +331,7 @@ if ($result->num_rows > 0) {
             <p class="para"><a href="units.php">Units</a></p>
         </li>
 
-        <li class="items">
+        <li class="items <?php echo $current_page == 'add-tenant.php' ? 'active-menu' : ''; ?>">
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
@@ -409,6 +418,13 @@ if ($result->num_rows > 0) {
                         ?>
                     </div>
                     <sub>* Unit radio buttons are unclickable if occupied</sub>
+                </div>
+
+
+                 <!-- Calendar for Move-in Date -->
+                <div class="form-group mb-3">
+                    <label for="move_in_date" class="form-label">Move-in Date:</label>
+                    <input type="date" class="form-control" id="move_in_date" name="move_in_date" required>
                 </div>
 
                 <!-- Email Address -->

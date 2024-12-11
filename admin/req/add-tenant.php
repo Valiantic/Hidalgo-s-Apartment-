@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $work = $_POST['work'];
     $downpayment = $_POST['downpayment'];
     $units = isset($_POST['units']) ? $_POST['units'] : '';
+    $move_in_date = $_POST['move_in_date'];
     $email = $_POST['email'];
     $password = $_POST['password'];
 
@@ -39,8 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
 
     // Insert data into `tenant` table
-    $stmt1 = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, units) VALUES (?, ?, ?, ?, ?)");
-    $stmt1->bind_param("sssds", $fullname, $phone_number, $work, $downpayment, $units);
+    $stmt1 = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, units, move_in_date) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt1->bind_param("sssdss", $fullname, $phone_number, $work, $downpayment, $units, $move_in_date);
     $stmt1->execute();
 
     // Insert data into `users` table
@@ -69,18 +70,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $mail->send();
         echo " <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
-    <script>
-        Swal.fire({
-            title: 'Success!',
-            text: 'Tenant added successfully. An email notification has been sent to the tenant.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: 'Tenant added successfully. An email notification has been sent to the tenant.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+
+           
+            setTimeout(() => {
                 window.location.href = '../add-tenant.php';
-            }
-        });
-    </script>";
+            }, 3000);
+        </script>";
 
         
     } catch (Exception $e) {
@@ -92,6 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 text: 'An error occurred: " . $mail->ErrorInfo . "',
                 icon: 'error'
             });
+
+              // Add a 5-second timer before redirection
+            setTimeout(() => {
+                window.location.href = '../add-tenant.php';
+            }, 3000);
         </script>";
     }
 }

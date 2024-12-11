@@ -30,7 +30,8 @@ CREATE TABLE tenant (
     phone_number VARCHAR(15) NOT NULL,
     work VARCHAR(255),
     downpayment FLOAT NOT NULL,
-    units VARCHAR(255)
+    units VARCHAR(255),
+    move_in_date DATE
 );
 
 
