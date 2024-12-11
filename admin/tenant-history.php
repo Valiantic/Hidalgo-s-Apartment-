@@ -8,6 +8,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 }
 $current_page = basename($_SERVER['PHP_SELF']); 
+
+
+// Fetch all tenant history records
+$query = "SELECT * FROM tenant_history ORDER BY deleted_at DESC";
+$result = $conn->query($query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -380,7 +385,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </tr>
             </thead>
             <tbody>
-              
+               <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['tenant_id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+                                <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+                                <td><?php echo htmlspecialchars($row['work']); ?></td>
+                                <td><?php echo htmlspecialchars($row['downpayment']); ?></td>
+                                <td><?php echo htmlspecialchars($row['units']); ?></td>
+                                <td><?php echo htmlspecialchars($row['move_in_date']); ?></td>
+                                <td><?php echo htmlspecialchars($row['move_out_date']); ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="10" class="text-center">No tenant history found</td>
+                        </tr>
+                    <?php endif; ?>
             </tbody>
         </table>
     </div>

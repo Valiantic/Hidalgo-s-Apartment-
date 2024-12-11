@@ -32,7 +32,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
-
+    <!-- SWEET ALERT MODAL -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 <style>
     *{
         margin: 0;
@@ -404,8 +406,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <td>{$row['units']}</td>
                              <td>{$row['move_in_date']}</td>
                             <td>
-                                <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary btn-sm'>Edit</a>
-                                <a href='delete-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this tenant?\");'>Delete</a>
+                                <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary btn-sm'>Edit</a>     
+                                <button class='btn btn-danger btn-sm' onclick='confirmDelete({$row['tenant_id']})'>Delete</button>
                             </td>
                         </tr>";
                     }
@@ -439,6 +441,25 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
 
     showFull()
+
+    // DELETE CONFIRMATION
+
+    function confirmDelete(tenantId) {
+    Swal.fire({
+        title: 'Remove Tenant?',
+        text: "You won't be able to undo this action.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Remove Tenant'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to the delete URL
+            window.location.href = `./req/tenant-history.php?tenant_id=${tenantId}`;
+        }
+    });
+    }
 </script>
 
 </body>

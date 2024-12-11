@@ -23,7 +23,6 @@ CREATE TABLE users (
 );
 
 -- TENANTS
-
 CREATE TABLE tenant (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(255) NOT NULL,
@@ -32,6 +31,21 @@ CREATE TABLE tenant (
     downpayment FLOAT NOT NULL,
     units VARCHAR(255),
     move_in_date DATE
+);
+
+
+-- TENANT HISTORY
+CREATE TABLE tenant_history (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    tenant_id INT NOT NULL,
+    fullname VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    work VARCHAR(255),
+    downpayment DECIMAL(10, 2) NOT NULL,
+    units VARCHAR(50) NOT NULL,
+    move_in_date DATE NOT NULL,
+    move_out_date DATE NOT NULL,
+    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
