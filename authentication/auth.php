@@ -109,6 +109,7 @@
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
                 <h1>Welcome Back!</h1>
+              
                 <p>Don't have an account?</p>
                 <button class="btn register-btn">Register</button>
             </div>

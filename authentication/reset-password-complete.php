@@ -1,47 +1,4 @@
-<?php
-include '.././connections.php';
-session_start();
 
-if (!isset($_SESSION['email'])) {
-    header('Location: forgot-password.php?error=' . urlencode('Please provide your email address first.'));
-    exit;
-}
-
-if (isset($_POST['reset'])) {
-    // Ensure that the password field is being sent as a POST request
-    if (isset($_POST['new_password']) && !empty($_POST['new_password'])) {
-        $email = $_SESSION['email'];
-        $newPassword = mysqli_real_escape_string($conn, $_POST['new_password']);  // New password input
-
-        // Check password strength
-        if (strlen($newPassword) <= 7) {
-            header('Location: reset-password.php?error=' . urlencode('Password must be longer than 7 characters.'));
-            exit;
-        } elseif (!preg_match('/[\W_]/', $newPassword)) {
-            header('Location: reset-password.php?error=' . urlencode('Password must include at least one special character.'));
-            exit;
-        }
-
-        // Hash the new password before storing it in the database
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-
-        // Prepare the SQL query to update the user's password
-        $updateQuery = "UPDATE users SET password = '$hashedPassword' WHERE email = '$email'";
-
-        // Execute the query and check for success
-        if (mysqli_query($conn, $updateQuery)) {
-            unset($_SESSION['email']); 
-            echo "<script>window.location.href = 'reset-password-complete.php';</script>";
-        } else {
-            header('Location: reset-password.php?error=' . urlencode('Error resetting password. Please try again.'));
-            exit;
-        }
-    } else {
-        header('Location: reset-password.php?error=' . urlencode('New Password Cannot be Empty.'));
-        exit;
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -183,32 +140,26 @@ if (isset($_POST['reset'])) {
             justify-content: center;
             align-items: center;
         }
+        a{
+            text-decoration: none;
+            color: white;
+        }
+        .btn {
+            line-height: normal; /* Ensures the line height is normal */
+            padding: 12px; /* Adjust padding for a balanced look */
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="left-panel">
-            <h2>Let's Now Set your <span>New Password!</span></h2>
+            <h2>You have Set your<span>New Password!</span></h2>
         </div>
         <div class="right-panel">
-            <h3>Kindly Enter your New Password</h3>
-            <form method="post" action="">
-                <div class="input-box">
-                    <input type="password" id="password" name="new_password" placeholder="Password" required>
-                    <i class="toggle-password bi bi-eye-slash"></i>
-                </div>    
-              
-                <div class="notify">
-                    <!-- ERROR AND SUCCESS HANDLING -->
-                    <?php if (isset($_GET['error'])) { ?>
-                        <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
-                    <?php } ?>
-                    <?php if (isset($_GET['success'])) { ?>
-                        <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
-                    <?php } ?>
-                </div>
-
-                <button class="btn" name="reset">Reset Password</button>
+            <h3>All Set! use your new Credentials to Login</h3>
+            <form>
+            <a href="login.php" class="btn btn-primary w-100 custom-btn-font">Login</a>
             </form>
         </div>
     </div>

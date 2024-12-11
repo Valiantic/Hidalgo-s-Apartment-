@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else {
         
-        header('Location: ../auth.php?error=' . urlencode('Incorrect email or password.'));
+        header('Location: ../login.php?error=' . urlencode('Incorrect email or password.'));
         exit;
     }
 }

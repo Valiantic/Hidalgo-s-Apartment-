@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Check password strength
         if (strlen($password) <= 7) {
-            header('Location: ../auth.php?error=' . urlencode('Password must be longer than 7 characters.'));
+            header('Location: ../signup.php?error=' . urlencode('Password must be longer than 7 characters.'));
             exit;
         } elseif (!preg_match('/[\W_]/', $password)) {
-            header('Location: ../auth.php?error=' . urlencode('Password must include at least one special character.'));
+            header('Location: ../signup.php?error=' . urlencode('Password must include special character.'));
             exit;
         }
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($emailExists > 0) {
             // Redirect back to the form with an error message
-            header('Location: ../auth.php?error=' . urlencode('The email is already registered. Please use a different email.'));
+            header('Location: ../signup.php?error=' . urlencode('The email is already registered. Please use a different email.'));
             exit;
         } else {
             // Proceed to insert the new user
@@ -47,13 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit;
             } catch (Exception $e) {
                 // Redirect back to the form with an error message
-                header('Location: ../auth.php?error=' . urlencode('Signup failed. Please try again.'));
+                header('Location: ../signup.php?error=' . urlencode('Signup failed. Please try again.'));
                 exit;
             }
         }
     } else {
         // Redirect back to the form with an error message for missing fields
-        header('Location: ../auth.php?error=' . urlencode('All Fields are required.'));
+        header('Location: ../signup.php?error=' . urlencode('All Fields are required.'));
         exit;
     }
 }

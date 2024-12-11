@@ -26,8 +26,8 @@ if (isset($_POST['send'])) {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'hidalgosapartment@gmail.com';
-            $mail->Password = 'xecqkpbyajbrjmun';
+            $mail->Username = 'stevenmadali17@gmail.com'; 
+            $mail->Password = 'odei efvp hufg rccu'; 
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 
@@ -46,7 +46,14 @@ if (isset($_POST['send'])) {
             </script>
             ";
         } catch (Exception $e) {
-            echo "Error sending email: {$mail->ErrorInfo}";
+            echo " <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred: " . $mail->ErrorInfo . "',
+                icon: 'error'
+            });
+        </script>";
         }
     } else {
         echo "<script>alert('Email not found!');</script>";
@@ -218,7 +225,7 @@ if (isset($_POST['send'])) {
 
 
                 <div class="forgot-link">
-                    <a href="auth.php">Head back to Login</a>
+                    <a href="login.php">Head back to Login</a>
                 </div>
             </form>
         </div>

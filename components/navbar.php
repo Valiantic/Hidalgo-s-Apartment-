@@ -71,7 +71,7 @@
                     </ul>
                     <ul class="navbar-nav me-right mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="./authentication/auth.php" id="logintxt">Login</a>
+                            <a class="nav-link" href="./authentication/login.php" id="logintxt">Login</a>
                         </li>
                     </ul>
                 </div>
