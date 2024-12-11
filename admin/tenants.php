@@ -1,9 +1,11 @@
 <?php
 session_start();
+include '../connections.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-    header('Location: ../authentication/auth.php');
+    header('Location: ../authentication/login.php');
     exit;
+
 }
 ?>
 <!DOCTYPE html>
@@ -165,6 +167,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         font-weight: 500;
     }
 
+    .w-450{
+        width:450px;
+        border-radius:20px;
+    }
+    .n-table{
+        max-width: 800px;
+    }
+
     /* CARD STYLING */
     .height-img {
     max-height: 220px; 
@@ -201,6 +211,17 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         font-family: 'Poppins', 'sans-serif';
         font-size: 17px;
         font-weight: 500;
+    }
+    /* Custom styling for table */
+    .table-rounded {
+            border-radius: 14px;
+            overflow: hidden; /* Prevent content from overflowing the border radius */
+    }
+
+        /* Make table responsive */
+    .table-wrapper {
+            overflow-x: auto; /* Enable horizontal scrolling */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
     }
 
     /* MEDIA QUERIES */
@@ -276,7 +297,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
         <li class="items">
-            <a href="message.php"> <i class="fa-solid fa-envelope"></i></a>
+            <a href="message.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message.php">Message</a></p>
         </li>
 
@@ -332,121 +353,54 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
               </div>
         <?php } ?>
 
+        <div class="table-wrapper">
+        <table class="table table-bordered table-striped table-rounded">
+            <thead class="table-primary">
+                <tr>
+                    <th>Tenant_ID</th>
+                    <th>Full Name</th>
+                    <th>Phone Number</th>
+                    <th>Work</th>
+                    <th>Downpayment</th>
+                    <th>Unit No.</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Fetch tenant data
+                $sql = "SELECT * FROM tenant";
+                $result = $conn->query($sql);
 
-        <div class="table-responsive">
-              <table class="table table-bordered mt-3 n-table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Subject</th>
-                    <th scope="col">Grade</th>
-                    <th scope="col">Section</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <!--CREATE THIS FOR LOOP TO DISPLAY THE DATABASE DATA ON THE TABLE -->
-                  <?php $i = 0; foreach ($teachers as $teacher ) { 
-                    $i++; ?>
-                    
-                  <tr>
-                    <!-- Table heading for id iteration -->
-                    <th scope="row"><?=$i?></th>
-                    <td><?=$teacher['teacher_id']?></td>
-                    <!-- CLICK TO REDIRECT TO TEACHER-VIEW -->
-                    <td><a href="teacher-view.php?teacher_id=<?=$teacher['teacher_id']?>"><?=$teacher['fname']?></a></td>
-                    <td><?=$teacher['lname']?></td>
-                    <td><?=$teacher['username']?></td>
-                    <td>
-                       <?php 
-                           $s = '';
-                           $subjects = str_split(trim($teacher['subjects']));
-                           foreach ($subjects as $subject) {
-                              $s_temp = getSubjectById($subject, $conn);
-                              if ($s_temp != 0) 
-                                $s .=$s_temp['subject_code'].', ';
-                           }
-                           echo $s;
-                        ?>
-                    </td>
-                    <td>
-                    <?php 
-                           $g = '';
-                           $grades = str_split(trim($teacher['grades']));
-                           foreach ($grades as $grade) {
-                              $g_temp = getGradeById($grade, $conn);
-                              if ($g_temp != 0) 
-                                $g .=
-                                     
-                                     $g_temp['grade'].', ';
-                           }
-                           echo $g;
-                        ?>
+                // Check if query executed successfully
+                if (!$result) {
+                    die("Error executing query: " . $conn->error);
+                }
 
-                    </td>
-                    <td>
-                    <?php 
-                           $s = '';
-                           $sections = str_split(trim($teacher['section']));
-                           foreach ($sections as $section) {
-                              $s_temp = getSectionById($section, $conn);
-                              if ($s_temp != 0) 
-                                $s .=$s_temp['section'].', ';
-                                     
-                           }
-                           echo $s;
-                        ?>
-
-                    </td>
-
-
-                    <!-- <td>
-                      <?php 
-                          //  $c = '';
-                          //  $classes = str_split(trim($teacher['class']));
-
-                          //  foreach ($classes as $class_id) {
-                          //      $class = getClassById($class_id, $conn);
-
-                          //     $c_temp = getGradeById($class['grade'], $conn);
-                          //     $section = getSectionById($class['section'], $conn);
-                          //     if ($c_temp != 0) 
-                          //       $c .=$c_temp['grade_code'].'-'.
-                          //            $c_temp['grade'].$section['section'].', ';
-                          //  }
-                          //  echo $c;
-                          //  // FIX THIS
-                        ?>
-                    </td> -->
-                   
-                    
-                  <!-- continue 59:25; -->
-                    <td>
-
-                    <div class="d-grid gap-2">
-
-                     <a href="teacher-edit.php?teacher_id=<?=$teacher['teacher_id']?>"
-                           class="btn btn-warning">Edit</a>
-                              
-
-                       
-                       
-                          <a href="teacher-delete.php?teacher_id=<?=$teacher['teacher_id']?>"
-                           class="btn btn-danger">Delete</a>
-                           
-    
-                    </div>
-          
-                           
-                    </td>
-                  </tr>
-                <?php } ?>
-                </tbody>
-              </table>
+                // Display tenants or no records message
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                            <td>{$row['tenant_id']}</td>
+                            <td>{$row['fullname']}</td>
+                            <td>{$row['phone_number']}</td>
+                            <td>{$row['work']}</td>
+                            <td>{$row['downpayment']}</td>
+                            <td>{$row['units']}</td>
+                            <td>
+                                <a href='edit_tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary btn-sm'>Edit</a>
+                                <a href='delete_tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this tenant?\");'>Delete</a>
+                            </td>
+                        </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7' class='text-center'>No tenants found.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+       
            </div>
 
 
@@ -473,3 +427,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 </body>
 </html>
+<?php
+$conn->close();
+?>

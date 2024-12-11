@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'user') {
-    header('Location: ../authentication/auth.php');
+    header('Location: ../authentication/login.php');
     exit;
 }
 ?>

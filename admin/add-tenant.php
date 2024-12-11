@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-    header('Location: ../authentication/auth.php');
+    header('Location: ../authentication/login.php');
     exit;
 }
 
@@ -283,6 +283,9 @@ if ($result->num_rows > 0) {
         -webkit-appearance: none;
         margin: 0;
     }
+    .form-w{
+      margin-left: 10px;
+    }
 
 
 
@@ -324,7 +327,7 @@ if ($result->num_rows > 0) {
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
         <li class="items">
-            <a href="message.php"> <i class="fa-solid fa-envelope"></i></a>
+            <a href="message.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message.php">Message</a></p>
         </li>
 
@@ -392,6 +395,7 @@ if ($result->num_rows > 0) {
                 <!-- Units -->
                 <div class="mb-3">
                     <label class="form-label">Unit:</label>
+                   
                     <div class="d-flex flex-wrap gap-3">
                         <?php
                         $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
@@ -404,6 +408,7 @@ if ($result->num_rows > 0) {
                         }
                         ?>
                     </div>
+                    <sub>* Unit radio buttons are unclickable if occupied</sub>
                 </div>
 
                 <!-- Email Address -->

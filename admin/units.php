@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-    header('Location: ../authentication/auth.php');
+    header('Location: ../authentication/login.php');
     exit;
 }
 ?>
@@ -259,7 +259,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
         <li class="items">
-            <a href="message.php"> <i class="fa-solid fa-envelope"></i></a>
+            <a href="message.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message.php">Message</a></p>
         </li>
 
