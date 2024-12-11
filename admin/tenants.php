@@ -7,6 +7,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     exit;
 
 }
+$current_page = basename($_SERVER['PHP_SELF']); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -260,6 +261,15 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     }
     }
 
+     .sidebar .active-menu {
+        background: black;
+        color: white;
+    }
+    .sidebar .active-menu a {
+        color: white;
+    }
+
+
 
 </style>
 
@@ -282,21 +292,21 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             </span>
         </div>
 
-        <li class="items">
+        <li class="items <?php echo $current_page == 'dashboard.php' ? 'active-menu' : ''; ?>">
             <a href="dashboard.php"><i class="fa-solid fa-chart-simple"></i></a>
             <p class="para"><a href="dashboard.php">Dashboard</a></p>
         </li>
 
-        <li class="items">
+        <li class="items <?php echo $current_page == 'units.php' ? 'active-menu' : ''; ?>">
             <a href="units.php"><i class="fa-solid fa-home"></i></i></a>
             <p class="para"><a href="units.php">Units</a></p>
         </li>
 
-        <li class="items">
+        <li class="items <?php echo $current_page == 'tenants.php' ? 'active-menu' : ''; ?>">
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
-        <li class="items">
+        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
             <a href="message.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message.php">Message</a></p>
         </li>
@@ -353,6 +363,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
               </div>
         <?php } ?>
 
+        <!-- TABLE TO READ DATA FROM DATABASE -->
         <div class="table-wrapper">
         <table class="table table-bordered table-striped table-rounded">
             <thead class="table-primary">

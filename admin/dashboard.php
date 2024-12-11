@@ -5,6 +5,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('Location: ../authentication/login.php');
     exit;
 }
+
+$current_page = basename($_SERVER['PHP_SELF']); 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -227,6 +230,15 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     }
     }
 
+     .sidebar .active-menu {
+        background: black;
+        color: white;
+    }
+    .sidebar .active-menu a {
+        color: white;
+    }
+
+
 
 </style>
 
@@ -249,21 +261,21 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             </span>
         </div>
 
-        <li class="items">
+        <li class="items  <?php echo $current_page == 'dashboard.php' ? 'active-menu' : ''; ?>">
             <a href="dashboard.php"><i class="fa-solid fa-chart-simple"></i></a>
             <p class="para"><a href="dashboard.php">Dashboard</a></p>
         </li>
 
-        <li class="items">
+        <li class="items <?php echo $current_page == 'units.php' ? 'active-menu' : ''; ?>">
             <a href="units.php"><i class="fa-solid fa-home"></i></i></a>
             <p class="para"><a href="units.php">Units</a></p>
         </li>
 
-        <li class="items">
+        <li class="items <?php echo $current_page == 'tenants.php' ? 'active-menu' : ''; ?>">
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
-        <li class="items">
+        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
             <a href="message.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message.php">Message</a></p>
         </li>
@@ -292,7 +304,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                             <h1 class="card-title">12</h1>
                             <p class="card-text">All Tenants</p>
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info?</a>
+                            <a href="tenants.php" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
@@ -305,7 +317,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                             <h1 class="card-title">₱25,000</h1>
                             <p class="card-text">Monthly Earnings</p>
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info?</a>
+                            <a href="a" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
@@ -318,7 +330,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                             <h1 class="card-title">0</h1>
                             <p class="card-text">Today's Due Date</p>
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info?</a>
+                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
