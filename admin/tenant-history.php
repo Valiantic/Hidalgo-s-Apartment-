@@ -302,7 +302,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <p class="para"><a href="units.php">Units</a></p>
         </li>
 
-        <li class="items <?php echo $current_page == 'tenants.php' ? 'active-menu' : ''; ?>">
+        <li class="items <?php echo $current_page == 'tenant-history.php' ? 'active-menu' : ''; ?>">
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
@@ -329,11 +329,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="container-fluid mt-4">
           
 
-        <a href="add-tenant.php"
-        class="btn btn-light mb-3">Add New Tenant</a>
+        <a href="tenants.php"
+        class="btn btn-light mb-3">Back to Tenant List</a>
 
-        <a href="tenant-history.php"
-        class="btn btn-dark mb-3">View Tenant History</a>
 
           <!-- SEARCH BUTTON  -->
           <form action="teacher-search.php" class="smt-3 n-table" method="get">
@@ -378,41 +376,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <th>Downpayment</th>
                     <th>Unit No.</th>
                     <th>Move in Date</th>
-                    <th>Actions</th>
+                    <th>Move out Date</th>
                 </tr>
             </thead>
             <tbody>
-                <?php
-                // Fetch tenant data
-                $sql = "SELECT * FROM tenant";
-                $result = $conn->query($sql);
-
-                // Check if query executed successfully
-                if (!$result) {
-                    die("Error executing query: " . $conn->error);
-                }
-
-                // Display tenants or no records message
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>
-                            <td>{$row['tenant_id']}</td>
-                            <td>{$row['fullname']}</td>
-                            <td>{$row['phone_number']}</td>
-                            <td>{$row['work']}</td>
-                            <td>{$row['downpayment']}</td>
-                            <td>{$row['units']}</td>
-                             <td>{$row['move_in_date']}</td>
-                            <td>
-                                <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary btn-sm'>Edit</a>
-                                <a href='delete-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this tenant?\");'>Delete</a>
-                            </td>
-                        </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='7' class='text-center'>No tenants found.</td></tr>";
-                }
-                ?>
+              
             </tbody>
         </table>
     </div>

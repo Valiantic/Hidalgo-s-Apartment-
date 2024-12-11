@@ -8,8 +8,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 include "../connections.php";
 
-
-// Fetch the units that are already assigned to tenants
 $query = "SELECT units FROM tenant";
 $result = $conn->query($query);
 
@@ -21,6 +19,25 @@ if ($result->num_rows > 0) {
 }
 $current_page = basename($_SERVER['PHP_SELF']); 
 
+if (isset($_GET['tenant_id'])) {
+    $tenant_id = $_GET['tenant_id'];
+
+    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, units FROM tenant WHERE tenant_id = ?");
+    $stmt->bind_param("i", $tenant_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $tenant = $result->fetch_assoc();
+        $currentUnit = $tenant['units']; 
+    } else {
+        die("Tenant not found!");
+    }
+
+    $stmt->close();
+} else {
+    die("No tenant ID provided!");
+}
 ?>
 
 
@@ -214,17 +231,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
         font-weight: 300;
     }
     .custom-btn-font {
-    font-size: 1.35rem; /* Adjust the size as needed */
+    font-size: 1.35rem; 
     }
 
     .form-w{
         max-width:600px;
         width: 100%;
-        background-color: #f8f9fa; /* Light gray background */
-        background-color: #f8f9fa; /* Light gray background */
-        padding: 20px; /* Add padding */
-        border-radius: 8px; /* Add rounded corners */
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+        background-color: #f8f9fa; 
+        background-color: #f8f9fa; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         
     }
     .form-label {
@@ -331,7 +348,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <p class="para"><a href="units.php">Units</a></p>
         </li>
 
-        <li class="items <?php echo $current_page == 'add-tenant.php' ? 'active-menu' : ''; ?>">
+        <li class="items <?php echo $current_page == 'edit-tenant.php' ? 'active-menu' : ''; ?>">
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
@@ -341,7 +358,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li class="items logout-btn">
-            <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
             <p class="para"><a href="logout.php">Log-out</a></p>
         </li>
@@ -358,9 +374,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <div class="content">
     <div class="container-fluid ">
         <div class="row justify-content-center">
-            <form class="shadow p-4  mb-3 bg-light rounded" method="post" action="req/add-tenant.php" style="max-width: 600px; width: 100%;">
+            <form class="shadow p-4  mb-3 bg-light rounded" method="post" action="req/edit-tenant.php" style="max-width: 600px; width: 100%;">
                 <hr>
-                <h3 class="text-center">Add New Tenant</h3>
+                <h3 class="text-center">Edit Tenant Information</h3>
                 <hr>
 
                 <!-- ERROR HANDLING -->
@@ -377,81 +393,79 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                 <?php } ?>
 
+                <!-- Tenant ID To Pass -->
+                <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($tenant_id); ?>">
+
+
                 <!-- Full Name -->
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="fullname" name="fullname" required>
+                    <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo htmlspecialchars($tenant['fullname']); ?>" required>
                 </div>
 
                 <!-- Phone Number -->
                 <div class="mb-3">
                     <label class="form-label">Phone Number</label>
-                    <input type="number" class="form-control" id="phone_number" name="phone_number" required>
+                    <input type="number" class="form-control" id="phone_number" name="phone_number" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>" required>
                 </div>
 
                 <!-- Work -->
                 <div class="mb-3">
                     <label class="form-label">Work</label>
-                    <input type="text" class="form-control" id="work" name="work" required>
+                    <input type="text" class="form-control" id="work" name="work" value="<?php echo htmlspecialchars($tenant['work']); ?>" required>
                 </div>
 
                 <!-- Downpayment -->
                 <div class="mb-3">
                     <label class="form-label">Downpayment</label>
-                    <input type="number" class="form-control" id="downpayment" name="downpayment" min="0" required>
+                    <input type="number" class="form-control" id="downpayment" name="downpayment" value="<?php echo htmlspecialchars($tenant['downpayment']); ?>" min="0" required>
                 </div>
 
                 <!-- Units -->
                 <div class="mb-3">
-                    <label class="form-label">Unit:</label>
-                   
-                    <div class="d-flex flex-wrap gap-3">
-                        <?php
-                        $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
-                        foreach ($allUnits as $unit) {
-                            $isOccupied = in_array($unit, $occupiedUnits ?? []);
-                            echo '<div class="form-check">';
-                            echo '<input class="form-check-input" type="radio" name="units" value="' . $unit . '"' . ($isOccupied ? ' disabled' : '') . '>';
-                            echo '<label class="form-check-label' . ($isOccupied ? ' text-muted' : '') . '">' . $unit . '</label>';
-                            echo '</div>';
-                        }
-                        ?>
-                    </div>
-                    <sub>* Unit radio buttons are unclickable if occupied</sub>
+                <label class="form-label">Unit:</label>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <?php
+                    $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
+                    foreach ($allUnits as $unit) {
+                        // Determine if the unit is occupied and not the tenant's current unit
+                        $isOccupied = in_array($unit, $occupiedUnits) && $unit !== $currentUnit;
+
+                        // Determine if the unit should be preselected
+                        $isSelected = $unit === $currentUnit;
+
+                        echo '<div class="form-check">';
+                        echo '<input class="form-check-input" type="radio" name="units" value="' . $unit . '"'
+                            . ($isSelected ? ' checked' : '') // Preselect if it matches the tenant's current unit
+                            . ($isOccupied ? ' disabled' : '') . '>'; // Disable if it's occupied and not the current unit
+                        echo '<label class="form-check-label' . ($isOccupied ? ' text-muted' : '') . '">' . $unit . '</label>';
+                        echo '</div>';
+                    }
+                    ?>
                 </div>
+                <sub>* Unit radio buttons are unclickable if occupied</sub>
+            </div>
+
 
 
                  <!-- Calendar for Move-in Date -->
                 <div class="form-group mb-3">
                     <label for="move_in_date" class="form-label">Move-in Date:</label>
-                    <input type="date" class="form-control" id="move_in_date" name="move_in_date" required>
-                </div>
-
-                <!-- Email Address -->
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-
-                <!-- Password -->
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="password" name="password">
-                        <button class="btn btn-secondary" type="button" id="gBtn">Generate Password</button>
-                    </div>
+                    <input type="date" class="form-control" id="move_in_date" name="move_in_date">
                 </div>
 
                     <!-- ERROR AND SUCCESS HANDLING -->
                     <?php if (isset($_GET['error'])) { ?>
                     <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
-                <?php } ?>
-                <?php if (isset($_GET['success'])) { ?>
-                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
-                <?php } ?>
+                    <?php } ?>
+                    <?php if (isset($_GET['success'])) { ?>
+                        <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
+                    <?php } ?>
+
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100">Add</button>
+                <button type="submit" class="btn btn-primary w-100">Update</button>
             </form>
         </div>
     </div>
