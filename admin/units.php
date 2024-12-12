@@ -229,7 +229,6 @@ $current_page = basename($_SERVER['PHP_SELF']); //SAM CHANGES
     }
     }
 
-     /* SAM CHANGES*/
      .sidebar .active-menu {
         background: black;
         color: white;

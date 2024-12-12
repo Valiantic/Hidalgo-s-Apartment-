@@ -10,6 +10,8 @@
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
+     <!-- ANIMATE ON SCROLL -->
+     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +43,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url('../assets/images/welcome-temp-cover.png') no-repeat center center/cover;
+            background: url('../assets/images/welcome-cover.jpeg') no-repeat center center/cover;
             border-radius: 14px;
             min-height: 400px;
         }
@@ -194,7 +196,7 @@
 <body>
     <div class="container login-container">
         <!-- Left Side Image -->
-        <div class="login-image">
+        <div class="login-image" data-aos="fade-up">
             
         </div>
 
@@ -252,8 +254,15 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
+    <!-- ANIMATE ON SCROLL -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
     <script>
+
+
+          // Initialize AOS FOR SCREEN ANIMATION
+          AOS.init();
+
          // PASSWORD TOGGLE 
          const togglePassword = document.querySelector('.toggle-password');
         const passwordField = document.querySelector('#password');
