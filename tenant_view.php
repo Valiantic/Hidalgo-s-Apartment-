@@ -1,4 +1,20 @@
+<?php
 
+
+include 'connections.php';
+
+
+// Fetch unit data
+$query = "SELECT units, COUNT(*) AS count FROM tenant GROUP BY units";
+$result = $conn->query($query);
+
+$units_status = [];
+while ($row = $result->fetch_assoc()) {
+    $units_status[$row['units']] = $row['count'] > 0 ? 'Occupied' : 'Available';
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -261,131 +277,38 @@
 
         
        
-
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <div class="row justify-content-center">
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div class="card mt-4 shadow-lg">
-                  
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house2.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 1</h1>
-                            <p class="card-text">Occupied</p>
+            <?php
+                for ($i = 1; $i <= 5; $i++) {
+                    $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
+                    if ($i <= 3) {
+                        $img_src = $status == 'Occupied' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
+                    } else {
+                        $img_src = $status == 'Occupied' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
+                    }
+                    echo "
+                    <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>
+                        <div class='card'>
+                            <img class='card-img-top img-fluid height-img' src='$img_src' alt='Card image cap'>
+                            <div class='card-body'>
+                                <div class='d-flex justify-content-center'>
+                                    <div class='d-block mb-2'>
+                                        <h1 class='card-title'>Unit $i</h1>
+                                        <p class='card-text'>$status</p>
+                                    </div>
+                                </div>
+                                <div class='d-flex justify-content-center'>
+                                    <a href='#' class='btn btn-primary w-100 custom-btn-font'>Info</a>
+                                </div>
                             </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
                         </div>
-                    </div>
-                </div>
-
-               
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-
-                    <br/>
-                    <br/>
-                    <br/>
-
-                    <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/rent-house2.png" alt="Card image cap">
-                        <div class="card-body">
-
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 2</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <br/>
-                    <br/>
-                    <br/>
-
-                    <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house2.png" alt="Card image cap">
-                        <div class="card-body">
-
-                             <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 3</h1>
-                            <p class="card-text">Occupied</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/house1.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 4</h1>
-                            <p class="card-text">Occupied</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                     <br/>
-                    <br/>
-                    <br/>
-                    <div class="card mt-4">
-                        <img class="card-img-top img-fluid height-img"  src="./assets/images/icons/rent-house1.png" alt="Card image cap">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center">
-                            <div class="d-block mb-2">
-                            <h1 class="card-title">Unit 5</h1>
-                            <p class="card-text">Available</p>
-                            </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                            <a href="./authentication/auth.php" class="btn btn-primary w-100 custom-btn-font">Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            
+                    </div>";
+                }
+                ?>
 
             </div>
         </div>
