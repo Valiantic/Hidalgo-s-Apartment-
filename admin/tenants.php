@@ -8,6 +8,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 }
 $current_page = basename($_SERVER['PHP_SELF']); 
+
+$searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +32,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
     <!-- SWEET ALERT MODAL -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -338,10 +340,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
         class="btn btn-dark mb-3">View Tenant History</a>
 
           <!-- SEARCH BUTTON  -->
-          <form action="teacher-search.php" class="smt-3 n-table" method="get">
+          <form action="tenants.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search...">
+        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
         <button class="btn btn-primary" id="gBtn">
         Search
         <!-- Search button svg icon -->
@@ -386,7 +388,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <tbody>
                 <?php
                 // Fetch tenant data
-                $sql = "SELECT * FROM tenant";
+                $sql = "SELECT * FROM tenant WHERE fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%'";
                 $result = $conn->query($sql);
 
                 // Check if query executed successfully
@@ -412,7 +414,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='7' class='text-center'>No tenants found.</td></tr>";
+                    echo "<tr><td colspan='8' class='text-center'>No tenants found.</td></tr>";
                 }
                 ?>
             </tbody>
