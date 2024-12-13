@@ -21,6 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = $_POST['phone_number'];
     $work = $_POST['work'];
     $downpayment = $_POST['downpayment'];
+    $advance = $_POST['advance'];
+    $electricity = $_POST['electricity'];
+    $water = $_POST['water'];
     $units = isset($_POST['units']) ? $_POST['units'] : '';
     $move_in_date = $_POST['move_in_date'];
     $email = $_POST['email'];
@@ -51,8 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt_check->close();
 
     // Insert data into `tenant` table
-    $stmt1 = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, units, move_in_date) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt1->bind_param("sssdss", $fullname, $phone_number, $work, $downpayment, $units, $move_in_date);
+    $stmt1 = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt1->bind_param("sssddddss", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $units, $move_in_date);
     $stmt1->execute();
 
     // Insert data into `users` table

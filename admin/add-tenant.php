@@ -401,6 +401,26 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <input type="number" class="form-control" id="downpayment" name="downpayment" min="0" required>
                 </div>
 
+                  <!-- Advance -->
+                  <div class="mb-3">
+                    <label class="form-label">1 Month Advance</label>
+                    <input type="number" class="form-control" id="advance" name="advance" min="0" required>
+                </div>
+
+                <sub>* Utilities Downpayment</sub>
+
+                  <!-- Electricity -->
+                  <div class="mb-3">
+                    <label class="form-label">Electricty</label>
+                    <input type="number" class="form-control" id="electricity" name="electricity" min="0" required>
+                </div>
+
+                  <!-- Water -->
+                  <div class="mb-3">
+                    <label class="form-label">Water</label>
+                    <input type="number" class="form-control" id="water" name="water" min="0" required>
+                </div>
+
                 <!-- Units -->
                 <div class="mb-3">
                     <label class="form-label">Unit:</label>

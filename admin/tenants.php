@@ -8,8 +8,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 }
 $current_page = basename($_SERVER['PHP_SELF']); 
-
-$searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +30,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
     <!-- SWEET ALERT MODAL -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -340,10 +338,10 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
         class="btn btn-dark mb-3">View Tenant History</a>
 
           <!-- SEARCH BUTTON  -->
-          <form action="tenants.php" class="smt-3 n-table" method="get">
+          <form action="teacher-search.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
+        <input type="text" class="form-control" name="searchKey" placeholder="Search...">
         <button class="btn btn-primary" id="gBtn">
         Search
         <!-- Search button svg icon -->
@@ -380,6 +378,9 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
                     <th>Phone Number</th>
                     <th>Work</th>
                     <th>Downpayment</th>
+                    <th>Advance</th>
+                    <th>Electricity</th>
+                    <th>Water</th>
                     <th>Unit No.</th>
                     <th>Move in Date</th>
                     <th>Actions</th>
@@ -388,7 +389,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
             <tbody>
                 <?php
                 // Fetch tenant data
-                $sql = "SELECT * FROM tenant WHERE fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%'";
+                $sql = "SELECT * FROM tenant";
                 $result = $conn->query($sql);
 
                 // Check if query executed successfully
@@ -405,6 +406,9 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
                             <td>{$row['phone_number']}</td>
                             <td>{$row['work']}</td>
                             <td>{$row['downpayment']}</td>
+                            <td>{$row['advance']}</td>
+                            <td>{$row['electricity']}</td>  
+                            <td>{$row['water']}</td>
                             <td>{$row['units']}</td>
                              <td>{$row['move_in_date']}</td>
                             <td>
@@ -414,7 +418,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
                         </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='8' class='text-center'>No tenants found.</td></tr>";
+                    echo "<tr><td colspan='7' class='text-center'>No tenants found.</td></tr>";
                 }
                 ?>
             </tbody>
