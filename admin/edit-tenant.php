@@ -22,7 +22,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 if (isset($_GET['tenant_id'])) {
     $tenant_id = $_GET['tenant_id'];
 
-    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, units FROM tenant WHERE tenant_id = ?");
+    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, advance, electricity, water, units FROM tenant WHERE tenant_id = ?");
     $stmt->bind_param("i", $tenant_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -415,11 +415,37 @@ if (isset($_GET['tenant_id'])) {
                     <input type="text" class="form-control" id="work" name="work" value="<?php echo htmlspecialchars($tenant['work']); ?>" required>
                 </div>
 
-                <!-- Downpayment -->
-                <div class="mb-3">
+
+                  <!-- Downpayment -->
+                  <div class="mb-3">
                     <label class="form-label">Downpayment</label>
                     <input type="number" class="form-control" id="downpayment" name="downpayment" value="<?php echo htmlspecialchars($tenant['downpayment']); ?>" min="0" required>
                 </div>
+
+
+                  <!-- Downpayment -->
+                  <div class="mb-3">
+                    <label class="form-label">Advance</label>
+                    <input type="number" class="form-control" id="advance" name="advance" value="<?php echo htmlspecialchars($tenant['advance']); ?>" min="0" required>
+                </div>
+
+                <sub>* Utilities Downpayment</sub>
+
+
+                  <!-- Downpayment -->
+                  <div class="mb-3">
+                    <label class="form-label">Electricity</label>
+                    <input type="number" class="form-control" id="electricity" name="electricity" value="<?php echo htmlspecialchars($tenant['electricity']); ?>" min="0" required>
+                </div>
+
+
+                  <!-- Downpayment -->
+                  <div class="mb-3">
+                    <label class="form-label">Water</label>
+                    <input type="number" class="form-control" id="water" name="water" value="<?php echo htmlspecialchars($tenant['water']); ?>" min="0" required>
+                </div>
+
+
 
                 <!-- Units -->
                 <div class="mb-3">
