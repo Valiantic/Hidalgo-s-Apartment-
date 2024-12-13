@@ -143,7 +143,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     
     .active.toggler {
-        left: 170px;
+        left: 160px;
     }
     
     .active.sidebar {
@@ -212,7 +212,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     .btn {
         font-family: 'Poppins', 'sans-serif';
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 500;
     }
     /* Custom styling for table */
@@ -226,6 +226,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             overflow-x: auto; /* Enable horizontal scrolling */
             -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
     }
+    
+    .btn-custom {
+        min-width: 100px; /* Adjust as needed */
+    }
+
+
 
     /* MEDIA QUERIES */
 
@@ -373,17 +379,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <table class="table table-bordered table-striped table-rounded">
             <thead class="table-primary">
                 <tr>
-                    <th>Tenant_ID</th>
-                    <th>Full Name</th>
-                    <th>Phone Number</th>
-                    <th>Work</th>
-                    <th>Downpayment</th>
-                    <th>Advance</th>
-                    <th>Electricity</th>
-                    <th>Water</th>
-                    <th>Unit No.</th>
-                    <th>Move in Date</th>
-                    <th>Actions</th>
+                    <th class="text-center">Tenant_ID</th>
+                    <th class="text-center">Full Name</th>
+                    <th class="text-center">Phone Number</th>
+                    <th class="text-center">Work</th>
+                    <th class="text-center">Downpayment</th>
+                    <th class="text-center">Advance</th>
+                    <th class="text-center">Electricity</th>
+                    <th class="text-center">Water</th>
+                    <th class="text-center">Unit No.</th>
+                    <th class="text-center">Move in Date</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -412,8 +418,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <td>{$row['units']}</td>
                              <td>{$row['move_in_date']}</td>
                             <td>
-                                <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary btn-sm'>Edit</a>     
-                                <button class='btn btn-danger btn-sm' onclick='confirmDelete({$row['tenant_id']})'>Delete</button>
+                                 <div class='d-flex gap-2'>
+                                    <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary w-100'>Edit</a>
+                                    <button class='btn btn-danger btn-sm' onclick='confirmDelete({$row['tenant_id']})'>Delete</button>
+                                </div>
                             </td>
                         </tr>";
                     }

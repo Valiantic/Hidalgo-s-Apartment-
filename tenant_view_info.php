@@ -4,21 +4,60 @@
 include 'connections.php';
 
 
-// Fetch unit data
-$query = "SELECT units, COUNT(*) AS count FROM tenant GROUP BY units";
-$result = $conn->query($query);
+$unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
 
-$units_status = [];
-while ($row = $result->fetch_assoc()) {
-    $units_status[$row['units']] = $row['count'] > 0 ? 'Occupied' : 'Available';
+if ($unit_number < 1 || $unit_number > 5) {
+    die("Invalid unit number. Please select a unit between 1 and 5.");
 }
 
+$unit_name = "Unit $unit_number";
+
+$sql = "SELECT units FROM tenant WHERE units = '$unit_name'";
+$result = $conn->query($sql);
+
+$status = ($result->num_rows > 0) ? 'Occupied' : 'Available';
+
+function getUnitType($unitNumber) {
+    return $unitNumber <= 3 ? '2-Storey Building' : 'Single-Storey Building';
+}
+
+$type = getUnitType($unit_number);
+
+function maxOccupancy($unitNumber) {
+    return $unitNumber <= 3 ? '3-5 Persons' : '2-4 Persons';
+}
+
+$occupancy = maxOccupancy($unit_number);
+
+function getUnitImage($unitNumber, $status) {
+    if ($unitNumber <= 3) {
+        return $status == 'Occupied' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
+    } else {
+        return $status == 'Occupied' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
+    }
+}
+
+$img_src = getUnitImage($unit_number, $status);
+
+function rentButton($status) {
+    global $unit_number; // Ensure $unit_number is accessible within the function
+    if ($status == 'Available') {
+        // return "<a href='rent_unit.php?unit=$unit_number' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
+        return "<a href='./authentication/login.php' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
+    } else {
+        return "";
+    }
+}
+
+$rent = rentButton($status);
 
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hidalgo's Apartment</title>
     <link rel="shortcut icon" href="./assets/images/logov5.png">
@@ -54,8 +93,8 @@ while ($row = $result->fetch_assoc()) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
-<style>
-     * {
+    <style>
+         * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -254,14 +293,10 @@ while ($row = $result->fetch_assoc()) {
         }
         }
 
-
-</style>
-
+    </style>
 </head>
 <body>
-    
-    <!-- ADMIN SIDEBAR COMPONENT -->
-    
+
     <?php
 
     include './components/navbar.php';
@@ -269,87 +304,40 @@ while ($row = $result->fetch_assoc()) {
     ?> 
 
 
-    <div class="content">
+    <div class="container-fluid mt-4 mb-4">
 
- 
-
-        <div class="container-fluid mt-4 mb-4">
-
-        
-       
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <div class="row justify-content-center">
-            <?php
-                for ($i = 1; $i <= 5; $i++) {
-                    $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
-                    if ($i <= 3) {
-                        $img_src = $status == 'Occupied' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
-                    } else {
-                        $img_src = $status == 'Occupied' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
-                    }
-                    echo "
-                    <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>
-                        <div class='card'>
-                            <img class='card-img-top img-fluid height-img' src='$img_src' alt='Card image cap'>
-                            <div class='card-body'>
-                                <div class='d-flex justify-content-center'>
-                                    <div class='d-block mb-2'>
-                                        <h1 class='card-title'>Unit $i</h1>
-                                        <p class='card-text'>$status</p>
-                                    </div>
-                                </div>
-                                <div class='d-flex justify-content-center'>
-                                    <a href='tenant_view_info.php?unit=$i' class='btn btn-warning w-100 custom-btn-font text-white text'>Info</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>";
-                }
-                ?>
-
+    <div class="container mt-5">
+        <br/>
+        <br/>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="tenant_view.php">Back</a>
+                        <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
+                        <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
+                        <p class="card-text text-center">Status: <?php echo $status; ?></p>
+                        <h2 class="card-subtitle mb-2 text-muted text-center"><?php echo $type; ?></h2>
+                        <h2 class="card-subtitle mb-2 text-muted text-center">Maximum Occupancy: <?php echo $occupancy; ?></h2>
+                        <?php echo $rent; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    </div>
+
+    <br/>
+    <br/>
+
 
     <?php
 
     include "components/footer.php";
 
     ?> 
-
-<!-- BOOTSTRAP -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-<script>
-
-        // Get the button
-        let mybutton = document.getElementById("backToTopBtn");
-
-        // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function() {
-        scrollFunction();
-        };
-
-        function scrollFunction() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            mybutton.style.display = "block";
-        } else {
-            mybutton.style.display = "none";
-        }
-        }
-
-        // When the user clicks on the button, scroll to the top of the document
-        mybutton.addEventListener("click", function() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-        });
-
-   
-</script>
-
 </body>
 </html>
+
+<?php $conn->close(); ?>
