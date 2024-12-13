@@ -9,9 +9,10 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 }
 $current_page = basename($_SERVER['PHP_SELF']); 
 
+$searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
 
-// Fetch all tenant history records
-$query = "SELECT * FROM tenant_history ORDER BY deleted_at DESC";
+// Fetch tenant history records based on search key
+$query = "SELECT * FROM tenant_history WHERE fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%' ORDER BY deleted_at DESC";
 $result = $conn->query($query);
 ?>
 <!DOCTYPE html>
@@ -35,7 +36,7 @@ $result = $conn->query($query);
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
 
 <style>
@@ -339,10 +340,10 @@ $result = $conn->query($query);
 
 
           <!-- SEARCH BUTTON  -->
-          <form action="teacher-search.php" class="smt-3 n-table" method="get">
+          <form action="tenant-history.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search...">
+        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
         <button class="btn btn-primary" id="gBtn">
         Search
         <!-- Search button svg icon -->
@@ -400,7 +401,7 @@ $result = $conn->query($query);
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="10" class="text-center">No tenant history found</td>
+                            <td colspan="8" class="text-center">No tenant history found</td>
                         </tr>
                     <?php endif; ?>
             </tbody>
