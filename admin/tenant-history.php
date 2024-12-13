@@ -380,6 +380,9 @@ $result = $conn->query($query);
                     <th>Phone Number</th>
                     <th>Work</th>
                     <th>Downpayment</th>
+                    <th>Advance</th>
+                    <th>Electricity</th>
+                    <th>Water</th>
                     <th>Unit No.</th>
                     <th>Move in Date</th>
                     <th>Move out Date</th>
@@ -394,6 +397,9 @@ $result = $conn->query($query);
                                 <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
                                 <td><?php echo htmlspecialchars($row['work']); ?></td>
                                 <td><?php echo htmlspecialchars($row['downpayment']); ?></td>
+                                <td><?php echo htmlspecialchars($row['advance']); ?></td>
+                                <td><?php echo htmlspecialchars($row['electricity']); ?></td>
+                                <td><?php echo htmlspecialchars($row['water']); ?></td>
                                 <td><?php echo htmlspecialchars($row['units']); ?></td>
                                 <td><?php echo htmlspecialchars($row['move_in_date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['move_out_date']); ?></td>

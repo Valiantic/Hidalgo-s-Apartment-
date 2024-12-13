@@ -28,7 +28,10 @@ CREATE TABLE tenant (
     fullname VARCHAR(255) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
     work VARCHAR(255),
-    downpayment FLOAT NOT NULL,
+    downpayment DECIMAL NOT NULL,
+    advance DECIMAL(10, 2) NOT NULL,
+    electricity DECIMAL(10, 2) NOT NULL,
+    water DECIMAL(10, 2) NOT NULL,
     units VARCHAR(255),
     move_in_date DATE
 );
@@ -42,6 +45,9 @@ CREATE TABLE tenant_history (
     phone_number VARCHAR(15) NOT NULL,
     work VARCHAR(255),
     downpayment DECIMAL(10, 2) NOT NULL,
+    advance DECIMAL(10, 2) NOT NULL,
+    electricity DECIMAL(10, 2) NOT NULL,
+    water DECIMAL(10, 2) NOT NULL,
     units VARCHAR(50) NOT NULL,
     move_in_date DATE NOT NULL,
     move_out_date DATE NOT NULL,

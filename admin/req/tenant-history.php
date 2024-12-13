@@ -22,17 +22,20 @@ if (isset($_GET['tenant_id'])) {
 
         // Insert tenant data into tenant_history
         $insert_stmt = $conn->prepare(
-            "INSERT INTO tenant_history (tenant_id, fullname, phone_number, work, downpayment, units, move_in_date, move_out_date) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO tenant_history (tenant_id, fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date, move_out_date) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $move_out_date = date('Y-m-d'); // Set move-out date to current date
         $insert_stmt->bind_param(
-            "isssssss",
+            "issssssssss",
             $tenant['tenant_id'],
             $tenant['fullname'],
             $tenant['phone_number'],
             $tenant['work'],
             $tenant['downpayment'],
+            $tenant['advance'],
+            $tenant['electricity'],
+            $tenant['water'],
             $tenant['units'],
             $tenant['move_in_date'],
             $move_out_date
