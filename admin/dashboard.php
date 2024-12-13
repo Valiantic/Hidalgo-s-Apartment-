@@ -6,8 +6,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     exit;
 }
 
+include '../connections.php';
+
 $current_page = basename($_SERVER['PHP_SELF']); 
 
+// Fetch total number of tenants
+$query = "SELECT COUNT(*) AS total_tenants FROM tenant";
+$result = $conn->query($query);
+$total_tenants = $result->fetch_assoc()['total_tenants'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -301,7 +307,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <div class="card">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all_tenants.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">12</h1>
+                            <h1 class="card-title"><?php echo $total_tenants; ?></h1>
                             <p class="card-text">All Tenants</p>
                             <div class="d-flex justify-content-center">
                             <a href="tenants.php" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
@@ -360,3 +366,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 </body>
 </html>
+<?php
+$conn->close();
+?>

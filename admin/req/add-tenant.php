@@ -15,8 +15,6 @@ require '../../authentication/phpmailer/src/Exception.php';
 require '../../authentication/phpmailer/src/PHPMailer.php';
 require '../../authentication/phpmailer/src/SMTP.php';
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $fullname = $_POST['fullname'];
@@ -33,17 +31,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Downpayment cannot be negative.");
     }
 
-     // Check if email already exists in the `users` table
-     $stmt_check = $conn->prepare("SELECT id FROM users WHERE email = ?");
-     $stmt_check->bind_param("s", $email);
-     $stmt_check->execute();
-     $stmt_check->store_result();
+    // Check if a unit is selected
+    if (empty($units)) {
+        header('Location: ../add-tenant.php?error=' . urlencode('Error: Please select a unit.'));
+        exit;
+    }
 
-     if ($stmt_check->num_rows > 0) {
-        die("Error: The email address is already registered. Please use a different email.");
+    // Check if email already exists in the `users` table
+    $stmt_check = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt_check->bind_param("s", $email);
+    $stmt_check->execute();
+    $stmt_check->store_result();
+
+    if ($stmt_check->num_rows > 0) {
+        header('Location: ../add-tenant.php?error=' . urlencode('Error: The email address is already registered. Please use a different email.'));
+        $stmt_check->close();
+        exit;
     }
     $stmt_check->close();
- 
 
     // Insert data into `tenant` table
     $stmt1 = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, units, move_in_date) VALUES (?, ?, ?, ?, ?, ?)");
@@ -84,13 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 confirmButtonText: 'OK'
             });
 
-           
             setTimeout(() => {
                 window.location.href = '../add-tenant.php';
-            }, 3000);
+            }, 2500);
         </script>";
 
-        
     } catch (Exception $e) {
         echo "
          <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
@@ -101,14 +104,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 icon: 'error'
             });
 
-              // Add a 5-second timer before redirection
+            // Add a 5-second timer before redirection
             setTimeout(() => {
                 window.location.href = '../add-tenant.php';
-            }, 3000);
+            }, 2500);
         </script>";
     }
 }
-
-
-
 ?>

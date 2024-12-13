@@ -442,13 +442,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                 </div>
 
-                    <!-- ERROR AND SUCCESS HANDLING -->
-                    <?php if (isset($_GET['error'])) { ?>
-                    <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
-                <?php } ?>
-                <?php if (isset($_GET['success'])) { ?>
-                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
-                <?php } ?>
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary w-100">Add</button>
