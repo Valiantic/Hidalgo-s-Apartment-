@@ -189,7 +189,7 @@
             <!-- Header -->
             <div class="text-center mb-4">
                 <a href="../index.php"><img class="logo" src="../assets/images/logov5.png" alt="Logo"></a>
-                <h3 class="fw-bold">Register your Account!</h3>
+                <h3 class="fw-bold">Let's Create your Account First!</h3>
                 
             </div>
             

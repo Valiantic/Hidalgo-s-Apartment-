@@ -15,7 +15,7 @@ $unit_name = "Unit $unit_number";
 $sql = "SELECT units FROM tenant WHERE units = '$unit_name'";
 $result = $conn->query($sql);
 
-$status = ($result->num_rows > 0) ? 'Occupied' : 'Available';
+$status = ($result->num_rows > 0) ? '<p class="fs-4 text-muted text-center">Occupied</p>' : '<p class="fs-4 fw-bold text-center text-warning">Available</p>';
 
 function getUnitType($unitNumber) {
     return $unitNumber <= 3 ? '2-Storey Building' : 'Single-Storey Building';
@@ -31,9 +31,9 @@ $occupancy = maxOccupancy($unit_number);
 
 function getUnitImage($unitNumber, $status) {
     if ($unitNumber <= 3) {
-        return $status == 'Occupied' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
+        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
     } else {
-        return $status == 'Occupied' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
+        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
     }
 }
 
@@ -41,15 +41,32 @@ $img_src = getUnitImage($unit_number, $status);
 
 function rentButton($status) {
     global $unit_number; // Ensure $unit_number is accessible within the function
-    if ($status == 'Available') {
+    if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
         // return "<a href='rent_unit.php?unit=$unit_number' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
-        return "<a href='./authentication/login.php' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
+        return "<a href='./authentication/signup.php' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
     } else {
         return "";
     }
 }
 
 $rent = rentButton($status);
+
+function buildingType($unitNumber) {
+    return $unitNumber <= 3 ? ' <li>
+                                <ul class="card-text">1 Bedroom</ul>
+                                <ul class="card-text">1 Living Room</ul>
+                                <ul class="card-text">1 Bathroom</ul>
+                                <ul class="card-text">1 Kitchen/ Dining Area</ul>
+                                </li>' : '
+                                <li>
+                                <ul class="card-text">2 Bedrooms (located on the upper floor)</ul>
+                                <ul class="card-text">1 Living Room</ul>
+                                <ul class="card-text">1 Bathroom</ul>
+                                <ul class="card-text">1 Kitchen/Dining Area</ul>
+                                </li>';
+}
+
+$building = buildingType($unit_number);
 
 ?>
 
@@ -191,6 +208,7 @@ $rent = rentButton($status);
             font-family: 'Poppins', 'sans-serif';
         font-size: 17px;
         font-weight: 500;
+        text-decoration: none;
         }
 
 
@@ -308,17 +326,18 @@ $rent = rentButton($status);
 
     <div class="container mt-5">
         <br/>
-        <br/>
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 mb-3">
-                <div class="card">
+                <div class="card" data-aos="fade-up">
                     <div class="card-body">
                         <a href="tenant_view.php">Back</a>
                         <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
                         <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
                         <p class="card-text text-center">Status: <?php echo $status; ?></p>
-                        <h2 class="card-subtitle mb-2 text-muted text-center"><?php echo $type; ?></h2>
-                        <h2 class="card-subtitle mb-2 text-muted text-center">Maximum Occupancy: <?php echo $occupancy; ?></h2>
+                        <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
+                        <h2 class="card-subtitle mb-2 text-center">Maximum Occupancy: <?php echo $occupancy; ?></h2>
+                        <h2 class="card-text mb-2 text-center">Apartment Description:</h2>
+                        <p class="card-text text-left"><?php echo $building; ?></p>
                         <?php echo $rent; ?>
                     </div>
                 </div>
@@ -329,7 +348,7 @@ $rent = rentButton($status);
     </div>
 
     <br/>
-    <br/>
+    
 
 
     <?php
@@ -337,6 +356,14 @@ $rent = rentButton($status);
     include "components/footer.php";
 
     ?> 
+
+    <!-- ANIMATE ON SCROLL -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+         // Initialize AOS FOR SCREEN ANIMATION
+         AOS.init();
+
+    </script>
 </body>
 </html>
 
