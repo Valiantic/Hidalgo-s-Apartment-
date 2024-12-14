@@ -305,7 +305,7 @@ while ($row = $result->fetch_assoc()) {
                 <?php
                 for ($i = 1; $i <= 5; $i++) {
                     $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
-                    if ($i <= 3) {
+                    if ($i >= 3) {
                         $img_src = $status == 'Occupied' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
                     } else {
                         $img_src = $status == 'Occupied' ? '../assets/images/icons/house1.png' : '../assets/images/icons/rent-house1.png';
@@ -322,7 +322,7 @@ while ($row = $result->fetch_assoc()) {
                                     </div>
                                 </div>
                                 <div class='d-flex justify-content-center'>
-                                    <a href='#' class='btn btn-primary w-100 custom-btn-font'>Info</a>
+                                    <a href='tenant-information.php?unit=$i' class='btn btn-primary w-100 custom-btn-font'>Info</a>
                                 </div>
                             </div>
                         </div>

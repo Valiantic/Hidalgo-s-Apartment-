@@ -1,19 +1,90 @@
 <?php
 session_start();
-include '../connections.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('Location: ../authentication/login.php');
     exit;
-
 }
+
+include '../connections.php';
+
 $current_page = basename($_SERVER['PHP_SELF']); 
 
-$searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
 
-// Fetch tenant history records based on search key
-$query = "SELECT * FROM tenant_history WHERE fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%' ORDER BY deleted_at DESC";
-$result = $conn->query($query);
+$unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
+
+if ($unit_number < 1 || $unit_number > 5) {
+    die("Invalid unit number. Please select a unit between 1 and 5.");
+}
+
+$unit_name = "Unit $unit_number";
+
+$sql = "SELECT * FROM tenant WHERE units = '$unit_name'";
+$result = $conn->query($sql);
+
+$tenant_info = $result->fetch_assoc();
+$tenant_fullname = $tenant_info['fullname'] ?? 'N/A';
+$tenant_phone = $tenant_info['phone_number'] ?? 'N/A';
+$start_date = $tenant_info['move_in_date'] ?? 'N/A';
+$due_date = $start_date !== 'N/A' ? date('Y-m-d', strtotime($start_date . ' +1 month')) : 'N/A';
+
+$status = ($result->num_rows > 0) ? '<p class="fs-4 text-muted text-center">Occupied</p>' : '<p class="fs-4 fw-bold text-center text-warning">Available</p>';
+
+function getUnitType($unitNumber) {
+    return $unitNumber >= 3 ? '2-Storey Building' : 'Single-Storey Building';
+}
+
+$type = getUnitType($unit_number);
+
+function maxOccupancy($unitNumber) {
+    return $unitNumber >= 3 ? '3-5 Persons' : '2-4 Persons';
+}
+
+$occupancy = maxOccupancy($unit_number);
+
+function getUnitImage($unitNumber, $status) {
+    if ($unitNumber >= 3) {
+        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
+    } else {
+        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? '../assets/images/icons/house1.png' : '../assets/images/icons/rent-house1.png';
+    }
+}
+
+$img_src = getUnitImage($unit_number, $status);
+
+function rentButton($status) {
+    global $unit_number; // Ensure $unit_number is accessible within the function
+    if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
+        // return "<a href='rent_unit.php?unit=$unit_number' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
+        return "";
+    } else {
+        return "                 <button type='submit' class='btn btn-success custom-btn-font text-white text'>View Contract</button>
+                                 <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Billing</button>
+                                <button type='submit' class='btn btn-danger custom-btn-font text-white text'>Terminate Lease</button>";
+    }
+}
+
+$rent = rentButton($status);
+
+function buildingType($unitNumber) {
+    return $unitNumber >= 3 ? ' <li>
+                                <ul class="card-text">2 Bedrooms (located on the upper floor)</ul>
+                                <ul class="card-text">1 Living Room</ul>
+                                <ul class="card-text">1 Bathroom</ul>
+                                <ul class="card-text">1 Kitchen/Dining Area</ul>
+                                </li>' : '
+                                <li>
+                                <ul class="card-text">1 Bedroom</ul>
+                                <ul class="card-text">1 Living Room</ul>
+                                <ul class="card-text">1 Bathroom</ul>
+                                <ul class="card-text">1 Kitchen/ Dining Area</ul>
+                                </li>
+                                ';
+}
+
+$building = buildingType($unit_number);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,13 +95,6 @@ $result = $conn->query($query);
     <link rel="shortcut icon" href="../assets/images/logov5.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-       <!-- Bootstrap CSS -->
-       <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- Bootstrap JavaScript -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
 
 
      <!-- GOOGLE FONTS POPPINS  -->
@@ -147,7 +211,7 @@ $result = $conn->query($query);
     }
     
     .active.toggler {
-        left: 170px;
+        left: 150px;
     }
     
     .active.sidebar {
@@ -167,19 +231,6 @@ $result = $conn->query($query);
     a {
         text-decoration: none;
         color: inherit;
-    }
-    h4, h5 {
-        font-family: 'Poppins', 'sans-serif';
-        font-size: 20px;
-        font-weight: 500;
-    }
-
-    .w-450{
-        width:450px;
-        border-radius:20px;
-    }
-    .n-table{
-        max-width: 800px;
     }
 
     /* CARD STYLING */
@@ -214,21 +265,10 @@ $result = $conn->query($query);
     .custom-btn-font {
     font-size: 1.35rem; /* Adjust the size as needed */
     }
-    .btn {
+    h4, h5 {
         font-family: 'Poppins', 'sans-serif';
-        font-size: 17px;
+        font-size: 20px;
         font-weight: 500;
-    }
-    /* Custom styling for table */
-    .table-rounded {
-            border-radius: 14px;
-            overflow: hidden; /* Prevent content from overflowing the border radius */
-    }
-
-        /* Make table responsive */
-    .table-wrapper {
-            overflow-x: auto; /* Enable horizontal scrolling */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
     }
 
     /* MEDIA QUERIES */
@@ -282,12 +322,7 @@ $result = $conn->query($query);
 </head>
 <body>
     
-    <!-- ADMIN SIDEBAR COMPONENT -->
-    <?php
-
-    // include "../components/admin_sidebar.php";
-
-    ?> 
+   
 
 <div class="menu">
     <div class="sidebar">
@@ -303,12 +338,12 @@ $result = $conn->query($query);
             <p class="para"><a href="dashboard.php">Dashboard</a></p>
         </li>
 
-        <li class="items <?php echo $current_page == 'units.php' ? 'active-menu' : ''; ?>">
+        <li class="items <?php echo $current_page == 'tenant-information.php' ? 'active-menu' : ''; ?>">
             <a href="units.php"><i class="fa-solid fa-home"></i></i></a>
             <p class="para"><a href="units.php">Units</a></p>
         </li>
 
-        <li class="items <?php echo $current_page == 'tenant-history.php' ? 'active-menu' : ''; ?>">
+        <li class="items <?php echo $current_page == 'tenant.php' ? 'active-menu' : ''; ?>">
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
@@ -333,91 +368,53 @@ $result = $conn->query($query);
 
     <div class="content">
         <div class="container-fluid mt-4">
-          
+            <div class="row justify-content-center">
 
-        <a href="tenants.php"
-        class="btn btn-light mb-3">Back to Tenant List</a>
-
-
-          <!-- SEARCH BUTTON  -->
-          <form action="tenant-history.php" class="smt-3 n-table" method="get">
-
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
-        <button class="btn btn-primary" id="gBtn">
-        Search
-        <!-- Search button svg icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-        </svg> 
-
-        </button>
-        </div>
-
-        </form>
-
-         <!-- ERROR HANDLING  -->
-         <?php if (isset($_GET['error'])) { ?>
-                <div class="alert alert-danger mt-3 n-table" role="alert">
-                <?=$_GET['error']?>
-              </div>
-             <?php } ?>
-
-                         <!-- SUCCESS HANDLING FOR TEACHER-DELETE -->
-             <?php if (isset($_GET['success'])) { ?>
-                <div class="alert alert-info mt-3 n-table" role="alert">
-                <?=$_GET['success']?>
-              </div>
-        <?php } ?>
-
-        <!-- TABLE TO READ DATA FROM DATABASE -->
-        <div class="table-wrapper">
-        <table class="table table-bordered table-striped table-rounded">
-            <thead class="table-primary">
-                <tr>
-                    <th>Tenant_ID</th>
-                    <th>Full Name</th>
-                    <th>Phone Number</th>
-                    <th>Work</th>
-                    <th>Downpayment</th>
-                    <th>Advance</th>
-                    <th>Electricity</th>
-                    <th>Water</th>
-                    <th>Unit No.</th>
-                    <th>Move in Date</th>
-                    <th>Move out Date</th>
-                </tr>
-            </thead>
-            <tbody>
-               <?php if ($result->num_rows > 0): ?>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['tenant_id']); ?></td>
-                                <td><?php echo htmlspecialchars($row['fullname']); ?></td>
-                                <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
-                                <td><?php echo htmlspecialchars($row['work']); ?></td>
-                                <td><?php echo htmlspecialchars($row['downpayment']); ?></td>
-                                <td><?php echo htmlspecialchars($row['advance']); ?></td>
-                                <td><?php echo htmlspecialchars($row['electricity']); ?></td>
-                                <td><?php echo htmlspecialchars($row['water']); ?></td>
-                                <td><?php echo htmlspecialchars($row['units']); ?></td>
-                                <td><?php echo htmlspecialchars($row['move_in_date']); ?></td>
-                                <td><?php echo htmlspecialchars($row['move_out_date']); ?></td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="11" class="text-center">No tenant history found</td>
-                        </tr>
-                    <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-       
-           </div>
-
-
-
+            <div class="col-12 col-md-6 mb-3">
+                <div class="card" data-aos="fade-up">
+                    <!-- TENANT INFORMATION CARD -->
+                    <div class="card-body">
+                        <a href="units.php">Back</a>
+                        <h1 class="text-center">Tenant Information</h1>
+                        <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
+                        <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
+                        <p class="card-text text-center">Status: <?php echo $status; ?></p>
+                        <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
+                        <?php if ($status != '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
+                            <p class="card-text text-center">Maintenance Status: <span style="color: green;">●</span></p>
+                            <hr>
+                            <h3 class="text-center">Tenant Information</h3>
+                            <form action="update_tenant_info.php" method="post">
+                                <input type="hidden" name="unit_number" value="<?php echo $unit_number; ?>">
+                                <p class="text-left fs-4">Full Name: <?php echo $tenant_fullname; ?></p>
+                                <p class="text-left fs-4">Phone Number: <?php echo $tenant_phone; ?></p>
+                                <p class="text-left fs-4">Start Date: <?php echo $start_date; ?></p>
+                                <p class="text-left fs-4">Due Date: <?php echo $due_date; ?></p>
+                                <hr>
+                                <h3 class="text-center">Billing Information</h3>
+                                <p class="fs-4">Monthly Bill:
+                                    <input class="card-text fs-6" type="radio" name="monthly_bill" value="paid"> paid
+                                    <input class="card-text" type="radio" name="monthly_bill" value="not_paid"> not paid
+                                </p>
+                                <p class="fs-4">Electricity Bill:
+                                    <input class="card-text" type="radio" name="electricity_bill" value="paid"> paid
+                                    <input class="card-text" type="radio" name="electricity_bill" value="not_paid"> not paid
+                                </p>
+                                <p class="fs-4">Water Bill:
+                                    <input class="card-text" type="radio" name="water_bill" value="paid"> paid
+                                    <input class="card-text" type="radio" name="water_bill" value="not_paid"> not paid
+                                </p>
+                                <hr/>
+                               
+                                <?php echo $rent; ?>
+                                
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+                
+            </div>
         </div>
     </div>
 

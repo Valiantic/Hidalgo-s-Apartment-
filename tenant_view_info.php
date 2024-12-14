@@ -18,19 +18,19 @@ $result = $conn->query($sql);
 $status = ($result->num_rows > 0) ? '<p class="fs-4 text-muted text-center">Occupied</p>' : '<p class="fs-4 fw-bold text-center text-warning">Available</p>';
 
 function getUnitType($unitNumber) {
-    return $unitNumber <= 3 ? '2-Storey Building' : 'Single-Storey Building';
+    return $unitNumber >= 3 ? '2-Storey Building' : 'Single-Storey Building';
 }
 
 $type = getUnitType($unit_number);
 
 function maxOccupancy($unitNumber) {
-    return $unitNumber <= 3 ? '3-5 Persons' : '2-4 Persons';
+    return $unitNumber >= 3 ? '3-5 Persons' : '2-4 Persons';
 }
 
 $occupancy = maxOccupancy($unit_number);
 
 function getUnitImage($unitNumber, $status) {
-    if ($unitNumber <= 3) {
+    if ($unitNumber >= 3) {
         return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
     } else {
         return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
@@ -52,18 +52,19 @@ function rentButton($status) {
 $rent = rentButton($status);
 
 function buildingType($unitNumber) {
-    return $unitNumber <= 3 ? ' <li>
-                                <ul class="card-text">1 Bedroom</ul>
-                                <ul class="card-text">1 Living Room</ul>
-                                <ul class="card-text">1 Bathroom</ul>
-                                <ul class="card-text">1 Kitchen/ Dining Area</ul>
-                                </li>' : '
-                                <li>
+    return $unitNumber >= 3 ? ' <li>
                                 <ul class="card-text">2 Bedrooms (located on the upper floor)</ul>
                                 <ul class="card-text">1 Living Room</ul>
                                 <ul class="card-text">1 Bathroom</ul>
                                 <ul class="card-text">1 Kitchen/Dining Area</ul>
-                                </li>';
+                                </li>' : '
+                                <li>
+                                <ul class="card-text">1 Bedroom</ul>
+                                <ul class="card-text">1 Living Room</ul>
+                                <ul class="card-text">1 Bathroom</ul>
+                                <ul class="card-text">1 Kitchen/ Dining Area</ul>
+                                </li>
+                                ';
 }
 
 $building = buildingType($unit_number);

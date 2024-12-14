@@ -8,6 +8,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 }
 $current_page = basename($_SERVER['PHP_SELF']); 
+
+$searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,8 +164,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     
     a {
-        text-decoration: none;
         color: inherit;
+        text-decoration: none;
+    }
+    .tenant-fullname {
+        text-decoration: underline;
     }
     h4, h5 {
         font-family: 'Poppins', 'sans-serif';
@@ -344,10 +350,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
         class="btn btn-dark mb-3">View Tenant History</a>
 
           <!-- SEARCH BUTTON  -->
-          <form action="teacher-search.php" class="smt-3 n-table" method="get">
+          <form action="tenants.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search...">
+        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
         <button class="btn btn-primary" id="gBtn">
         Search
         <!-- Search button svg icon -->
@@ -395,7 +401,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <tbody>
                 <?php
                 // Fetch tenant data
-                $sql = "SELECT * FROM tenant";
+                $sql = "SELECT * FROM tenant WHERE fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%'";
                 $result = $conn->query($sql);
 
                 // Check if query executed successfully
@@ -406,9 +412,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 // Display tenants or no records message
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                        $unit_number = str_replace('Unit ', '', $row['units']);
                         echo "<tr>
                             <td>{$row['tenant_id']}</td>
-                            <td>{$row['fullname']}</td>
+                            <td><a class='text-primary tenant-fullname' href='tenant-information.php?unit={$unit_number}'>{$row['fullname']}</a></td>
                             <td>{$row['phone_number']}</td>
                             <td>{$row['work']}</td>
                             <td>{$row['downpayment']}</td>
@@ -426,7 +433,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='7' class='text-center'>No tenants found.</td></tr>";
+                    echo "<tr><td colspan='11' class='text-center'>No tenants found.</td></tr>";
                 }
                 ?>
             </tbody>
