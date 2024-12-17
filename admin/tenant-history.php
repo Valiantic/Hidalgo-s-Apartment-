@@ -337,6 +337,7 @@ $result = $conn->query($query);
 
         <a href="tenants.php"
         class="btn btn-light mb-3">Back to Tenant List</a>
+        <button id="clearHistory" class="btn btn-danger mb-3" onclick="confirmClearHistory()">Delete Tenant History</button>
 
 
           <!-- SEARCH BUTTON  -->
@@ -423,6 +424,7 @@ $result = $conn->query($query);
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     const toggler = document.querySelector('.toggler')
@@ -436,6 +438,27 @@ $result = $conn->query($query);
     }
 
     showFull()
+
+    // Clear Tenant History
+    function confirmClearHistory() {
+        Swal.fire({
+            title: 'Clear Tenant History?',
+            text: "Clearing this will remove all Past Tenant Data",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, clear Tenant History!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = './req/clear-tenant-history.php';
+            }
+        })
+    }
+</script>
+
+<script>
+    
 </script>
 
 </body>
