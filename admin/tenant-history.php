@@ -337,7 +337,7 @@ $result = $conn->query($query);
 
         <a href="tenants.php"
         class="btn btn-light mb-3">Back to Tenant List</a>
-        <button id="clearHistory" class="btn btn-danger mb-3" onclick="confirmClearHistory()">Delete Tenant History</button>
+        <button id="clearHistory" class="btn btn-danger mb-3" onclick="confirmClearHistory()">Clear Tenant History</button>
 
 
           <!-- SEARCH BUTTON  -->

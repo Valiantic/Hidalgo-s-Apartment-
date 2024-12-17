@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
+        $_SESSION['fullname'] = $user['fullname'];
 
         if ($user['role'] == 'admin') {
             header('Location: ../../admin/dashboard.php');

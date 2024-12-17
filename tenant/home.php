@@ -1,12 +1,16 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] != 'user') {
-    header('Location: ../authentication/login.php');
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../authentication/login.php"); 
     exit;
 }
 
+$fullname = $_SESSION['fullname'];
+
 include '../connections.php';
+
+$current_page = basename($_SERVER['PHP_SELF']);
 
 
 ?>
@@ -26,6 +30,9 @@ include '../connections.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
+
+     <!-- ANIMATE ON SCROLL -->
+     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
 <style>
     *{
@@ -136,7 +143,7 @@ include '../connections.php';
     }
     
     .active.toggler {
-        left: 190px;
+        left: 135px;
     }
     
     .active.sidebar {
@@ -262,7 +269,7 @@ include '../connections.php';
             </span>
         </div>
 
-        <li class="items  <?php echo $current_page == 'dashboard.php' ? 'active-menu' : ''; ?>">
+        <li class="items  <?php echo $current_page == 'home.php' ? 'active-menu' : ''; ?>">
             <a href="dashboard.php"><i class="fa-solid fa-chart-simple"></i></a>
             <p class="para"><a href="dashboard.php">Dashboard</a></p>
         </li>
@@ -272,6 +279,12 @@ include '../connections.php';
             <a href="message.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message.php">Message</a></p>
         </li>
+
+        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
+            <a href="message.php"> <i class="fa-solid fa-gear"></i></a>
+            <p class="para"><a href="message.php">Settings</a></p>
+        </li>
+
 
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
@@ -289,8 +302,44 @@ include '../connections.php';
 
     <div class="content">
         <div class="container-fluid mt-4">
-            <div class="row justify-content-center">
+            <div class="row justify-content-start gap-4">
+
+            <h1 data-aos="fade-right" class="display- text-white fw-bold">Welcome, <?php echo htmlspecialchars($fullname); ?>!</h1>
                
+
+            <div class="card text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
+            <div class="card-title fs-4">Tenant Information</div>
+            <div class="card-body">
+                <label>Tenant Fullname</label>
+                <h5 class="card-text">John Doe</h5>
+                <label>Tenant Phone number</label>
+                <h5 class="card-text">0987654</h5>
+                <label>Start Date</label>
+                <h5 class="card-text">13/16/2024</h5>
+                <label>End Date</label>
+                <h5 class="card-text">1/16/2024</h5>
+
+            </div>
+            </div>
+
+            <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
+            <div class="card-title fs-4">Your Billings</div>
+            <div class="card-body">
+                <label>Monthly Rent <span style="color: blue;">7000</span></label>
+                <p class="card-text"><span style="color: green;">●</span> Paid</p>
+                <label>Electricity Bill</label>
+                <p class="card-text"><span style="color: green;">●</span> Paid</p>
+                <label>Water Bill</label>
+                <p class="card-text"><span style="color: green;">●</span> Paid</p>
+            </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="#" class="btn btn-primary">View Contract</a>
+                <a href="#" class="btn btn-warning">Report Issue</a>
+                <a href="#" class="btn btn-danger">End Contract</a>
+            </div>
+
             </div>
         </div>
     </div>
@@ -298,7 +347,13 @@ include '../connections.php';
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
 
+<!-- ANIMATE ON SCROLL -->
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
 <script>
+
+    AOS.init();
+
     const toggler = document.querySelector('.toggler')
     const sidebar = document.querySelector('.sidebar')
 

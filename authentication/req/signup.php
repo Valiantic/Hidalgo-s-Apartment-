@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Set session variables
                 $_SESSION['user_id'] = $pdo->lastInsertId();
                 $_SESSION['role'] = 'user';
+                $_SESSION['fullname'] = $fullname;
+
                 // Redirect to the tenant home page
                 header('Location: ../../tenant/home.php');
                 exit;

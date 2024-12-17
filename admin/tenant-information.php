@@ -66,24 +66,6 @@ function rentButton($status) {
 
 $rent = rentButton($status);
 
-function buildingType($unitNumber) {
-    return $unitNumber >= 3 ? ' <li>
-                                <ul class="card-text">2 Bedrooms (located on the upper floor)</ul>
-                                <ul class="card-text">1 Living Room</ul>
-                                <ul class="card-text">1 Bathroom</ul>
-                                <ul class="card-text">1 Kitchen/Dining Area</ul>
-                                </li>' : '
-                                <li>
-                                <ul class="card-text">1 Bedroom</ul>
-                                <ul class="card-text">1 Living Room</ul>
-                                <ul class="card-text">1 Bathroom</ul>
-                                <ul class="card-text">1 Kitchen/ Dining Area</ul>
-                                </li>
-                                ';
-}
-
-$building = buildingType($unit_number);
-
 
 ?>
 <!DOCTYPE html>
