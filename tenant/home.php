@@ -7,10 +7,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $fullname = $_SESSION['fullname'];
+$phone_number = $_SESSION['phone_number'];
+$first_name = explode(' ', $fullname)[0]; // Get the first name
 
 include '../connections.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
+
 
 
 ?>
@@ -143,7 +146,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     
     .active.toggler {
-        left: 135px;
+        left: 150px;
     }
     
     .active.sidebar {
@@ -304,16 +307,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="container-fluid mt-4">
             <div class="row justify-content-start gap-4">
 
-            <h1 data-aos="fade-right" class="display- text-white fw-bold">Welcome, <?php echo htmlspecialchars($fullname); ?>!</h1>
+            <h1 data-aos="fade-right" class="display- text-white fw-bold">Welcome, <?php echo htmlspecialchars($first_name); ?>!</h1>
                
 
             <div class="card text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
-            <div class="card-title fs-4">Tenant Information</div>
+            <div class="card-title fs-4 text-center">Tenant Information</div>
             <div class="card-body">
                 <label>Tenant Fullname</label>
-                <h5 class="card-text">John Doe</h5>
+                <h5 class="card-text"><?php echo htmlspecialchars($fullname)?></h5>
                 <label>Tenant Phone number</label>
-                <h5 class="card-text">0987654</h5>
+                <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
                 <label>Start Date</label>
                 <h5 class="card-text">13/16/2024</h5>
                 <label>End Date</label>
@@ -323,7 +326,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
 
             <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
-            <div class="card-title fs-4">Your Billings</div>
+            <div class="card-title fs-4 text-center">Your Billings</div>
             <div class="card-body">
                 <label>Monthly Rent <span style="color: blue;">7000</span></label>
                 <p class="card-text"><span style="color: green;">●</span> Paid</p>
@@ -334,10 +337,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             </div>
 
-            <div class="d-flex gap-2">
-                <a href="#" class="btn btn-primary">View Contract</a>
-                <a href="#" class="btn btn-warning">Report Issue</a>
-                <a href="#" class="btn btn-danger">End Contract</a>
+            <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
+            <div class="card-title fs-4 text-center">Actions</div>
+            <div class="card-body d-flex flex-column gap-2">
+                <br/>
+                <a href="#" class="btn btn-primary btn-lg">View Contract</a>
+                <a href="#" class="btn btn-warning btn-lg text-white">Report Issue</a>
+                <a href="#" class="btn btn-danger btn-lg">End Contract</a>
+            </div>
             </div>
 
             </div>
