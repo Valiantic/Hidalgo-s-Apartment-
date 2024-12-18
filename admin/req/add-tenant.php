@@ -53,65 +53,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $stmt_check->close();
 
-    // Insert data into `tenant` table
-    $stmt1 = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt1->bind_param("sssddddss", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $units, $move_in_date);
-    $stmt1->execute();
+    // Begin a transaction
+    $conn->begin_transaction();
 
-    // Insert data into `users` table
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-    $stmt2 = $conn->prepare("INSERT INTO users (fullname, phone_number, work, email, password) VALUES (?, ?, ?, ?, ?)");
-    $stmt2->bind_param("sssss", $fullname, $phone_number, $work, $email, $hashed_password);
-    $stmt2->execute();
-
-    // Send email notification
-    $mail = new PHPMailer(true);
     try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'stevenmadali17@gmail.com'; 
-        $mail->Password = 'odei efvp hufg rccu'; 
-        $mail->SMTPSecure = 'ssl';
-        $mail->Port = 465;
+        // Insert data into `users` table
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+        $stmt_user = $conn->prepare("INSERT INTO users (fullname, phone_number, work, email, password) VALUES (?, ?, ?, ?, ?)");
+        $stmt_user->bind_param("sssss", $fullname, $phone_number, $work, $email, $hashed_password);
+        $stmt_user->execute();
 
-        $mail->setFrom('hidalgosapartment@gmail.com');
-        $mail->addAddress($_POST["email"]);
+        // Get the newly inserted user ID
+        $user_id = $conn->insert_id;
 
-        $mail->isHTML(true);
-        $mail->Subject = 'Account Created';
-        $mail->Body = "<h1>Welcome! $fullname Thank you for choosing Hidalgo's Apartment! </h1><p>Use this credentials to Log-in to your account.</p><ul><li><strong>Email: $email</strong> </li><li><strong>Password: $password</strong> </li></ul>";
+        // Insert data into `tenant` table
+        $stmt_tenant = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt_tenant->bind_param("sssddddssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $units, $move_in_date, $user_id);
+        $stmt_tenant->execute();
 
-        $mail->send();
-        echo " <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
-        <script>
-            Swal.fire({
-                title: 'Success!',
-                text: 'Tenant added successfully. An email notification has been sent to the tenant.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
+        // Commit the transaction
+        $conn->commit();
 
-            setTimeout(() => {
-                window.location.href = '../add-tenant.php';
-            }, 2500);
-        </script>";
+        // Send email notification
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'stevenmadali17@gmail.com'; 
+            $mail->Password = 'odei efvp hufg rccu'; 
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
 
+            $mail->setFrom('hidalgosapartment@gmail.com');
+            $mail->addAddress($_POST["email"]);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Account Created';
+            $mail->Body = "<h1>Welcome! $fullname Thank you for choosing Hidalgo's Apartment! </h1><p>Use this credentials to Log-in to your account.</p><ul><li><strong>Email: $email</strong> </li><li><strong>Password: $password</strong> </li></ul>";
+
+            $mail->send();
+            echo " <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
+            <script>
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Tenant added successfully. An email notification has been sent to the tenant.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+
+                setTimeout(() => {
+                    window.location.href = '../add-tenant.php';
+                }, 2500);
+            </script>";
+        } catch (Exception $e) {
+            echo "
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
+            <script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred: " . $mail->ErrorInfo . "',
+                    icon: 'error'
+                });
+
+                setTimeout(() => {
+                    window.location.href = '../add-tenant.php';
+                }, 2500);
+            </script>";
+        }
     } catch (Exception $e) {
-        echo "
-         <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>;
-        <script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'An error occurred: " . $mail->ErrorInfo . "',
-                icon: 'error'
-            });
-
-            // Add a 5-second timer before redirection
-            setTimeout(() => {
-                window.location.href = '../add-tenant.php';
-            }, 2500);
-        </script>";
+        $conn->rollback();
+        die("Error adding tenant: " . $e->getMessage());
     }
 }
 ?>

@@ -146,7 +146,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     
     .active.toggler {
-        left: 150px;
+        left: 170px;
     }
     
     .active.sidebar {
@@ -305,7 +305,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="content">
         <div class="container-fluid mt-4">
-            <div class="row justify-content-start gap-4">
+            <div class="row justify-content-center gap-4">
 
             <h1 data-aos="fade-right" class="display- text-white fw-bold">Welcome, <?php echo htmlspecialchars($first_name); ?>!</h1>
                

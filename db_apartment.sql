@@ -24,7 +24,7 @@ CREATE TABLE users (
 
 -- TENANTS
 CREATE TABLE tenant (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    tenant_id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(255) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
     work VARCHAR(255),
@@ -54,4 +54,20 @@ CREATE TABLE tenant_history (
     deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- FOREIGN KEY CONSTRAINT
+ALTER TABLE tenant ADD COLUMN user_id INT;
+
+UPDATE tenant
+SET user_id = (
+    SELECT id
+    FROM users
+    WHERE users.fullname = tenant.fullname
+    LIMIT 1
+);
+
+UPDATE tenant SET user_id = 1 WHERE user_id IS NULL;
+
+ALTER TABLE tenant
+ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+ON DELETE CASCADE ON UPDATE CASCADE;
 

@@ -9,8 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 include "../../connections.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve and sanitize input data
-    $tenant_id = $_POST['tenant_id']; 
+    $tenant_id = $_POST['tenant_id'];
     $fullname = htmlspecialchars(trim($_POST['fullname']));
     $phone_number = htmlspecialchars(trim($_POST['phone_number']));
     $work = htmlspecialchars(trim($_POST['work']));
@@ -21,28 +20,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $unit = htmlspecialchars(trim($_POST['units']));
     $move_in_date = htmlspecialchars(trim($_POST['move_in_date']));
 
-    // if (empty($fullname) || empty($phone_number) || empty($work) || empty($downpayment) || empty($unit) || empty($move_in_date)) {
-    //     die("All fields are required!");
-    // }
+    // Start a transaction to ensure atomicity
+    $conn->begin_transaction();
 
-    // Update tenant information in the database
-    $query = "UPDATE tenant 
-              SET fullname = ?, phone_number = ?, work = ?, downpayment = ?,  advance = ?, electricity = ?, water = ?, units = ?, move_in_date = ? 
-              WHERE tenant_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("sssssssssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $unit, $move_in_date, $tenant_id);
+    try {
+        // Update tenant table
+        $tenant_query = "UPDATE tenant 
+                         SET fullname = ?, phone_number = ?, work = ?, downpayment = ?, advance = ?, electricity = ?, water = ?, units = ?, move_in_date = ?
+                         WHERE tenant_id = ?";
+        $tenant_stmt = $conn->prepare($tenant_query);
+        $tenant_stmt->bind_param("sssssssssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $unit, $move_in_date, $tenant_id);
+        $tenant_stmt->execute();
 
-    if ($stmt->execute()) {
-        // Redirect or show success message
+        // Update users table
+        $user_query = "UPDATE users 
+                       SET fullname = ?, phone_number = ?, work = ? 
+                       WHERE id = (SELECT user_id FROM tenant WHERE tenant_id = ?)";
+        $user_stmt = $conn->prepare($user_query);
+        $user_stmt->bind_param("sssi", $fullname, $phone_number, $work, $tenant_id);
+        $user_stmt->execute();
+
+        $conn->commit();
+
         header("Location: ../tenants.php?success=Record updated successfully!");
-        exit;
-    } else {
-        die("Error updating record: " . $stmt->error);
+    } catch (Exception $e) {
+        $conn->rollback();
+        die("Error updating records: " . $e->getMessage());
     }
-
-    $stmt->close();
-    $conn->close();
-} else {
-    die("Invalid request!");
 }
 ?>

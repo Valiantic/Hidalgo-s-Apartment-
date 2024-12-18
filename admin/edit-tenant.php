@@ -22,7 +22,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 if (isset($_GET['tenant_id'])) {
     $tenant_id = $_GET['tenant_id'];
 
-    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, advance, electricity, water, units FROM tenant WHERE tenant_id = ?");
+    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date FROM tenant WHERE tenant_id = ?");
     $stmt->bind_param("i", $tenant_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -478,7 +478,7 @@ if (isset($_GET['tenant_id'])) {
                  <!-- Calendar for Move-in Date -->
                 <div class="form-group mb-3">
                     <label for="move_in_date" class="form-label">Move-in Date:</label>
-                    <input type="date" class="form-control" id="move_in_date" name="move_in_date">
+                    <input type="date" class="form-control" id="move_in_date" name="move_in_date" value="<?php echo htmlspecialchars($tenant['move_in_date']); ?>" required>
                 </div>
 
                     <!-- ERROR AND SUCCESS HANDLING -->
