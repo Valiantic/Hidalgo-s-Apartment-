@@ -37,6 +37,26 @@ function getMonthlyRent($unit) {
 
 $monthly_rent = getMonthlyRent($unit);
 
+// Fetch the latest tenant billing information
+$stmt = $pdo->prepare("SELECT monthly_rent_status, electricity_status, water_status 
+                       FROM transaction_info 
+                       WHERE tenant_id = ? 
+                       ORDER BY transaction_id DESC 
+                       LIMIT 1");
+$stmt->execute([$user_id]);
+$billing_info = $stmt->fetch();
+
+function displayStatus($status) {
+    switch ($status) {
+        case 'Paid':
+            return '<span style="color: green;">●</span> Paid';
+        case 'Not Paid':
+            return '<span style="color: red;">●</span> Not Paid';
+        default:
+            return '<span style="color: gray;">●</span> No Bill Yet';
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -348,13 +368,13 @@ $monthly_rent = getMonthlyRent($unit);
             <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Your Billings</div>
             <div class="card-body">
-                <label>Monthly Rent <span style="color: blue;"><?php echo htmlspecialchars($monthly_rent); ?></span></label>
-                <p class="card-text"><span style="color: green;">●</span> Paid</p>
+                <label>Monthly Rent <span style="color: blue;">₱<?php echo htmlspecialchars($monthly_rent); ?></span></label>
+                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['monthly_rent_status']) : displayStatus(null); ?></p>
                 <label>Electricity Bill</label>
-                <p class="card-text"><span style="color: green;">●</span> Paid</p>
+                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['electricity_status']) : displayStatus(null); ?></p>
                 <label>Water Bill</label>
-                <p class="card-text"><span style="color: green;">●</span> Paid</p>
-            </div>
+                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['water_status']) : displayStatus(null); ?></p>
+                </div>
             </div>
 
             <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">

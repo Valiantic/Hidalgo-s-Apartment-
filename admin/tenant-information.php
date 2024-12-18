@@ -8,9 +8,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 include '../connections.php';
 
-$current_page = basename($_SERVER['PHP_SELF']); 
+$current_page = basename($_SERVER['PHP_SELF']);
 
-
+// Retrieve the unit number from the query parameter
 $unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
 
 if ($unit_number < 1 || $unit_number > 5) {
@@ -19,10 +19,15 @@ if ($unit_number < 1 || $unit_number > 5) {
 
 $unit_name = "Unit $unit_number";
 
-$sql = "SELECT * FROM tenant WHERE units = '$unit_name'";
-$result = $conn->query($sql);
-
+// Fetch tenant details for the specified unit
+$sql = "SELECT * FROM tenant WHERE units = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $unit_name);
+$stmt->execute();
+$result = $stmt->get_result();
 $tenant_info = $result->fetch_assoc();
+
+$tenant_id = $tenant_info['tenant_id'] ?? null;
 $tenant_fullname = $tenant_info['fullname'] ?? 'N/A';
 $tenant_phone = $tenant_info['phone_number'] ?? 'N/A';
 $start_date = $tenant_info['move_in_date'] ?? 'N/A';
@@ -30,18 +35,21 @@ $due_date = $start_date !== 'N/A' ? date('Y-m-d', strtotime($start_date . ' +1 m
 
 $status = ($result->num_rows > 0) ? '<p class="fs-4 text-muted text-center">Occupied</p>' : '<p class="fs-4 fw-bold text-center text-warning">Available</p>';
 
+// Function to determine unit type
 function getUnitType($unitNumber) {
     return $unitNumber >= 3 ? '2-Storey Building' : 'Single-Storey Building';
 }
 
 $type = getUnitType($unit_number);
 
+// Function to determine max occupancy
 function maxOccupancy($unitNumber) {
     return $unitNumber >= 3 ? '3-5 Persons' : '2-4 Persons';
 }
 
 $occupancy = maxOccupancy($unit_number);
 
+// Function to get unit image based on availability
 function getUnitImage($unitNumber, $status) {
     if ($unitNumber >= 3) {
         return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
@@ -52,22 +60,27 @@ function getUnitImage($unitNumber, $status) {
 
 $img_src = getUnitImage($unit_number, $status);
 
-function rentButton($status) {
-    global $unit_number; // Ensure $unit_number is accessible within the function
+// Function to display buttons based on unit status
+function rentButton($status, $tenant_id, $unit_name) {
     if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
-        // return "<a href='rent_unit.php?unit=$unit_number' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
-        return "";
+        return ""; // Empty string since the unit is available
     } else {
-        return "                 <button type='submit' class='btn btn-success custom-btn-font text-white text'>View Contract</button>
-                                 <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Billing</button>
-                                <button type='submit' class='btn btn-danger custom-btn-font text-white text'>Terminate Lease</button>";
+        return "
+        <div class='button-group'>
+            <form method='POST' action='update_billing_status.php' style='display: inline;'>
+                <input type='hidden' name='tenant_id' value='" . htmlspecialchars($tenant_id) . "'>
+                <input type='hidden' name='unit' value='" . htmlspecialchars($unit_name) . "'>
+                <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Billing</button>
+            </form>
+            <button type='submit' class='btn btn-success custom-btn-font text-white text'>View Contract</button>
+            <button type='submit' class='btn btn-danger custom-btn-font text-white text'>Terminate Lease</button>
+        </div>";
     }
 }
 
-$rent = rentButton($status);
-
-
+$rent = rentButton($status, $tenant_id, $unit_name);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -297,7 +310,24 @@ $rent = rentButton($status);
         color: white;
     }
 
+    .radio-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 1.7rem;
+    }
+    .radio-group input[type="radio"] {
+        display: inline-block;
+        margin-right: 2px;
+        transform: scale(1.5); /* Increase the size of the radio buttons */
+    }
 
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
 
 </style>
 
@@ -358,6 +388,26 @@ $rent = rentButton($status);
                     <div class="card-body">
                         <a href="units.php">Back</a>
                         <h1 class="text-center">Tenant Information</h1>
+
+                        <!-- DATA TO PASS FOR BILLING INFORMATION -->
+                        <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($user_id); ?>">
+                        <input type="hidden" name="unit" value="<?php echo htmlspecialchars($unit); ?>">
+
+                                        <!-- ERROR HANDLING  -->
+                        <?php if (isset($_GET['error'])) { ?>
+                                <div class="alert alert-danger mt-3 n-table" role="alert">
+                                <?=$_GET['error']?>
+                            </div>
+                            <?php } ?>
+
+                                        <!-- SUCCESS HANDLING FOR TEACHER-DELETE -->
+                            <?php if (isset($_GET['success'])) { ?>
+                                <div class="alert alert-info mt-3 n-table" role="alert">
+                                <?=$_GET['success']?>
+                            </div>
+                        <?php } ?>
+
+
                         <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
                         <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
                         <p class="card-text text-center">Status: <?php echo $status; ?></p>
@@ -366,7 +416,7 @@ $rent = rentButton($status);
                             <p class="card-text text-center">Maintenance Status: <span style="color: green;">●</span></p>
                             <hr>
                             <h3 class="text-center">Tenant Information</h3>
-                            <form action="update_tenant_info.php" method="post">
+                            <form action="./req/update_billing_status.php" method="post">
                                 <input type="hidden" name="unit_number" value="<?php echo $unit_number; ?>">
                                 <p class="text-left fs-4">Full Name: <?php echo $tenant_fullname; ?></p>
                                 <p class="text-left fs-4">Phone Number: <?php echo $tenant_phone; ?></p>
@@ -374,17 +424,26 @@ $rent = rentButton($status);
                                 <p class="text-left fs-4">Due Date: <?php echo $due_date; ?></p>
                                 <hr>
                                 <h3 class="text-center">Billing Information</h3>
-                                <p class="fs-4">Monthly Bill:
-                                    <input class="card-text fs-6" type="radio" name="monthly_bill" value="paid"> paid
-                                    <input class="card-text" type="radio" name="monthly_bill" value="not_paid"> not paid
+                                <p class="fs-4">Monthly Bill:<br>
+                                    <div class="radio-group">
+                                        <input class="card-text fs-6" type="radio" name="monthly_rent_status" value="Paid"> paid
+                                        <input class="card-text" type="radio" name="monthly_rent_status" value="Not Paid"> not paid
+                                        <input type="radio" name="monthly_rent_status" value="No Bill Yet" checked> no bill yet
+                                    </div>
                                 </p>
-                                <p class="fs-4">Electricity Bill:
-                                    <input class="card-text" type="radio" name="electricity_bill" value="paid"> paid
-                                    <input class="card-text" type="radio" name="electricity_bill" value="not_paid"> not paid
+                                <p class="fs-4">Electricity Bill:<br>
+                                    <div class="radio-group">
+                                        <input class="card-text" type="radio" name="electricity_status" value="Paid"> paid
+                                        <input class="card-text" type="radio" name="electricity_status" value="Not Paid"> not paid
+                                        <input type="radio" name="electricity_status" value="No Bill Yet" checked> no bill yet
+                                    </div>
                                 </p>
-                                <p class="fs-4">Water Bill:
-                                    <input class="card-text" type="radio" name="water_bill" value="paid"> paid
-                                    <input class="card-text" type="radio" name="water_bill" value="not_paid"> not paid
+                                <p class="fs-4">Water Bill:<br>
+                                    <div class="radio-group">
+                                        <input class="card-text" type="radio" name="water_status" value="Paid"> paid
+                                        <input class="card-text" type="radio" name="water_status" value="Not Paid"> not paid
+                                        <input type="radio" name="water_status" value="No Bill Yet" checked> no bill yet
+                                    </div>
                                 </p>
                                 <hr/>
                                
@@ -415,6 +474,27 @@ $rent = rentButton($status);
     }
 
     showFull()
+
+
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+      radio.addEventListener('click', function() {
+        if (this.wasChecked) {
+          this.checked = false;
+        }
+        document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+          radio.wasChecked = radio.checked;
+        });
+      });
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            if (this.value !== 'No Bill Yet') {
+                document.querySelector('input[type="radio"][name="' + this.name + '"][value="No Bill Yet"]').checked = false;
+            }
+        });
+    });
+  
 </script>
 
 </body>

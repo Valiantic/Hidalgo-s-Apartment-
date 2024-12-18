@@ -54,6 +54,7 @@ CREATE TABLE tenant_history (
     deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- FOREIGN KEY CONSTRAINT
 ALTER TABLE tenant ADD COLUMN user_id INT;
 
@@ -71,3 +72,16 @@ ALTER TABLE tenant
 ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 ON DELETE CASCADE ON UPDATE CASCADE;
 
+
+-- TRANSACTION
+
+CREATE TABLE transaction_info (
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    tenant_id INT NOT NULL,
+    unit VARCHAR(50) NOT NULL,
+    monthly_rent_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
+    electricity_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
+    water_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenant(user_id)
+);
