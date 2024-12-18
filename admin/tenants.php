@@ -33,7 +33,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
     <!-- SWEET ALERT MODAL -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -413,6 +413,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         $unit_number = str_replace('Unit ', '', $row['units']);
+                        $formatted_move_in_date = date('m/d/Y', strtotime($row['move_in_date']));
                         echo "<tr>
                             <td>{$row['tenant_id']}</td>
                             <td><a class='text-primary tenant-fullname' href='tenant-information.php?unit={$unit_number}'>{$row['fullname']}</a></td>
@@ -423,7 +424,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
                             <td>{$row['electricity']}</td>  
                             <td>{$row['water']}</td>
                             <td>{$row['units']}</td>
-                             <td>{$row['move_in_date']}</td>
+                            <td>{$formatted_move_in_date}</td>
                             <td>
                                  <div class='d-flex gap-2'>
                                     <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary w-100'>Edit</a>

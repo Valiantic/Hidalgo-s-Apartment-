@@ -14,7 +14,12 @@ include '../connections.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-
+// Fetch tenant start date
+$user_id = $_SESSION['user_id'];
+$stmt = $pdo->prepare("SELECT move_in_date FROM tenant WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$tenant = $stmt->fetch();
+$start_date = $tenant['move_in_date'];
 
 ?>
 <!DOCTYPE html>
@@ -31,7 +36,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
 
      <!-- ANIMATE ON SCROLL -->
@@ -318,9 +323,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <label>Tenant Phone number</label>
                 <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
                 <label>Start Date</label>
-                <h5 class="card-text">13/16/2024</h5>
+                <h5 class="card-text"><?php echo date('m/d/Y', strtotime($start_date)); ?></h5>
                 <label>End Date</label>
-                <h5 class="card-text">1/16/2024</h5>
+                <h5 class="card-text" id="end-date"></h5>
 
             </div>
             </div>
@@ -373,6 +378,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 
     showFull()
+
+    // Calculate and display end date
+    const startDate = new Date("<?php echo $start_date; ?>");
+    const endDate = new Date(startDate);
+    endDate.setMonth(startDate.getMonth() + 1);
+    const formattedEndDate = endDate.toLocaleDateString('en-US');
+    document.getElementById('end-date').textContent = formattedEndDate;
 </script>
 
 </body>
