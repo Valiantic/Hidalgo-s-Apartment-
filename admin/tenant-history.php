@@ -392,6 +392,10 @@ $result = $conn->query($query);
             <tbody>
                <?php if ($result->num_rows > 0): ?>
                         <?php while ($row = $result->fetch_assoc()): ?>
+                            <?php
+                                $formatted_move_in_date = date('m/d/Y', strtotime($row['move_in_date']));
+                                $formatted_move_out_date = date('m/d/Y', strtotime($row['move_out_date']));
+                            ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($row['tenant_id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['fullname']); ?></td>
@@ -402,8 +406,8 @@ $result = $conn->query($query);
                                 <td><?php echo htmlspecialchars($row['electricity']); ?></td>
                                 <td><?php echo htmlspecialchars($row['water']); ?></td>
                                 <td><?php echo htmlspecialchars($row['units']); ?></td>
-                                <td><?php echo htmlspecialchars($row['move_in_date']); ?></td>
-                                <td><?php echo htmlspecialchars($row['move_out_date']); ?></td>
+                                <td><?php echo htmlspecialchars($formatted_move_in_date); ?></td>
+                                <td><?php echo htmlspecialchars($formatted_move_out_date); ?></td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>

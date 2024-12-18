@@ -14,12 +14,28 @@ include '../connections.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Fetch tenant start date
+// Fetch tenant start date and unit
 $user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT move_in_date FROM tenant WHERE user_id = ?");
+$stmt = $pdo->prepare("SELECT move_in_date, units FROM tenant WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $tenant = $stmt->fetch();
 $start_date = $tenant['move_in_date'];
+$unit = $tenant['units'];
+
+// Function to get monthly rent based on unit
+function getMonthlyRent($unit) {
+    $rent_prices = [
+        'Unit 1' => 3500,
+        'Unit 2' => 3500,
+        'Unit 3' => 6500,
+        'Unit 4' => 6500,
+        'Unit 5' => 6500,
+        // Add more units and their prices as needed
+    ];
+    return isset($rent_prices[$unit]) ? $rent_prices[$unit] : 'N/A';
+}
+
+$monthly_rent = getMonthlyRent($unit);
 
 ?>
 <!DOCTYPE html>
@@ -326,14 +342,13 @@ $start_date = $tenant['move_in_date'];
                 <h5 class="card-text"><?php echo date('m/d/Y', strtotime($start_date)); ?></h5>
                 <label>End Date</label>
                 <h5 class="card-text" id="end-date"></h5>
-
             </div>
             </div>
 
             <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Your Billings</div>
             <div class="card-body">
-                <label>Monthly Rent <span style="color: blue;">7000</span></label>
+                <label>Monthly Rent <span style="color: blue;"><?php echo htmlspecialchars($monthly_rent); ?></span></label>
                 <p class="card-text"><span style="color: green;">●</span> Paid</p>
                 <label>Electricity Bill</label>
                 <p class="card-text"><span style="color: green;">●</span> Paid</p>
@@ -346,8 +361,8 @@ $start_date = $tenant['move_in_date'];
             <div class="card-title fs-4 text-center">Actions</div>
             <div class="card-body d-flex flex-column gap-2">
                 <br/>
-                <a href="#" class="btn btn-primary btn-lg">View Contract</a>
                 <a href="#" class="btn btn-warning btn-lg text-white">Report Issue</a>
+                <a href="#" class="btn btn-primary btn-lg">View Contract</a>
                 <a href="#" class="btn btn-danger btn-lg">End Contract</a>
             </div>
             </div>
