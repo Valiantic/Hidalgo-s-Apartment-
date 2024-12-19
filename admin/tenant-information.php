@@ -421,6 +421,7 @@ if ($maintenance_status) {
                                 <h1 class="card-title"><?php echo $unit_name; ?></h1>
                                 <p class="card-text">Status: <?php echo $status; ?></p>
                                 <h2 class="card-subtitle mb-2"><?php echo $type; ?></h2>
+                                <a href="add-tenant.php?unit=<?php echo $unit_number; ?>" class="btn btn-primary">Add Tenant</a>
                             </div>
                         <?php else: ?>
                             <div class="row g-0">
@@ -430,7 +431,9 @@ if ($maintenance_status) {
                                     <h1 class="card-title"><?php echo $unit_name; ?></h1>
                                     <p class="card-text">Status: <?php echo $status; ?></p>
                                     <h2 class="card-subtitle mb-2"><?php echo $type; ?></h2>
-                                    <p class="card-text">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?></p>
+                                    <p class="card-text"> <a class='text-primary text-decoration-underline' href='unit-maintenance.php?unit=$i'>Maintenance Status: </a><span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?></p>
+                                   
+
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

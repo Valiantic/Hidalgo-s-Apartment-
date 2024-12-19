@@ -13,10 +13,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 // Retrieve the unit number from the query parameter
 $unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
 
-if ($unit_number < 1 || $unit_number > 5) {
-    die("Invalid unit number. Please select a unit between 1 and 5.");
-}
-
 $unit_name = "Unit $unit_number";
 
 // Fetch maintenance requests for the specified unit

@@ -408,7 +408,15 @@ if ($maintenance_status) {
                 <?php if ($maintenance_status): ?>
                     <div class="alert alert-info text-center">
                         Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?>
+                        <?php if ($maintenance_status['status'] == 'Resolved'): ?>
+                        <form action="req/confirm-maintenance.php" method="POST">
+                            <input type="hidden" name="tenant_id" value="<?php echo $tenant_id; ?>">
+                            <button type="submit" class="btn btn-success btn-lg">Confirm</button>
+                        </form>
+                    <?php endif; ?>
+                    
                     </div>
+                    
                 <?php endif; ?>
                 <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
                 <a href="#" class="btn btn-primary btn-lg">View Contract</a>
