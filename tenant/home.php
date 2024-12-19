@@ -57,6 +57,31 @@ function displayStatus($status) {
     }
 }
 
+$maintenance_query = "SELECT unit, status FROM maintenance_request WHERE tenant_id = ? ORDER BY request_id DESC LIMIT 1";
+$maintenance_stmt = $pdo->prepare($maintenance_query);
+$maintenance_stmt->execute([$tenant_id]);
+$maintenance_status = $maintenance_stmt->fetch();
+
+$maintenance_color = 'gray';
+$maintenance_text = 'No Issues';
+
+if ($maintenance_status) {
+    switch ($maintenance_status['status']) {
+        case 'Pending':
+            $maintenance_color = 'red';
+            $maintenance_text = 'Pending';
+            break;
+        case 'In Progress':
+            $maintenance_color = 'yellow';
+            $maintenance_text = 'In Progress';
+            break;
+        case 'Resolved':
+            $maintenance_color = 'green';
+            $maintenance_text = 'Resolved';
+            break;
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -380,7 +405,11 @@ function displayStatus($status) {
             <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Actions</div>
             <div class="card-body d-flex flex-column gap-2">
-                <br/>
+                <?php if ($maintenance_status): ?>
+                    <div class="alert alert-info text-center">
+                        Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?>
+                    </div>
+                <?php endif; ?>
                 <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
                 <a href="#" class="btn btn-primary btn-lg">View Contract</a>
                 <a href="#" class="btn btn-danger btn-lg">End Contract</a>
