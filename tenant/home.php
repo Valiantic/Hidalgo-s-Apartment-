@@ -314,7 +314,7 @@ function displayStatus($status) {
         </div>
 
         <li class="items  <?php echo $current_page == 'home.php' ? 'active-menu' : ''; ?>">
-            <a href="dashboard.php"><i class="fa-solid fa-chart-simple"></i></a>
+            <a href="dashboard.php"><i class="fa-solid fa-person"></i></a>
             <p class="para"><a href="dashboard.php">Dashboard</a></p>
         </li>
 

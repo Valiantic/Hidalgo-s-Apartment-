@@ -10,7 +10,6 @@ include '../connections.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Retrieve the unit number from the query parameter
 $unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
 
 if ($unit_number < 1 || $unit_number > 5) {
@@ -19,7 +18,6 @@ if ($unit_number < 1 || $unit_number > 5) {
 
 $unit_name = "Unit $unit_number";
 
-// Fetch tenant details for the specified unit
 $sql = "SELECT * FROM tenant WHERE units = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $unit_name);
@@ -42,14 +40,12 @@ function getUnitType($unitNumber) {
 
 $type = getUnitType($unit_number);
 
-// Function to determine max occupancy
 function maxOccupancy($unitNumber) {
     return $unitNumber >= 3 ? '3-5 Persons' : '2-4 Persons';
 }
 
 $occupancy = maxOccupancy($unit_number);
 
-// Function to get unit image based on availability
 function getUnitImage($unitNumber, $status) {
     if ($unitNumber >= 3) {
         return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
@@ -60,17 +56,16 @@ function getUnitImage($unitNumber, $status) {
 
 $img_src = getUnitImage($unit_number, $status);
 
-// Function to display buttons based on unit status
 function rentButton($status, $tenant_id, $unit_name) {
     if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
-        return ""; // Empty string since the unit is available
+        return ""; 
     } else {
         return "
         <div class='button-group'>
             <form method='POST' action='update_billing_status.php' style='display: inline;'>
                 <input type='hidden' name='tenant_id' value='" . htmlspecialchars($tenant_id) . "'>
                 <input type='hidden' name='unit' value='" . htmlspecialchars($unit_name) . "'>
-                <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Billing</button>
+                <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Details</button>
             </form>
             <button type='submit' class='btn btn-success custom-btn-font text-white text'>View Contract</button>
             <button type='submit' class='btn btn-danger custom-btn-font text-white text'>Terminate Lease</button>
@@ -79,6 +74,17 @@ function rentButton($status, $tenant_id, $unit_name) {
 }
 
 $rent = rentButton($status, $tenant_id, $unit_name);
+
+
+$maintenance_query = "SELECT unit, COUNT(*) AS count FROM maintenance_request GROUP BY unit";
+$maintenance_result = $conn->query($maintenance_query);
+
+$maintenance_status = [];
+while ($row = $maintenance_result->fetch_assoc()) {
+    $maintenance_status[$row['unit']] = $row['count'] > 0 ? 'Pending' : 'No Issues';
+}
+
+$maintenance_color = isset($maintenance_status[$unit_name]) && $maintenance_status[$unit_name] == 'Pending' ? 'red' : 'green';
 ?>
 
 <!DOCTYPE html>
@@ -258,7 +264,7 @@ $rent = rentButton($status, $tenant_id, $unit_name);
         font-weight: 300;
     }
     .custom-btn-font {
-    font-size: 1.35rem; /* Adjust the size as needed */
+    font-size: 1.35rem; 
     }
     h4, h5 {
         font-family: 'Poppins', 'sans-serif';
@@ -320,13 +326,20 @@ $rent = rentButton($status, $tenant_id, $unit_name);
     .radio-group input[type="radio"] {
         display: inline-block;
         margin-right: 2px;
-        transform: scale(1.5); /* Increase the size of the radio buttons */
+        transform: scale(1.5); 
     }
 
     .button-group {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         gap: 10px;
+    }
+
+    @media (min-width: 768px) {
+        .button-group {
+            flex-direction: row;
+        }
     }
 
 </style>
@@ -387,7 +400,7 @@ $rent = rentButton($status, $tenant_id, $unit_name);
                     <!-- TENANT INFORMATION CARD -->
                     <div class="card-body">
                         <a href="units.php">Back</a>
-                        <h1 class="text-center">Tenant Information</h1>
+                        <h1 class="text-center">Unit Information</h1>
 
                         <!-- DATA TO PASS FOR BILLING INFORMATION -->
                         <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($user_id); ?>">
@@ -413,7 +426,7 @@ $rent = rentButton($status, $tenant_id, $unit_name);
                         <p class="card-text text-center">Status: <?php echo $status; ?></p>
                         <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
                         <?php if ($status != '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
-                            <p class="card-text text-center">Maintenance Status: <span style="color: green;">●</span></p>
+                            <p class="card-text text-center">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span></p>
                             <hr>
                             <h3 class="text-center">Tenant Information</h3>
                             <form action="./req/update_billing_status.php" method="post">

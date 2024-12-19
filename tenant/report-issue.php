@@ -327,6 +327,7 @@ $_SESSION['unit'] = $unit;
 
             <!-- INPUT FORM HERE -->
             <div class="card text-dark bg-light mb-3 p-3" style="max-width: 30rem;">
+                <a href="home.php">Back</a>
                 <div class="card-title fs-4 text-center">Maintenance Report</div>
                 <div class="card-body">
 

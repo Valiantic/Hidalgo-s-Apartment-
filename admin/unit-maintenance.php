@@ -8,23 +8,24 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 include '../connections.php';
 
-$current_page = basename($_SERVER['PHP_SELF']); 
+$current_page = basename($_SERVER['PHP_SELF']);
 
-$query = "SELECT units, COUNT(*) AS count FROM tenant GROUP BY units";
-$result = $conn->query($query);
+// Retrieve the unit number from the query parameter
+$unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
 
-$units_status = [];
-while ($row = $result->fetch_assoc()) {
-    $units_status[$row['units']] = $row['count'] > 0 ? 'Occupied' : 'Available';
+if ($unit_number < 1 || $unit_number > 5) {
+    die("Invalid unit number. Please select a unit between 1 and 5.");
 }
 
-$maintenance_query = "SELECT unit, COUNT(*) AS count FROM maintenance_request GROUP BY unit";
-$maintenance_result = $conn->query($maintenance_query);
+$unit_name = "Unit $unit_number";
 
-$maintenance_status = [];
-while ($row = $maintenance_result->fetch_assoc()) {
-    $maintenance_status[$row['unit']] = $row['count'] > 0 ? 'Pending' : 'No Issues';
-}
+// Fetch maintenance requests for the specified unit
+$sql = "SELECT * FROM maintenance_request WHERE unit = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $unit_name);
+$stmt->execute();
+$result = $stmt->get_result();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,7 +152,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
     }
     
     .active.toggler {
-        left: 140px;
+        left: 190px;
     }
     
     .active.sidebar {
@@ -203,7 +204,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
         font-weight: 300;
     }
     .custom-btn-font {
-    font-size: 1.35rem; 
+    font-size: 1.35rem; /* Adjust the size as needed */
     }
     h4, h5 {
         font-family: 'Poppins', 'sans-serif';
@@ -261,8 +262,6 @@ while ($row = $maintenance_result->fetch_assoc()) {
 
 </head>
 <body>
-    
-   
 
 <div class="menu">
     <div class="sidebar">
@@ -278,7 +277,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
             <p class="para"><a href="dashboard.php">Dashboard</a></p>
         </li>
 
-        <li class="items <?php echo $current_page == 'units.php' ? 'active-menu' : ''; ?>">
+        <li class="items <?php echo $current_page == 'unit-maintenance.php' ? 'active-menu' : ''; ?>">
             <a href="units.php"><i class="fa-solid fa-home"></i></i></a>
             <p class="para"><a href="units.php">Units</a></p>
         </li>
@@ -309,44 +308,57 @@ while ($row = $maintenance_result->fetch_assoc()) {
     <div class="content">
         <div class="container-fluid mt-4">
             <div class="row justify-content-center">
-                <?php
-                for ($i = 1; $i <= 5; $i++) {
-                    $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
-                    $maintenance = isset($maintenance_status["Unit $i"]) ? $maintenance_status["Unit $i"] : 'No Issues';
-                    $maintenance_color = $maintenance == 'Pending' ? 'red' : 'green';
-                    
-                    if ($i >= 3) {
-                        $img_src = $status == 'Occupied' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
-                    } else {
-                        $img_src = $status == 'Occupied' ? '../assets/images/icons/house1.png' : '../assets/images/icons/rent-house1.png';
-                    }
-                    
-                    echo "
-                    <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>
-                        <div class='card'>
-                            <img class='card-img-top img-fluid height-img' src='$img_src' alt='Card image cap'>
-                            <div class='card-body'>
-                                <div class='d-flex justify-content-center'>
-                                    <div class='d-block mb-2'>
-                                        <h1 class='card-title text-center'>Unit $i</h1>
-                                        <a class='text-primary text-decoration-underline' href='unit-maintenance.php?unit=$i'>Maintenance Status: </a> <span style='color: $maintenance_color;'>●</span>
-                                        <p class='card-text text-center'>$status</p>
+                
+            <div class="col-12 col-md-8 mb-3">
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-body">
+                            <a href="units.php">Back</a>
+                            <h1 class="text-center mb-4">Maintenance Requests for <?php echo htmlspecialchars($unit_name); ?></h1>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date Reported</th>
+                                        <th scope="col">Issue</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($row = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><?php echo date('m/d/y', strtotime($row['created_at'])); ?></td>
+                                        <td><?php echo htmlspecialchars($row['description']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['status']); ?></td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                            <?php if ($result->num_rows == 0): ?>
+                                <p class="text-center">No maintenance requests found for this unit.</p>
+                            <?php else: ?>
+                                <form action="update-maintenance-status.php" method="POST" class="mt-4">
+                                    <input type="hidden" name="unit" value="<?php echo htmlspecialchars($unit_name); ?>">
+                                    <div class="mb-3 d-flex justify-content-center">
+                                        <label for="status" class="form-label">Select a status:&nbsp;</label>
+                                        <select class="form-select w-50 " id="status" name="status" required>
+                                            <option value="Pending">Pending</option>
+                                            <option value="In Progress">In Progress</option>
+                                            <option value="Resolved">Resolved</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <div class='d-flex justify-content-center'>
-                                    <a href='tenant-information.php?unit=$i' class='btn btn-primary w-100 custom-btn-font'>Info</a>
-                                </div>
-                            </div>
+                                    <button type="submit" class="btn btn-primary w-50 mx-auto d-block">Update Status</button>
+                                </form>
+                            <?php endif; ?>
                         </div>
-                    </div>";
-                }
-                ?>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
 
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
 
 <script>
     const toggler = document.querySelector('.toggler')
@@ -361,7 +373,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
 
     showFull()
 </script>
-
+   
 </body>
 </html>
 <?php
