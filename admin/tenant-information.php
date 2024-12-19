@@ -76,15 +76,32 @@ function rentButton($status, $tenant_id, $unit_name) {
 $rent = rentButton($status, $tenant_id, $unit_name);
 
 
-$maintenance_query = "SELECT unit, COUNT(*) AS count FROM maintenance_request GROUP BY unit";
-$maintenance_result = $conn->query($maintenance_query);
+$maintenance_query = "SELECT unit, status FROM maintenance_request WHERE unit = ? ORDER BY request_id DESC LIMIT 1";
+$maintenance_stmt = $conn->prepare($maintenance_query);
+$maintenance_stmt->bind_param("s", $unit_name);
+$maintenance_stmt->execute();
+$maintenance_result = $maintenance_stmt->get_result();
+$maintenance_status = $maintenance_result->fetch_assoc();
 
-$maintenance_status = [];
-while ($row = $maintenance_result->fetch_assoc()) {
-    $maintenance_status[$row['unit']] = $row['count'] > 0 ? 'Pending' : 'No Issues';
+$maintenance_color = 'gray';
+$maintenance_text = 'No Issues';
+
+if ($maintenance_status) {
+    switch ($maintenance_status['status']) {
+        case 'Pending':
+            $maintenance_color = 'red';
+            $maintenance_text = 'Pending';
+            break;
+        case 'In Progress':
+            $maintenance_color = 'yellow';
+            $maintenance_text = 'In Progress';
+            break;
+        case 'Resolved':
+            $maintenance_color = 'green';
+            $maintenance_text = 'Resolved';
+            break;
+    }
 }
-
-$maintenance_color = isset($maintenance_status[$unit_name]) && $maintenance_status[$unit_name] == 'Pending' ? 'red' : 'green';
 ?>
 
 <!DOCTYPE html>
@@ -413,7 +430,7 @@ $maintenance_color = isset($maintenance_status[$unit_name]) && $maintenance_stat
                                     <h1 class="card-title"><?php echo $unit_name; ?></h1>
                                     <p class="card-text">Status: <?php echo $status; ?></p>
                                     <h2 class="card-subtitle mb-2"><?php echo $type; ?></h2>
-                                    <p class="card-text">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span></p>
+                                    <p class="card-text">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?></p>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

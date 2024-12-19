@@ -335,7 +335,7 @@ $result = $stmt->get_result();
                             <?php if ($result->num_rows == 0): ?>
                                 <p class="text-center">No maintenance requests found for this unit.</p>
                             <?php else: ?>
-                                <form action="update-maintenance-status.php" method="POST" class="mt-4">
+                                <form action="./req/update-maintenance-status.php" method="POST" class="mt-4">
                                     <input type="hidden" name="unit" value="<?php echo htmlspecialchars($unit_name); ?>">
                                     <div class="mb-3 d-flex justify-content-center">
                                         <label for="status" class="form-label">Select a status:&nbsp;</label>
@@ -343,6 +343,7 @@ $result = $stmt->get_result();
                                             <option value="Pending">Pending</option>
                                             <option value="In Progress">In Progress</option>
                                             <option value="Resolved">Resolved</option>
+                                            <option value="No Issues">No Issues</option>
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-50 mx-auto d-block">Update Status</button>

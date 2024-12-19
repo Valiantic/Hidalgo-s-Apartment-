@@ -18,12 +18,12 @@ while ($row = $result->fetch_assoc()) {
     $units_status[$row['units']] = $row['count'] > 0 ? 'Occupied' : 'Available';
 }
 
-$maintenance_query = "SELECT unit, COUNT(*) AS count FROM maintenance_request GROUP BY unit";
+$maintenance_query = "SELECT unit, status FROM maintenance_request GROUP BY unit";
 $maintenance_result = $conn->query($maintenance_query);
 
 $maintenance_status = [];
 while ($row = $maintenance_result->fetch_assoc()) {
-    $maintenance_status[$row['unit']] = $row['count'] > 0 ? 'Pending' : 'No Issues';
+    $maintenance_status[$row['unit']] = $row['status'];
 }
 ?>
 <!DOCTYPE html>
@@ -313,7 +313,21 @@ while ($row = $maintenance_result->fetch_assoc()) {
                 for ($i = 1; $i <= 5; $i++) {
                     $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
                     $maintenance = isset($maintenance_status["Unit $i"]) ? $maintenance_status["Unit $i"] : 'No Issues';
-                    $maintenance_color = $maintenance == 'Pending' ? 'red' : 'green';
+                    
+                    switch ($maintenance) {
+                        case 'Pending':
+                            $maintenance_color = 'red';
+                            break;
+                        case 'In Progress':
+                            $maintenance_color = 'yellow';
+                            break;
+                        case 'Resolved':
+                            $maintenance_color = 'green';
+                            break;
+                        default:
+                            $maintenance_color = 'gray';
+                            break;
+                    }
                     
                     if ($i >= 3) {
                         $img_src = $status == 'Occupied' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
