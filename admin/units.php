@@ -151,7 +151,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
     }
     
     .active.toggler {
-        left: 140px;
+        left: 150px;
     }
     
     .active.sidebar {

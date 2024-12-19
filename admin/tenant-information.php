@@ -61,7 +61,7 @@ function rentButton($status, $tenant_id, $unit_name) {
         return ""; 
     } else {
         return "
-        <div class='button-group'>
+        <div class='button-group d-flex justify-content-center'>
             <form method='POST' action='update_billing_status.php' style='display: inline;'>
                 <input type='hidden' name='tenant_id' value='" . htmlspecialchars($tenant_id) . "'>
                 <input type='hidden' name='unit' value='" . htmlspecialchars($unit_name) . "'>
@@ -212,7 +212,7 @@ $maintenance_color = isset($maintenance_status[$unit_name]) && $maintenance_stat
     }
     
     .active.toggler {
-        left: 150px;
+        left: 190px;
     }
     
     .active.sidebar {
@@ -394,80 +394,61 @@ $maintenance_color = isset($maintenance_status[$unit_name]) && $maintenance_stat
     <div class="content">
         <div class="container-fluid mt-4">
             <div class="row justify-content-center">
-
-            <div class="col-12 col-md-6 mb-3">
-                <div class="card" data-aos="fade-up">
-                    <!-- TENANT INFORMATION CARD -->
-                    <div class="card-body">
-                        <a href="units.php">Back</a>
-                        <h1 class="text-center">Unit Information</h1>
-
-                        <!-- DATA TO PASS FOR BILLING INFORMATION -->
-                        <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($user_id); ?>">
-                        <input type="hidden" name="unit" value="<?php echo htmlspecialchars($unit); ?>">
-
-                                        <!-- ERROR HANDLING  -->
-                        <?php if (isset($_GET['error'])) { ?>
-                                <div class="alert alert-danger mt-3 n-table" role="alert">
-                                <?=$_GET['error']?>
+                <div class="col-12 mb-3">
+                    <div class="card" data-aos="fade-up">
+                        <div class="row g-0">
+                            
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <a href="units.php">Back</a>
+                                    <div class="col-md-12 text-center">
+                                        <img src="<?php echo $img_src; ?>" class="card-img-top img-fluid height-img" alt="Unit Image">
+                                    </div>
+                                    <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
+                                    <p class="card-text text-center">Status: <?php echo $status; ?></p>
+                                    <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
+                                    <?php if ($status != '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
+                                        <p class="card-text text-center">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span></p>
+                                        <hr>
+                                        <h3 class="text-center">Tenant Information</h3>
+                                        <form action="./req/update_billing_status.php" method="post">
+                                            <input type="hidden" name="unit_number" value="<?php echo $unit_number; ?>">
+                                            <p class="fs-4">Full Name: <?php echo $tenant_fullname; ?></p>
+                                            <p class="fs-4">Phone Number: <?php echo $tenant_phone; ?></p>
+                                            <p class="fs-4">Start Date: <?php echo $start_date; ?></p>
+                                            <p class="fs-4">Due Date: <?php echo $due_date; ?></p>
+                                            <hr>
+                                            <h3 class="text-center">Billing Information</h3>
+                                            <p class="fs-4">Monthly Bill:<br>
+                                                <div class="radio-group">
+                                                    <input class="card-text fs-6" type="radio" name="monthly_rent_status" value="Paid"> paid
+                                                    <input class="card-text" type="radio" name="monthly_rent_status" value="Not Paid"> not paid
+                                                    <input type="radio" name="monthly_rent_status" value="No Bill Yet" checked> no bill yet
+                                                </div>
+                                            </p>
+                                            <p class="fs-4">Electricity Bill:<br>
+                                                <div class="radio-group">
+                                                    <input class="card-text" type="radio" name="electricity_status" value="Paid"> paid
+                                                    <input class="card-text" type="radio" name="electricity_status" value="Not Paid"> not paid
+                                                    <input type="radio" name="electricity_status" value="No Bill Yet" checked> no bill yet
+                                                </div>
+                                            </p>
+                                            <p class="fs-4">Water Bill:<br>
+                                                <div class="radio-group">
+                                                    <input class="card-text" type="radio" name="water_status" value="Paid"> paid
+                                                    <input class="card-text" type="radio" name="water_status" value="Not Paid"> not paid
+                                                    <input type="radio" name="water_status" value="No Bill Yet" checked> no bill yet
+                                                </div>
+                                            </p>
+                                            <hr/>
+                                            <?php echo $rent; ?>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <?php } ?>
-
-                                        <!-- SUCCESS HANDLING FOR TEACHER-DELETE -->
-                            <?php if (isset($_GET['success'])) { ?>
-                                <div class="alert alert-info mt-3 n-table" role="alert">
-                                <?=$_GET['success']?>
-                            </div>
-                        <?php } ?>
-
-
-                        <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
-                        <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
-                        <p class="card-text text-center">Status: <?php echo $status; ?></p>
-                        <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
-                        <?php if ($status != '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
-                            <p class="card-text text-center">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span></p>
-                            <hr>
-                            <h3 class="text-center">Tenant Information</h3>
-                            <form action="./req/update_billing_status.php" method="post">
-                                <input type="hidden" name="unit_number" value="<?php echo $unit_number; ?>">
-                                <p class="text-left fs-4">Full Name: <?php echo $tenant_fullname; ?></p>
-                                <p class="text-left fs-4">Phone Number: <?php echo $tenant_phone; ?></p>
-                                <p class="text-left fs-4">Start Date: <?php echo $start_date; ?></p>
-                                <p class="text-left fs-4">Due Date: <?php echo $due_date; ?></p>
-                                <hr>
-                                <h3 class="text-center">Billing Information</h3>
-                                <p class="fs-4">Monthly Bill:<br>
-                                    <div class="radio-group">
-                                        <input class="card-text fs-6" type="radio" name="monthly_rent_status" value="Paid"> paid
-                                        <input class="card-text" type="radio" name="monthly_rent_status" value="Not Paid"> not paid
-                                        <input type="radio" name="monthly_rent_status" value="No Bill Yet" checked> no bill yet
-                                    </div>
-                                </p>
-                                <p class="fs-4">Electricity Bill:<br>
-                                    <div class="radio-group">
-                                        <input class="card-text" type="radio" name="electricity_status" value="Paid"> paid
-                                        <input class="card-text" type="radio" name="electricity_status" value="Not Paid"> not paid
-                                        <input type="radio" name="electricity_status" value="No Bill Yet" checked> no bill yet
-                                    </div>
-                                </p>
-                                <p class="fs-4">Water Bill:<br>
-                                    <div class="radio-group">
-                                        <input class="card-text" type="radio" name="water_status" value="Paid"> paid
-                                        <input class="card-text" type="radio" name="water_status" value="Not Paid"> not paid
-                                        <input type="radio" name="water_status" value="No Bill Yet" checked> no bill yet
-                                    </div>
-                                </p>
-                                <hr/>
-                               
-                                <?php echo $rent; ?>
-                                
-                            </form>
-                        <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-                
             </div>
         </div>
     </div>
