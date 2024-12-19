@@ -394,21 +394,24 @@ $maintenance_color = isset($maintenance_status[$unit_name]) && $maintenance_stat
     <div class="content">
         <div class="container-fluid mt-4">
             <div class="row justify-content-center">
+                
                 <div class="col-12 mb-3">
                     <div class="card" data-aos="fade-up">
+                        
                         <div class="row g-0">
+
+                            <div class="col-md-4 d-flex flex-column align-items-center p-3">
                             
-                            <div class="col-md-12">
+                            <a href="units.php" class="">Back</a>
+                                <img src="<?php echo $img_src; ?>" class="card-img-top img-fluid height-img mb-3" alt="Unit Image">
+                                <h1 class="card-title"><?php echo $unit_name; ?></h1>
+                                <p class="card-text">Status: <?php echo $status; ?></p>
+                                <h2 class="card-subtitle mb-2"><?php echo $type; ?></h2>
+                                <p class="card-text">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span></p>
+                            </div>
+                            <div class="col-md-8">
                                 <div class="card-body">
-                                    <a href="units.php">Back</a>
-                                    <div class="col-md-12 text-center">
-                                        <img src="<?php echo $img_src; ?>" class="card-img-top img-fluid height-img" alt="Unit Image">
-                                    </div>
-                                    <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
-                                    <p class="card-text text-center">Status: <?php echo $status; ?></p>
-                                    <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
                                     <?php if ($status != '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
-                                        <p class="card-text text-center">Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span></p>
                                         <hr>
                                         <h3 class="text-center">Tenant Information</h3>
                                         <form action="./req/update_billing_status.php" method="post">
