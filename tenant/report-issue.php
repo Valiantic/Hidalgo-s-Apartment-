@@ -6,56 +6,19 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$fullname = $_SESSION['fullname'];
-$phone_number = $_SESSION['phone_number'];
-$first_name = explode(' ', $fullname)[0]; 
-
 include '../connections.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-
 $user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT tenant_id, move_in_date, units FROM tenant WHERE user_id = ?");
+$stmt = $pdo->prepare("SELECT tenant_id, units FROM tenant WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $tenant = $stmt->fetch();
 $tenant_id = $tenant['tenant_id'];
-$start_date = $tenant['move_in_date'];
 $unit = $tenant['units'];
 
-function getMonthlyRent($unit) {
-    $rent_prices = [
-        'Unit 1' => 3500,
-        'Unit 2' => 3500,
-        'Unit 3' => 6500,
-        'Unit 4' => 6500,
-        'Unit 5' => 6500,
-        
-    ];
-    return isset($rent_prices[$unit]) ? $rent_prices[$unit] : 'N/A';
-}
-
-$monthly_rent = getMonthlyRent($unit);
-
-
-$stmt = $pdo->prepare("SELECT monthly_rent_status, electricity_status, water_status 
-                       FROM transaction_info 
-                       WHERE tenant_id = ? 
-                       ORDER BY transaction_id DESC 
-                       LIMIT 1");
-$stmt->execute([$tenant_id]);
-$billing_info = $stmt->fetch();
-
-function displayStatus($status) {
-    switch ($status) {
-        case 'Paid':
-            return '<span style="color: green;">●</span> Paid';
-        case 'Not Paid':
-            return '<span style="color: red;">●</span> Not Paid';
-        default:
-            return '<span style="color: gray;">●</span> No Bill Yet';
-    }
-}
+$_SESSION['tenant_id'] = $tenant_id;
+$_SESSION['unit'] = $unit;
 
 ?>
 <!DOCTYPE html>
@@ -77,6 +40,11 @@ function displayStatus($status) {
 
      <!-- ANIMATE ON SCROLL -->
      <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+
+        <!-- BOOTSTRAP 5.3.0 CSS -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 
 <style>
     *{
@@ -243,7 +211,7 @@ function displayStatus($status) {
         font-weight: 500;
     }
     .custom-btn-font {
-    font-size: 1.35rem; 
+    font-size: 1.35rem; /* Adjust the size as needed */
     }
 
      /* MEDIA QUERIES */
@@ -290,8 +258,14 @@ function displayStatus($status) {
         color: white;
     }
 
-
-
+    @media (max-width: 768px) {
+            .form-control, .form-select {
+                font-size: 14px;
+    }
+            .btn {
+                font-size: 14px;
+            }
+    }
 </style>
 
 </head>
@@ -313,9 +287,9 @@ function displayStatus($status) {
             </span>
         </div>
 
-        <li class="items  <?php echo $current_page == 'home.php' ? 'active-menu' : ''; ?>">
-            <a href="dashboard.php"><i class="fa-solid fa-chart-simple"></i></a>
-            <p class="para"><a href="dashboard.php">Dashboard</a></p>
+        <li class="items  <?php echo $current_page == 'report-issue.php' ? 'active-menu' : ''; ?>">
+            <a href="home.php"><i class="fa-solid fa-person"></i></a>
+            <p class="para"><a href="home.php">Home</a></p>
         </li>
 
 
@@ -348,43 +322,37 @@ function displayStatus($status) {
         <div class="container-fluid mt-4">
             <div class="row justify-content-center gap-4">
 
-            <h1 data-aos="fade-right" class="display- text-white fw-bold">Welcome, <?php echo htmlspecialchars($first_name); ?>!</h1>
+            <h1 data-aos="fade-right" class="display- text-white fw-bold">Let's Raise your Concern to the Admin!</h1>
                
 
-            <div class="card text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
-            <div class="card-title fs-4 text-center">Tenant Information</div>
-            <div class="card-body">
-                <label>Tenant Fullname</label>
-                <h5 class="card-text"><?php echo htmlspecialchars($fullname)?></h5>
-                <label>Tenant Phone number</label>
-                <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
-                <label>Start Date</label>
-                <h5 class="card-text"><?php echo date('m/d/Y', strtotime($start_date)); ?></h5>
-                <label>End Date</label>
-                <h5 class="card-text" id="end-date"></h5>
-            </div>
-            </div>
+            <!-- INPUT FORM HERE -->
+            <div class="card text-dark bg-light mb-3 p-3" style="max-width: 30rem;">
+                <div class="card-title fs-4 text-center">Maintenance Report</div>
+                <div class="card-body">
 
-            <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
-            <div class="card-title fs-4 text-center">Your Billings</div>
-            <div class="card-body">
-                <label>Monthly Rent <span style="color: blue;">₱<?php echo htmlspecialchars($monthly_rent); ?></span></label>
-                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['monthly_rent_status']) : displayStatus(null); ?></p>
-                <label>Electricity Bill</label>
-                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['electricity_status']) : displayStatus(null); ?></p>
-                <label>Water Bill</label>
-                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['water_status']) : displayStatus(null); ?></p>
+                <form action="./req/report-issue.php" method="POST" class="p-4 border rounded">
+                    <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($tenant_id); ?>">
+                    <input type="hidden" name="unit" value="<?php echo htmlspecialchars($unit); ?>">
+                    <div class="mb-3">
+                        <label for="report-description" class="form-label">Report Issue</label>
+                        <textarea class="form-control" id="report-description" name="report_description" rows="4" placeholder="Tell us what happened?" required></textarea>
+                    </div>
+
+                    <?php if (isset($error_message)): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($error_message) ?></div>
+                <?php endif; ?>
+
+                    <?php if (isset($_SESSION['success_message'])): ?>
+                        <div class="alert alert-success mt-3">
+                            <?= htmlspecialchars($_SESSION['success_message']) ?>
+                            <?php unset($_SESSION['success_message']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <button type="submit" class="btn btn-primary w-100">Submit Report</button>
+                </form>
+
                 </div>
-            </div>
-
-            <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
-            <div class="card-title fs-4 text-center">Actions</div>
-            <div class="card-body d-flex flex-column gap-2">
-                <br/>
-                <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
-                <a href="#" class="btn btn-primary btn-lg">View Contract</a>
-                <a href="#" class="btn btn-danger btn-lg">End Contract</a>
-            </div>
             </div>
 
             </div>
@@ -414,11 +382,7 @@ function displayStatus($status) {
 
     showFull()
 
-    const startDate = new Date("<?php echo $start_date; ?>");
-    const endDate = new Date(startDate);
-    endDate.setMonth(startDate.getMonth() + 1);
-    const formattedEndDate = endDate.toLocaleDateString('en-US');
-    document.getElementById('end-date').textContent = formattedEndDate;
+
 </script>
 
 </body>

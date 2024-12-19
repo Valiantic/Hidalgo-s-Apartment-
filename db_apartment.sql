@@ -85,3 +85,16 @@ CREATE TABLE transaction_info (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (tenant_id) REFERENCES tenant(user_id)
 );
+
+-- MAINTENANCE 
+
+CREATE TABLE maintenance_request (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    tenant_id INT,
+    unit VARCHAR(50),
+    description TEXT NOT NULL,
+    status ENUM('Pending', 'In Progress', 'Resolved') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id) ON DELETE CASCADE
+);
+
