@@ -56,7 +56,7 @@ function getUnitImage($unitNumber, $status) {
 
 $img_src = getUnitImage($unit_number, $status);
 
-function rentButton($status, $tenant_id, $unit_name) {
+function rentButton($status, $tenant_id, $unit_number) {
     if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
         return ""; 
     } else {
@@ -64,16 +64,16 @@ function rentButton($status, $tenant_id, $unit_name) {
         <div class='button-group d-flex justify-content-center'>
             <form method='POST' action='update_billing_status.php' style='display: inline;'>
                 <input type='hidden' name='tenant_id' value='" . htmlspecialchars($tenant_id) . "'>
-                <input type='hidden' name='unit' value='" . htmlspecialchars($unit_name) . "'>
+                <input type='hidden' name='unit' value='" . htmlspecialchars($unit_number) . "'>
                 <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Details</button>
             </form>
-            <button type='submit' class='btn btn-success custom-btn-font text-white text'>View Contract</button>
+            <a href='contract-page.php?unit=" . htmlspecialchars($unit_number) . "' class='btn btn-success custom-btn-font text-white text'>View Contract</a>
             <button type='submit' class='btn btn-danger custom-btn-font text-white text'>Terminate Lease</button>
         </div>";
     }
 }
 
-$rent = rentButton($status, $tenant_id, $unit_name);
+$rent = rentButton($status, $tenant_id, $unit_number);
 
 
 $maintenance_query = "SELECT unit, status FROM maintenance_request WHERE unit = ? ORDER BY request_id DESC LIMIT 1";
@@ -416,8 +416,9 @@ if ($maintenance_status) {
                     <div class="card" data-aos="fade-up">
                         <?php if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
                             <div class="text-center p-3">
-                                <a href="units.php" class="btn btn-secondary mb-3">Back</a>
-                                <img src="<?php echo $img_src; ?>" class="card-img-top img-fluid height-img mb-3" alt="Unit Image">
+
+
+                            <img src="<?php echo $img_src; ?>" class="card-img-top img-fluid height-img mb-3" alt="Unit Image">
                                 <h1 class="card-title"><?php echo $unit_name; ?></h1>
                                 <p class="card-text">Status: <?php echo $status; ?></p>
                                 <h2 class="card-subtitle mb-2"><?php echo $type; ?></h2>
@@ -426,7 +427,6 @@ if ($maintenance_status) {
                         <?php else: ?>
                             <div class="row g-0">
                                 <div class="col-md-4 d-flex flex-column align-items-center p-3">
-                                    <a href="units.php" class="btn btn-secondary mb-3">Back</a>
                                     <img src="<?php echo $img_src; ?>" class="card-img-top img-fluid height-img mb-3" alt="Unit Image">
                                     <h1 class="card-title"><?php echo $unit_name; ?></h1>
                                     <p class="card-text">Status: <?php echo $status; ?></p>
