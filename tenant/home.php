@@ -22,6 +22,7 @@ $tenant = $stmt->fetch();
 $tenant_id = $tenant['tenant_id'];
 $start_date = $tenant['move_in_date'];
 $unit = $tenant['units'];
+$unit_number = (int) filter_var($unit, FILTER_SANITIZE_NUMBER_INT);
 
 function getMonthlyRent($unit) {
     $rent_prices = [
@@ -418,8 +419,9 @@ if ($maintenance_status) {
                     </div>
                     
                 <?php endif; ?>
+                <br/>
                 <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
-                <a href="#" class="btn btn-primary btn-lg">View Contract</a>
+                <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-primary btn-lg">View Contract</a>
                 <a href="#" class="btn btn-danger btn-lg">End Contract</a>
             </div>
             </div>
