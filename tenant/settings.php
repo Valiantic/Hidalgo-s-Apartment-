@@ -8,24 +8,14 @@ if (!isset($_SESSION['user_id'])) {
 
 $fullname = $_SESSION['fullname'];
 $phone_number = $_SESSION['phone_number'];
-
+$email = $_SESSION['email']; // Fetch email from session
 
 include '../connections.php';
-
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
 
 $user_id = $_SESSION['user_id'];
-
-
-// Fetch user email
-$stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-$email = $user['email'] ?? ''; 
-
-
 $stmt = $pdo->prepare("SELECT tenant_id, move_in_date, units FROM tenant WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $tenant = $stmt->fetch();
@@ -546,7 +536,9 @@ if ($maintenance_status) {
                         </div>
 
                         <!-- Login Form -->
-                        <form action="./req/update_info.php" method="POST">
+                        <form action="./req/update-info.php" method="POST">
+                            <!-- Tenant ID To Pass -->
+                            <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($tenant_id); ?>">
                             <div class="input-box">
                                 <input type="text" name="fullname" placeholder="Fullname" value="<?php echo htmlspecialchars($fullname); ?>" required>
                                 <i class='bx bxs-user-account'></i> 
@@ -557,12 +549,12 @@ if ($maintenance_status) {
                             </div>    
 
                             <div class="d-flex justify-content-center mb-1">
-                                <!-- ERROR AND SUCCESS HANDLING -->
-                                <?php if (isset($_GET['error'])) { ?>
-                                    <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
+                                <!-- ERROR AND SUCCESS HANDLING FOR TENANT INFORMATION -->
+                                <?php if (isset($_GET['info_error'])) { ?>
+                                    <b style="color: #f00;"><?= htmlspecialchars($_GET['info_error']) ?></b><br>
                                 <?php } ?>
-                                <?php if (isset($_GET['success'])) { ?>
-                                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
+                                <?php if (isset($_GET['info_success'])) { ?>
+                                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['info_success']) ?></b><br>
                                 <?php } ?>
                             </div>
 
@@ -580,9 +572,11 @@ if ($maintenance_status) {
                         </div>
 
                         <!-- Login Form -->
-                        <form action="./req/update_account.php" method="POST">
+                        <form action="./req/update-account.php" method="POST">
+                            <!-- Tenant ID To Pass -->
+                            <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($tenant_id); ?>">
                             <div class="input-box">
-                                <input type="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>" required>
+                                <input type="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" required>
                                 <i class='bx bxs-envelope'></i> 
                             </div>    
                             <div class="input-box">
@@ -595,12 +589,12 @@ if ($maintenance_status) {
                             </div>    
 
                             <div class="d-flex justify-content-center mb-1">
-                                <!-- ERROR AND SUCCESS HANDLING -->
-                                <?php if (isset($_GET['error'])) { ?>
-                                    <b style="color: #f00;"><?= htmlspecialchars($_GET['error']) ?></b><br>
+                                <!-- ERROR AND SUCCESS HANDLING FOR ACCOUNT SETTINGS -->
+                                <?php if (isset($_GET['account_error'])) { ?>
+                                    <b style="color: #f00;"><?= htmlspecialchars($_GET['account_error']) ?></b><br>
                                 <?php } ?>
-                                <?php if (isset($_GET['success'])) { ?>
-                                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['success']) ?></b><br>
+                                <?php if (isset($_GET['account_success'])) { ?>
+                                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['account_success']) ?></b><br>
                                 <?php } ?>
                             </div>
 
