@@ -316,6 +316,9 @@ if ($maintenance_status) {
             font-size: 1.2rem;
             color: #6c757d;
         }
+
+        
+
         .logo{
             height: 100px;
             margin-bottom: 10px;
@@ -580,13 +583,13 @@ if ($maintenance_status) {
                                 <i class='bx bxs-envelope'></i> 
                             </div>    
                             <div class="input-box">
-                                <input type="password" name="old_password" placeholder="Old Password" required>
-                                <i class='bx bxs-lock'></i> 
-                            </div>    
+                                <input type="password" id="password" name="old_password" placeholder="Old Password" required>
+                                <i class="toggle-password bi bi-eye-slash"></i>
+                                </div>    
                             <div class="input-box">
-                                <input type="password" name="new_password" placeholder="New Password" required>
-                                <i class='bx bxs-lock'></i> 
-                            </div>    
+                                <input type="password" id="password" name="new_password" placeholder="New Password" required>
+                                <i class="toggle-password bi bi-eye-slash"></i>
+                                </div>    
 
                             <div class="d-flex justify-content-center mb-1">
                                 <!-- ERROR AND SUCCESS HANDLING FOR ACCOUNT SETTINGS -->
