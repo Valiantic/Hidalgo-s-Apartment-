@@ -420,9 +420,9 @@ if ($maintenance_status) {
                     
                 <?php endif; ?>
                 <br/>
+                <br/>
                 <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
                 <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-primary btn-lg">View Contract</a>
-                <a href="#" class="btn btn-danger btn-lg">End Contract</a>
             </div>
             </div>
 
