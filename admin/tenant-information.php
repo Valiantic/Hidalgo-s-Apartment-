@@ -68,7 +68,7 @@ function rentButton($status, $tenant_id, $unit_number) {
                 <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Details</button>
             </form>
             <a href='contract-page.php?unit=" . htmlspecialchars($unit_number) . "' class='btn btn-success custom-btn-font text-white text'>View Contract</a>
-            <button type='submit' class='btn btn-danger custom-btn-font text-white text'>Terminate Lease</button>
+            <a href='#' class='btn btn-danger custom-btn-font text-white text terminate-lease' data-tenant-id='" . htmlspecialchars($tenant_id) . "'>Terminate Lease</a>
         </div>";
     }
 }
@@ -482,7 +482,34 @@ if ($maintenance_status) {
     </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>  
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.terminate-lease').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const tenantId = this.getAttribute('data-tenant-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to terminate this lease.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, terminate it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `req/terminate-lease.php?tenant_id=${tenantId}`;
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 
 <script>
     const toggler = document.querySelector('.toggler')

@@ -43,6 +43,12 @@ if (isset($_GET['tenant_id'])) {
         $insert_stmt->execute();
         $insert_stmt->close();
 
+        // Delete tenant data from transaction_info table
+        $delete_transaction_stmt = $conn->prepare("DELETE FROM transaction_info WHERE tenant_id = ?");
+        $delete_transaction_stmt->bind_param("i", $tenant_id);
+        $delete_transaction_stmt->execute();
+        $delete_transaction_stmt->close();
+
         // Fetch user ID from the users table
         $user_stmt = $conn->prepare("SELECT id FROM users WHERE fullname = ? AND phone_number = ?");
         $user_stmt->bind_param("ss", $tenant['fullname'], $tenant['phone_number']);
