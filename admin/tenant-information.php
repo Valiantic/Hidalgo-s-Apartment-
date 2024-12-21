@@ -76,6 +76,26 @@ function rentButton($status, $tenant_id, $unit_number) {
 $rent = rentButton($status, $tenant_id, $unit_number);
 
 
+$stmt = $pdo->prepare("SELECT monthly_rent_status, electricity_status, water_status 
+                       FROM transaction_info 
+                       WHERE tenant_id = ? 
+                       ORDER BY transaction_id DESC 
+                       LIMIT 1");
+$stmt->execute([$tenant_id]);
+$billing_info = $stmt->fetch();
+
+function displayStatus($status) {
+    switch ($status) {
+        case 'Paid':
+            return '<span style="color: green;">●</span> Paid';
+        case 'Not Paid':
+            return '<span style="color: red;">●</span> Not Paid';
+        default:
+            return '<span style="color: gray;">●</span> No Bill Yet';
+    }
+}
+
+
 $maintenance_query = "SELECT unit, status FROM maintenance_request WHERE unit = ? ORDER BY request_id DESC LIMIT 1";
 $maintenance_stmt = $conn->prepare($maintenance_query);
 $maintenance_stmt->bind_param("s", $unit_name);
@@ -447,21 +467,21 @@ if ($maintenance_status) {
                                             <p class="fs-4">Due Date: <?php echo $due_date; ?></p>
                                             <hr>
                                             <h3 class="text-center">Billing Information</h3>
-                                            <p class="fs-4">Monthly Bill:<br>
+                                            <p class="fs-4">Monthly Bill: <?php echo $billing_info ? displayStatus($billing_info['monthly_rent_status']) : displayStatus(null); ?><br>
                                                 <div class="radio-group">
                                                     <input class="card-text fs-6" type="radio" name="monthly_rent_status" value="Paid"> paid
                                                     <input class="card-text" type="radio" name="monthly_rent_status" value="Not Paid"> not paid
                                                     <input type="radio" name="monthly_rent_status" value="No Bill Yet" checked> no bill yet
                                                 </div>
                                             </p>
-                                            <p class="fs-4">Electricity Bill:<br>
+                                            <p class="fs-4">Electricity Bill: <?php echo $billing_info ? displayStatus($billing_info['electricity_status']) : displayStatus(null); ?><br>
                                                 <div class="radio-group">
                                                     <input class="card-text" type="radio" name="electricity_status" value="Paid"> paid
                                                     <input class="card-text" type="radio" name="electricity_status" value="Not Paid"> not paid
                                                     <input type="radio" name="electricity_status" value="No Bill Yet" checked> no bill yet
                                                 </div>
                                             </p>
-                                            <p class="fs-4">Water Bill:<br>
+                                            <p class="fs-4">Water Bill: <?php echo $billing_info ? displayStatus($billing_info['water_status']) : displayStatus(null); ?><br>
                                                 <div class="radio-group">
                                                     <input class="card-text" type="radio" name="water_status" value="Paid"> paid
                                                     <input class="card-text" type="radio" name="water_status" value="Not Paid"> not paid
