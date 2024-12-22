@@ -282,7 +282,6 @@ if ($maintenance_status) {
             background: #ffffff;
             padding: 30px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 14px;
             margin-left: 40px;
         }
 

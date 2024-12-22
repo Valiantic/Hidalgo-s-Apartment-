@@ -75,6 +75,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- TRANSACTION
 
+
 CREATE TABLE transaction_info (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     tenant_id INT NOT NULL,
@@ -83,8 +84,10 @@ CREATE TABLE transaction_info (
     electricity_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
     water_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (tenant_id) REFERENCES tenant(user_id)
+    FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 -- MAINTENANCE 
 
