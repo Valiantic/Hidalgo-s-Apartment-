@@ -8,17 +8,20 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 include '../connections.php';
 
-$current_page = basename($_SERVER['PHP_SELF']); 
-
-// Fetch total number of tenants
-$query = "SELECT COUNT(*) AS total_tenants FROM tenant";
-$result = $conn->query($query);
-$total_tenants = $result->fetch_assoc()['total_tenants'];
+try {
+    // Fetch all inquiries, ordered by latest first
+    $stmt = $conn->query("SELECT email, full_name, message, created_at FROM contact_us ORDER BY created_at DESC");
+    $inquiries = $stmt->fetch_all(MYSQLI_ASSOC);
+} catch(mysqli_sql_exception $e) {
+    echo "Query failed: " . $e->getMessage();
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Hidalgo's Apartment</title>
     <link rel="shortcut icon" href="../assets/images/logov5.png">
@@ -31,9 +34,11 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" defer></script>
 
-<style>
-    *{
+    <style>
+         *{
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -57,7 +62,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #4DA1A9;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -102,11 +107,12 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     .para{
         opacity: 0;
         transition: opacity 0.5s ease;
+        color: #ffffff;
     }
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color:  #4DA1A9;;
     }
     
     .logout-btn{
@@ -116,7 +122,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color:  #4DA1A9;;
     }
     
     .toggler{
@@ -142,6 +148,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     
     .active.toggler {
         left: 190px;
+        color: #ffffff;
     }
     
     .active.sidebar {
@@ -207,7 +214,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background:  #4DA1A9;;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -244,20 +251,27 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         color: white;
     }
 
+    .card-body {
+        padding: 0.5rem;
+    }
 
+    .accordion-button {
+        font-size: 0.9rem;
+    }
 
-</style>
+    .accordion-body {
+        font-size: 0.9rem;
+    }
+
+    #searchInput {
+        width: 100%;
+    }
+    }
+
+    </style>
 
 </head>
-<body>
-    
-    <!-- ADMIN SIDEBAR COMPONENT -->
-    <?php
-
-    // include "../components/admin_sidebar.php";
-
-    ?> 
-
+<body class="bg-light">
 <div class="menu">
     <div class="sidebar">
         <div class="logo items">
@@ -308,42 +322,58 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     <div class="content">
         <div class="container-fluid mt-4">
             <div class="row justify-content-center">
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all_tenants.png" alt="Card image cap">
-                        <div class="card-body">
-                            <h1 class="card-title"><?php echo $total_tenants; ?></h1>
-                            <p class="card-text">All Tenants</p>
-                            <div class="d-flex justify-content-center">
-                            <a href="tenants.php" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+               
+            <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                            <h4 class="mb-0">Contact Inquiries</h4>
+                            <div class="d-flex gap-2 mt-2 mt-md-0">
+                                <input type="search" class="form-control form-control-sm" id="searchInput" placeholder="Search emails..." onkeyup="filterInquiries()">
                             </div>
-
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house-income.png" alt="Card image cap">
-                        <div class="card-body">
-                            <h1 class="card-title">₱25,000</h1>
-                            <p class="card-text">Monthly Earnings</p>
-                            <div class="d-flex justify-content-center">
-                            <a href="a" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/deadline.png" alt="Card image cap">
-                        <div class="card-body">
-                            <h1 class="card-title">0</h1>
-                            <p class="card-text">Today's Due Date</p>
-                            <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
-                            </div>
-
+                    <div class="card-body p-0">
+                        <div class="accordion" id="contactAccordion">
+                            <?php 
+                            if (count($inquiries) > 0):
+                                foreach ($inquiries as $index => $inquiry): 
+                                    $timestamp = strtotime($inquiry['created_at']);
+                                    $formattedDate = date('Y-m-d h:i A', $timestamp);
+                            ?>
+                                <div class="accordion-item inquiry-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button <?php echo $index !== 0 ? 'collapsed' : ''; ?>" 
+                                                type="button" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#collapse<?php echo $index; ?>">
+                                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                                <div>
+                                                    <strong class="d-block"><?php echo htmlspecialchars($inquiry['full_name']); ?></strong>
+                                                    <span class="text-muted"><?php echo htmlspecialchars($inquiry['email']); ?></span>
+                                                </div>
+                                                <small class="text-muted ms-3"><?php echo $formattedDate; ?></small>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse<?php echo $index; ?>" 
+                                         class="accordion-collapse collapse <?php echo $index === 0 ? 'show' : ''; ?>" 
+                                         data-bs-parent="#contactAccordion">
+                                        <div class="accordion-body">
+                                            <p class="mb-0"><?php echo nl2br(htmlspecialchars($inquiry['message'])); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php 
+                                endforeach;
+                            else:
+                            ?>
+                                <div class="p-4 text-center text-muted">
+                                    No inquiries found.
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -351,10 +381,28 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         </div>
     </div>
 
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
+            </div>
+        </div>
+    </div>
 
-<script>
+</div>
+    
+
+    <script>
+    function filterInquiries() {
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const items = document.getElementsByClassName('inquiry-item');
+        
+        for (let item of items) {
+            const content = item.textContent.toLowerCase();
+            if (content.includes(searchText)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        }
+    }
+
     const toggler = document.querySelector('.toggler')
     const sidebar = document.querySelector('.sidebar')
 
@@ -367,10 +415,6 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
 
 
     showFull()
-</script>
-
+    </script>
 </body>
 </html>
-<?php
-$conn->close();
-?>
