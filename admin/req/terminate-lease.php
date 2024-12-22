@@ -20,8 +20,14 @@ try {
     // Start a transaction
     $conn->begin_transaction();
 
-    // Fetch tenant data
-    $select_stmt = $conn->prepare("SELECT * FROM tenant WHERE tenant_id = ?");
+    // Fetch tenant data including user_id
+    $select_stmt = $conn->prepare("
+        SELECT t.*, u.id as user_id 
+        FROM tenant t 
+        LEFT JOIN users u ON t.fullname = u.fullname 
+        AND t.phone_number = u.phone_number 
+        WHERE t.tenant_id = ?
+    ");
     $select_stmt->bind_param("i", $tenant_id);
     $select_stmt->execute();
     $result = $select_stmt->get_result();
@@ -55,14 +61,19 @@ try {
     $insert_stmt->execute();
     $insert_stmt->close();
 
-    // Get the user_id associated with the tenant
-    $user_id = $tenant['user_id'];
-
     // Delete from transaction_info table
     $delete_transaction_stmt = $conn->prepare("DELETE FROM transaction_info WHERE tenant_id = ?");
     $delete_transaction_stmt->bind_param("i", $tenant_id);
     $delete_transaction_stmt->execute();
     $delete_transaction_stmt->close();
+
+    // Delete messages first if user_id exists
+    if ($tenant['user_id']) {
+        $delete_messages_stmt = $conn->prepare("DELETE FROM messages WHERE sender_id = ? OR receiver_id = ?");
+        $delete_messages_stmt->bind_param("ii", $tenant['user_id'], $tenant['user_id']);
+        $delete_messages_stmt->execute();
+        $delete_messages_stmt->close();
+    }
 
     // Delete from tenant table
     $delete_tenant_stmt = $conn->prepare("DELETE FROM tenant WHERE tenant_id = ?");
@@ -70,23 +81,30 @@ try {
     $delete_tenant_stmt->execute();
     $delete_tenant_stmt->close();
 
-    // Delete from users table
-    $delete_user_stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-    $delete_user_stmt->bind_param("i", $user_id);
-    $delete_user_stmt->execute();
-    $delete_user_stmt->close();
+    // Delete from users table if user_id exists
+    if ($tenant['user_id']) {
+        $delete_user_stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+        $delete_user_stmt->bind_param("i", $tenant['user_id']);
+        $delete_user_stmt->execute();
+        $delete_user_stmt->close();
+    }
 
     // Commit the transaction
     $conn->commit();
 
-    header('Location: ../tenants.php?success=Tenant lease successfully terminated.');
+    header('Location: ../tenants.php?success=Tenant lease successfully terminated and all related data removed.');
     exit;
 
 } catch (Exception $e) {
     // Rollback transaction in case of an error
     $conn->rollback();
-    $_SESSION['error_message'] = $e->getMessage();
+    error_log("Lease termination error: " . $e->getMessage()); // Log the error
     header('Location: ../tenants.php?error=An error occurred while terminating tenant lease.');
     exit;
+} finally {
+    // Close connection
+    if (isset($conn)) {
+        $conn->close();
+    }
 }
 ?>
