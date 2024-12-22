@@ -409,9 +409,9 @@ if ($maintenance_status) {
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
-        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
-            <a href="message.php"> <i class="fa-solid fa-message"></i></a>
-            <p class="para"><a href="message.php">Message</a></p>
+        <li class="items <?php echo $current_page == 'message-admin.php' ? 'active-menu' : ''; ?>">
+            <a href="message-admin.php"> <i class="fa-solid fa-message"></i></a>
+            <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
         <li class="items logout-btn">
@@ -451,7 +451,7 @@ if ($maintenance_status) {
                                     <h1 class="card-title"><?php echo $unit_name; ?></h1>
                                     <p class="card-text">Status: <?php echo $status; ?></p>
                                     <h2 class="card-subtitle mb-2"><?php echo $type; ?></h2>
-                                    <p class="card-text"> <a class='text-primary text-decoration-underline' href='unit-maintenance.php?unit=$i'>Maintenance Status: </a><span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?></p>
+                                    <p class="card-text"> <a class='text-primary text-decoration-underline' href='unit-maintenance.php?unit=<?php echo $unit_number; ?>'>Maintenance Status: </a><span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?></p>
                                    
 
                                 </div>

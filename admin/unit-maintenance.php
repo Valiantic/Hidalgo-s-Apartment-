@@ -282,9 +282,9 @@ $result = $stmt->get_result();
             <a href="tenants.php"> <i class="fa-solid fa-user"></i></a>
             <p class="para"><a href="tenants.php">Tenants</a></p>
         </li>
-        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
-            <a href="message.php"> <i class="fa-solid fa-message"></i></a>
-            <p class="para"><a href="message.php">Message</a></p>
+        <li class="items <?php echo $current_page == 'message-admin.php' ? 'active-menu' : ''; ?>">
+            <a href="message-admin.php"> <i class="fa-solid fa-message"></i></a>
+            <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
         <li class="items logout-btn">

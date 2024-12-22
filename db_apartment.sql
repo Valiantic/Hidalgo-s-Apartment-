@@ -1,4 +1,4 @@
--- DATABASE CREATION
+-- DATABASE CREATION FOR DEPLOYMENT
 CREATE DATABASE db_apartment;
 
 --FOR CONTACT US
@@ -74,8 +74,6 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 -- TRANSACTION
-
-
 CREATE TABLE transaction_info (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     tenant_id INT NOT NULL,
@@ -90,7 +88,6 @@ CREATE TABLE transaction_info (
 
 
 -- MAINTENANCE 
-
 CREATE TABLE maintenance_request (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
     tenant_id INT,
@@ -100,4 +97,30 @@ CREATE TABLE maintenance_request (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id) ON DELETE CASCADE
 );
+
+CREATE TABLE messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,  -- User sending the message
+    receiver_id INT NOT NULL,  -- User receiving the message
+    message TEXT NOT NULL,  -- Message content
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp when message is sent
+    FOREIGN KEY (sender_id) REFERENCES users(id),
+    FOREIGN KEY (receiver_id) REFERENCES users(id)
+);
+
+-- IN CASE MESSAGE TABLE FAILS 
+ALTER TABLE messages 
+DROP FOREIGN KEY messages_ibfk_1,
+ADD CONSTRAINT messages_ibfk_1 
+FOREIGN KEY (sender_id) 
+REFERENCES users(id) 
+ON DELETE CASCADE;
+
+ALTER TABLE messages 
+DROP FOREIGN KEY messages_ibfk_2,
+ADD CONSTRAINT messages_ibfk_2 
+FOREIGN KEY (receiver_id) 
+REFERENCES users(id) 
+ON DELETE CASCADE;
+
 
