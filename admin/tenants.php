@@ -146,7 +146,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
     }
     
     .active.toggler {
-        left: 160px;
+        left: 150px;
     }
     
     .active.sidebar {
