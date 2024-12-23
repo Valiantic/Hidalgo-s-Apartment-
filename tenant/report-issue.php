@@ -71,7 +71,7 @@ $_SESSION['unit'] = $unit;
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -120,7 +120,7 @@ $_SESSION['unit'] = $unit;
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff
     }
     
     .logout-btn{
@@ -130,7 +130,8 @@ $_SESSION['unit'] = $unit;
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff
+
     }
     
     .toggler{
@@ -178,6 +179,15 @@ $_SESSION['unit'] = $unit;
     }
 
      /* CARD STYLING */
+     .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
      .height-img {
     max-height: 220px; 
     width: auto;
@@ -221,7 +231,8 @@ $_SESSION['unit'] = $unit;
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
+;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -269,7 +280,7 @@ $_SESSION['unit'] = $unit;
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -293,14 +304,14 @@ $_SESSION['unit'] = $unit;
         </li>
 
 
-        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
-            <a href="message.php"> <i class="fa-solid fa-message"></i></a>
-            <p class="para"><a href="message.php">Message</a></p>
+        <li class="items <?php echo $current_page == 'message-tenant.php' ? 'active-menu' : ''; ?>">
+            <a href="message-tenant.php"> <i class="fa-solid fa-message"></i></a>
+            <p class="para"><a href="message-tenant.php">Message</a></p>
         </li>
 
-        <li class="items <?php echo $current_page == 'message.php' ? 'active-menu' : ''; ?>">
-            <a href="message.php"> <i class="fa-solid fa-gear"></i></a>
-            <p class="para"><a href="message.php">Settings</a></p>
+        <li class="items <?php echo $current_page == 'settings.php' ? 'active-menu' : ''; ?>">
+            <a href="settings.php"> <i class="fa-solid fa-gear"></i></a>
+            <p class="para"><a href="settings.php">Settings</a></p>
         </li>
 
 
@@ -322,11 +333,11 @@ $_SESSION['unit'] = $unit;
         <div class="container-fluid mt-4">
             <div class="row justify-content-center gap-4">
 
-            <h1 data-aos="fade-right" class="display- text-white fw-bold">Let's Raise your Concern to the Admin!</h1>
+            <h1 data-aos="fade-right" class="display- text-black fw-bold">Let's Raise your Concern to the Admin!</h1>
                
 
             <!-- INPUT FORM HERE -->
-            <div class="card text-dark bg-light mb-3 p-3" style="max-width: 30rem;">
+            <div class="card shadow-lg text-dark bg-light mb-3 p-3" style="max-width: 30rem;">
                 <a href="home.php">Back</a>
                 <div class="card-title fs-4 text-center">Maintenance Report</div>
                 <div class="card-body">
@@ -350,7 +361,7 @@ $_SESSION['unit'] = $unit;
                         </div>
                     <?php endif; ?>
 
-                    <button type="submit" class="btn btn-primary w-100">Submit Report</button>
+                    <button type="submit" class="btn btn-ocean w-100">Submit Report</button>
                 </form>
 
                 </div>

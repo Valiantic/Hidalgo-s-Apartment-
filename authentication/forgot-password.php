@@ -56,7 +56,7 @@ if (isset($_POST['send'])) {
         </script>";
         }
     } else {
-        echo "<script>alert('Email not found!');</script>";
+        header('Location: forgot-password.php?error=Email not found. Make sure you own a unit in this apartment.');
     }
 }
 ?>
@@ -186,6 +186,8 @@ if (isset($_POST['send'])) {
             display: flex;
             justify-content: center;
             align-items: center;
+            text-align: justify;
+            font-size: 15px;
         }
         .forgot-link{
             text-align: center;
