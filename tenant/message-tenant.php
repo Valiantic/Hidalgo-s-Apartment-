@@ -81,7 +81,7 @@ $admin_id = $admin['id'];
         .sidebar{
             height: 100vh;
             width: 60px;
-            background: aliceblue;
+            background: #C6E7FF;
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
@@ -130,7 +130,7 @@ $admin_id = $admin['id'];
         
         .sidebar li:not(.logout-btn):hover {
             background: #000;
-            color: aliceblue;
+            color: #ffffff;
         }
         
         .logout-btn{
@@ -140,7 +140,7 @@ $admin_id = $admin['id'];
         
         .logout-btn:hover{
             background-color: #B70202;
-            color: aliceblue;
+            color: #ffffff;
         }
         
         .toggler{
@@ -231,7 +231,7 @@ $admin_id = $admin['id'];
             .sidebar{
             height: 100vh;
             width: 70px;
-            background: aliceblue;
+            background: #C6E7FF;
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
@@ -271,7 +271,7 @@ $admin_id = $admin['id'];
 
     </style>
 </head>
-<body>
+<body class="bg-light">
 
 <div class="menu">
     <div class="sidebar">
@@ -318,7 +318,7 @@ $admin_id = $admin['id'];
             <div class="row justify-content-center gap-4">
 
             <div class="container">
-        <div class="card">
+        <div class="card shadow">
             <div class="card-header">
                 <h5>Chat with Admin (<?php echo htmlspecialchars($admin['fullname']); ?>)</h5>
             </div>

@@ -132,7 +132,7 @@ if ($maintenance_status) {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -181,7 +181,7 @@ if ($maintenance_status) {
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;
     }
     
     .logout-btn{
@@ -191,7 +191,7 @@ if ($maintenance_status) {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;
     }
     
     .toggler{
@@ -239,6 +239,15 @@ if ($maintenance_status) {
     }
 
      /* CARD STYLING */
+     .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
      .height-img {
     max-height: 220px; 
     width: auto;
@@ -379,7 +388,6 @@ if ($maintenance_status) {
         .btn {
             width: 100%;
             height: 48px;
-            background-color: rgb(102, 153, 255) !important;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, .1);
             border: none;
@@ -429,7 +437,7 @@ if ($maintenance_status) {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -476,7 +484,7 @@ if ($maintenance_status) {
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -560,7 +568,7 @@ if ($maintenance_status) {
                                 <?php } ?>
                             </div>
 
-                            <button type="submit" class="btn">Update Information</button>
+                            <button type="submit" class="btn btn-ocean">Update Information</button>
                         </form>
                     </div>
                 </div>
@@ -600,7 +608,7 @@ if ($maintenance_status) {
                                 <?php } ?>
                             </div>
 
-                            <button type="submit" class="btn">Update Account</button>
+                            <button type="submit" class="btn btn-ocean">Update Account</button>
                         </form>
                     </div>
                 </div>

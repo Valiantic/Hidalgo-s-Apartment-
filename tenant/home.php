@@ -129,7 +129,7 @@ if ($maintenance_status) {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -178,7 +178,7 @@ if ($maintenance_status) {
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;
     }
     
     .logout-btn{
@@ -188,7 +188,7 @@ if ($maintenance_status) {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;
     }
     
     .toggler{
@@ -236,6 +236,15 @@ if ($maintenance_status) {
     }
 
      /* CARD STYLING */
+     .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
      .height-img {
     max-height: 220px; 
     width: auto;
@@ -279,7 +288,7 @@ if ($maintenance_status) {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -321,7 +330,7 @@ if ($maintenance_status) {
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -374,10 +383,10 @@ if ($maintenance_status) {
         <div class="container-fluid mt-4">
             <div class="row justify-content-center gap-4">
 
-            <h1 data-aos="fade-right" class="display- text-white fw-bold">Welcome, <?php echo htmlspecialchars($first_name); ?>!</h1>
+            <h1 data-aos="fade-right" class="display- text-black fw-bold">Welcome, <?php echo htmlspecialchars($first_name); ?>!</h1>
                
 
-            <div class="card text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
+            <div class="card text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Tenant Information</div>
             <div class="card-body">
                 <label>Tenant Fullname</label>
@@ -391,7 +400,7 @@ if ($maintenance_status) {
             </div>
             </div>
 
-            <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
+            <div class="card text-left text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Your Billings</div>
             <div class="card-body">
                 <label>Monthly Rent <span style="color: blue;">₱<?php echo htmlspecialchars($monthly_rent); ?></span></label>
@@ -403,7 +412,7 @@ if ($maintenance_status) {
                 </div>
             </div>
 
-            <div class="card text-left text-dark bg-light mb-3 p-3" style="max-width: 18rem;">
+            <div class="card text-left text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Actions</div>
             <div class="card-body d-flex flex-column gap-2">
                 <?php if ($maintenance_status): ?>
@@ -422,7 +431,7 @@ if ($maintenance_status) {
                 <br/>
                 <br/>
                 <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
-                <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-primary btn-lg">View Contract</a>
+                <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-ocean btn-lg">View Contract</a>
             </div>
             </div>
 
