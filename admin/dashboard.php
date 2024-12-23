@@ -237,7 +237,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         display: flex;
         align-items: center;
         font-size: 1.3rem;
-        color: #ffffff;
+        color: #252525;
         margin-left: 0px;
         margin-right: 10px;
         padding: 10px 0px;
