@@ -17,12 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("ss", $status, $unit);
 
     if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Maintenance status updated successfully!";
+        $_SESSION['success'] = "Maintenance status updated successfully!";
+        // Extract the unit number from the unit name
+        $unit_number = (int) filter_var($unit, FILTER_SANITIZE_NUMBER_INT);
+        header("Location: ../unit-maintenance.php?unit=" . urlencode($unit_number) . "&success=" . urlencode("Maintenance status updated successfully!"));
+        exit;
     } else {
-        $_SESSION['error_message'] = "Failed to update maintenance status.";
+        $_SESSION['error'] = "Failed to update maintenance status.";
+        header("Location: ../unit-maintenance.php?unit=" . urlencode($unit_number) . "&error=" . urlencode("Failed to update maintenance status."));
+        exit;
     }
-
-    header("Location: ../unit-maintenance.php?unit=" . urlencode($unit));
-    exit;
 }
 ?>
