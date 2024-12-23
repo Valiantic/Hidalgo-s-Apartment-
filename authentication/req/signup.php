@@ -24,18 +24,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Hash the password after passing validation
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Check if the email is already registered
-        $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
-        $checkStmt->execute([$email]);
-        $emailExists = $checkStmt->fetchColumn();
+        // Check if the email is already registered in users or pending_users table
+        $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ? UNION ALL SELECT COUNT(*) FROM pending_users WHERE email = ?");
+        $checkStmt->execute([$email, $email]);
+        $emailExists = array_sum($checkStmt->fetchAll(PDO::FETCH_COLUMN));
 
         if ($emailExists > 0) {
             // Redirect back to the form with an error message
             header('Location: ../signup.php?error=' . urlencode('The email is already registered. Please use a different email.'));
             exit;
         } else {
-            // Proceed to insert the new user
-            $stmt = $pdo->prepare("INSERT INTO users (fullname, phone_number, work, email, password, role) VALUES (?, ?, ?, ?, ?, ?)");
+            // Proceed to insert the new user into pending_users table
+            $stmt = $pdo->prepare("INSERT INTO pending_users (fullname, phone_number, work, email, password, role) VALUES (?, ?, ?, ?, ?, ?)");
             try {
                 $stmt->execute([$fullname, $phone_number, $work, $email, $hashedPassword, 'user']);
                 session_start();
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['fullname'] = $fullname;
 
                 // Redirect to the tenant home page
-                header('Location: ../../tenant/home.php');
+                header('Location: ../../pending_users/available-units.php');
                 exit;
             } catch (Exception $e) {
                 // Redirect back to the form with an error message

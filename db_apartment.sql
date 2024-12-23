@@ -128,9 +128,8 @@ REFERENCES users(id)
 ON DELETE CASCADE;
 
 -- NEW TENANT OR PENDING TENANT REQUESTS
--- USER ACCOUNTS
-CREATE TABLE pending_request (
-    pending_tenant_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE pending_users (
+    pending_user_id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(255) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
     work VARCHAR(255),
@@ -140,6 +139,3 @@ CREATE TABLE pending_request (
     reset_token VARCHAR(255),  -- Column to store the reset token
     token_expiry DATETIME      -- Column to store the token expiration time
 );
-
-
-

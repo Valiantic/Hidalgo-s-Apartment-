@@ -46,9 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
     } else {
+        // Check if the email is registered in the pending_users table
+        $stmt = $pdo->prepare("SELECT * FROM pending_users WHERE email = ?");
+        $stmt->execute([$email]);
+        $pending_user = $stmt->fetch();
 
-        header('Location: ../login.php?error=' . urlencode('Incorrect email or password.'));
-        exit;
+        if ($pending_user && password_verify($password, $pending_user['password'])) {
+            $_SESSION['user_id'] = $pending_user['pending_user_id'];
+            $_SESSION['role'] = $pending_user['role'];
+            $_SESSION['fullname'] = $pending_user['fullname'];
+            $_SESSION['phone_number'] = $pending_user['phone_number'];
+
+            header('Location: ../../pending_users/available-units.php');
+            exit;
+        } else {
+            header('Location: ../login.php?error=' . urlencode('Incorrect email or password.'));
+            exit;
+        }
     }
 }
 ?>
