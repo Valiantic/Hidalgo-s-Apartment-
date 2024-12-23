@@ -240,7 +240,7 @@
 
                 <button type="submit" class="btn">Login</button>
                 <div class=" d-flex justify-content-center mt-4">
-                <p>Don't have an account? <a class="register" href="signup.php">Click here!</a></p>
+                <p>Rent Unit to Create an Account <a class="register" href="../tenant_view.php">Click here!</a></p>
 
                 </div>
                

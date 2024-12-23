@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+// Check if the user came from the "Rent this Unit" button
+if (!isset($_SESSION['rent_unit_access'])) {
+    // Redirect to the tenant view info page
+    header("Location: login.php"); 
+    exit();
+}
+
+// Clear the session variable after ensuring access
+unset($_SESSION['rent_unit_access']);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -7,7 +7,8 @@ include 'connections.php';
 $unit_number = isset($_GET['unit']) ? (int)$_GET['unit'] : null;
 
 if ($unit_number < 1 || $unit_number > 5) {
-    die("Invalid unit number. Please select a unit between 1 and 5.");
+    // die("Invalid unit number. Please select a unit between 1 and 5.");
+    header("Location: login.php"); 
 }
 
 $unit_name = "Unit $unit_number";
@@ -42,8 +43,7 @@ $img_src = getUnitImage($unit_number, $status);
 function rentButton($status) {
     global $unit_number; // Ensure $unit_number is accessible within the function
     if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
-        // return "<a href='rent_unit.php?unit=$unit_number' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
-        return "<a href='./authentication/signup.php' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
+        return "<a href='./authentication/signup_handler.php' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
     } else {
         return "";
     }
@@ -335,11 +335,11 @@ $building = buildingType($unit_number);
                         <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
                         <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
                         <p class="card-text text-center">Status: <?php echo $status; ?></p>
-                        <h2 class="card-subtitle mb-2 text-center"><?php echo $type; ?></h2>
+                        <?php echo $rent; ?>
+                        <h2 class="card-subtitle mt-4 mb-2 text-center"><?php echo $type; ?></h2>
                         <h2 class="card-subtitle mb-2 text-center">Maximum Occupancy: <?php echo $occupancy; ?></h2>
                         <h2 class="card-text mb-2 text-center">Apartment Description:</h2>
                         <p class="card-text text-left"><?php echo $building; ?></p>
-                        <?php echo $rent; ?>
                     </div>
                 </div>
             </div>

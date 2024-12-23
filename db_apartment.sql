@@ -22,6 +22,10 @@ CREATE TABLE users (
     token_expiry DATETIME      -- Column to store the token expiration time
 );
 
+-- ADMIN ACCOUNT
+INSERT INTO users (fullname, phone_number, work, email, password, role)
+VALUES ('Admin', '9999999', 'Administrator', 'hidalgo-apartment@admin.com', '$2y$10$AdR93qoCLMmPv6jhcPrhYeIwOfDaCPWGKzUNROxDT3DrXCf4i1f12', 'admin');
+
 -- TENANTS
 CREATE TABLE tenant (
     tenant_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -122,5 +126,7 @@ ADD CONSTRAINT messages_ibfk_2
 FOREIGN KEY (receiver_id) 
 REFERENCES users(id) 
 ON DELETE CASCADE;
+
+
 
 

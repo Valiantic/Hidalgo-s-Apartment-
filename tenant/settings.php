@@ -591,11 +591,11 @@ if ($maintenance_status) {
                             </div>    
                             <div class="input-box">
                                 <input type="password" id="password" name="old_password" placeholder="Old Password" required>
-                                <i class="toggle-password bi bi-eye-slash"></i>
+                                <!-- <i class="toggle-password bi bi-eye-slash"></i> -->
                                 </div>    
                             <div class="input-box">
                                 <input type="password" id="password" name="new_password" placeholder="New Password" required>
-                                <i class="toggle-password bi bi-eye-slash"></i>
+                                <!-- <i class="toggle-password bi bi-eye-slash"></i> -->
                                 </div>    
 
                             <div class="d-flex justify-content-center mb-1">
