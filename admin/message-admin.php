@@ -17,6 +17,30 @@ $tenant_result = mysqli_query($conn, $tenant_query);
 
 // Get selected tenant's messages if any
 $selected_tenant = isset($_GET['tenant_id']) ? $_GET['tenant_id'] : null;
+
+
+// Get count of new messages for each tenant
+$new_messages_query = "
+    SELECT sender_id, COUNT(*) AS new_messages 
+    FROM messages 
+    WHERE receiver_id = ? AND is_read = 0 
+    GROUP BY sender_id";
+$new_messages_stmt = $conn->prepare($new_messages_query);
+$new_messages_stmt->bind_param("i", $_SESSION['user_id']);
+$new_messages_stmt->execute();
+$new_messages_result = $new_messages_stmt->get_result();
+$new_messages_count = [];
+while ($row = $new_messages_result->fetch_assoc()) {
+    $new_messages_count[$row['sender_id']] = $row['new_messages'];
+}
+// Mark messages as read when a tenant is selected
+if ($selected_tenant) {
+    $mark_as_read_query = "UPDATE messages SET is_read = 1 WHERE sender_id = ? AND receiver_id = ?";
+    $mark_as_read_stmt = $conn->prepare($mark_as_read_query);
+    $mark_as_read_stmt->bind_param("ii", $selected_tenant, $_SESSION['user_id']);
+    $mark_as_read_stmt->execute();
+    $mark_as_read_stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -334,6 +358,9 @@ $selected_tenant = isset($_GET['tenant_id']) ? $_GET['tenant_id'] : null;
                                 <a href="?tenant_id=<?php echo $tenant['user_id']; ?>" 
                                    class="list-group-item list-group-item-action <?php echo ($selected_tenant == $tenant['user_id']) ? 'active' : ''; ?>">
                                     <?php echo htmlspecialchars($tenant['fullname']); ?>
+                                    <?php if (isset($new_messages_count[$tenant['user_id']])): ?>
+                                        <span class="badge bg-danger rounded-pill ms-2"><?php echo $new_messages_count[$tenant['user_id']]; ?></span>
+                                    <?php endif; ?>
                                     <br>
                                     <small>Unit: <?php echo htmlspecialchars($tenant['units']); ?></small>
                                 </a>
