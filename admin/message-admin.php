@@ -8,37 +8,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+$current_page = basename($_SERVER['PHP_SELF']); 
+
+
 // Get list of all tenants
 $tenant_query = "SELECT * FROM tenant_users WHERE role = 'user'";
 $tenant_result = mysqli_query($conn, $tenant_query);
 
 // Get selected tenant's messages if any
 $selected_tenant = isset($_GET['tenant_id']) ? $_GET['tenant_id'] : null;
-
-// Get count of new messages for each tenant
-$new_messages_query = "
-    SELECT sender_id, COUNT(*) AS new_messages 
-    FROM messages 
-    WHERE receiver_id = ? AND is_read = 0 
-    GROUP BY sender_id";
-$new_messages_stmt = $conn->prepare($new_messages_query);
-$new_messages_stmt->bind_param("i", $_SESSION['user_id']);
-$new_messages_stmt->execute();
-$new_messages_result = $new_messages_stmt->get_result();
-
-$new_messages_count = [];
-while ($row = $new_messages_result->fetch_assoc()) {
-    $new_messages_count[$row['sender_id']] = $row['new_messages'];
-}
-
-// Mark messages as read when a tenant is selected
-if ($selected_tenant) {
-    $mark_as_read_query = "UPDATE messages SET is_read = 1 WHERE sender_id = ? AND receiver_id = ?";
-    $mark_as_read_stmt = $conn->prepare($mark_as_read_query);
-    $mark_as_read_stmt->bind_param("ii", $selected_tenant, $_SESSION['user_id']);
-    $mark_as_read_stmt->execute();
-    $mark_as_read_stmt->close();
-}
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +33,7 @@ if ($selected_tenant) {
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
    
    <style>
         .chat-container {
@@ -100,7 +78,7 @@ if ($selected_tenant) {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -149,7 +127,7 @@ if ($selected_tenant) {
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -159,7 +137,7 @@ if ($selected_tenant) {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -250,7 +228,7 @@ if ($selected_tenant) {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -289,7 +267,7 @@ if ($selected_tenant) {
 
     </style>
 </head>
-<body>
+<body class="bg-light">
 <div class="menu">
     <div class="sidebar">
         <div class="logo items">
@@ -318,6 +296,12 @@ if ($selected_tenant) {
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
+
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -344,15 +328,12 @@ if ($selected_tenant) {
                     <div class="card-header">
                         <h5>Tenants</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body shadow-lg">
                         <div class="list-group">
                             <?php while($tenant = mysqli_fetch_assoc($tenant_result)): ?>
                                 <a href="?tenant_id=<?php echo $tenant['user_id']; ?>" 
                                    class="list-group-item list-group-item-action <?php echo ($selected_tenant == $tenant['user_id']) ? 'active' : ''; ?>">
                                     <?php echo htmlspecialchars($tenant['fullname']); ?>
-                                    <?php if (isset($new_messages_count[$tenant['user_id']])): ?>
-                                        <span class="badge bg-danger rounded-pill ms-2"><?php echo $new_messages_count[$tenant['user_id']]; ?></span>
-                                    <?php endif; ?>
                                     <br>
                                     <small>Unit: <?php echo htmlspecialchars($tenant['units']); ?></small>
                                 </a>

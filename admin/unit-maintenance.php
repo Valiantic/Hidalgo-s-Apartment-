@@ -65,7 +65,7 @@ $result = $stmt->get_result();
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -113,7 +113,7 @@ $result = $stmt->get_result();
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -123,7 +123,7 @@ $result = $stmt->get_result();
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -215,7 +215,7 @@ $result = $stmt->get_result();
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -257,7 +257,7 @@ $result = $stmt->get_result();
 </style>
 
 </head>
-<body>
+<body class="bg-light">
 
 <div class="menu">
     <div class="sidebar">
@@ -287,6 +287,11 @@ $result = $stmt->get_result();
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -306,7 +311,7 @@ $result = $stmt->get_result();
             <div class="row justify-content-center">
                 
             <div class="col-12 col-md-8 mb-3">
-                    <div class="card" data-aos="fade-up">
+                    <div class="card shadow-lg" data-aos="fade-up">
                         <div class="card-body">
                             <a href="units.php">Back</a>
                             <h1 class="text-center mb-4">Maintenance Requests for <?php echo htmlspecialchars($unit_name); ?></h1>

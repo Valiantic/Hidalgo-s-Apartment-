@@ -65,7 +65,7 @@ function rentButton($status, $tenant_id, $unit_number) {
             <form method='POST' action='update_billing_status.php' style='display: inline;'>
                 <input type='hidden' name='tenant_id' value='" . htmlspecialchars($tenant_id) . "'>
                 <input type='hidden' name='unit' value='" . htmlspecialchars($unit_number) . "'>
-                <button type='submit' class='btn btn-primary custom-btn-font text-white text'>Update Details</button>
+                <button type='submit' class='btn btn-ocean custom-btn-font text-white text'>Update Details</button>
             </form>
             <a href='contract-page.php?unit=" . htmlspecialchars($unit_number) . "' class='btn btn-success custom-btn-font text-white text'>View Contract</a>
             <a href='#' class='btn btn-danger custom-btn-font text-white text terminate-lease' data-tenant-id='" . htmlspecialchars($tenant_id) . "'>Terminate Lease</a>
@@ -166,7 +166,7 @@ if ($maintenance_status) {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -214,7 +214,7 @@ if ($maintenance_status) {
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -224,7 +224,7 @@ if ($maintenance_status) {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -272,6 +272,15 @@ if ($maintenance_status) {
     }
 
     /* CARD STYLING */
+    .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
     .height-img {
     max-height: 220px; 
     width: auto;
@@ -316,7 +325,7 @@ if ($maintenance_status) {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -382,7 +391,7 @@ if ($maintenance_status) {
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
    
 
@@ -414,6 +423,11 @@ if ($maintenance_status) {
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -433,7 +447,7 @@ if ($maintenance_status) {
             <div class="row justify-content-center">
                 
                 <div class="col-12 mb-3">
-                    <div class="card" data-aos="fade-up">
+                    <div class="card shadow-lg" data-aos="fade-up">
                         <?php if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>'): ?>
                             <div class="text-center p-3">
 

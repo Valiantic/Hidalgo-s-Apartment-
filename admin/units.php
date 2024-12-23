@@ -68,7 +68,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -111,12 +111,12 @@ while ($row = $maintenance_result->fetch_assoc()) {
     
     .para{
         opacity: 0;
-        transition: opacity 0.5s ease;
+        transition: opacity 0.5s ease;    
     }
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -126,7 +126,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -174,6 +174,15 @@ while ($row = $maintenance_result->fetch_assoc()) {
     }
 
     /* CARD STYLING */
+    .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
     .height-img {
     max-height: 220px; 
     width: auto;
@@ -218,7 +227,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -260,7 +269,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
    
 
@@ -291,6 +300,12 @@ while ($row = $maintenance_result->fetch_assoc()) {
             <a href="message-admin.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
+
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
 
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
@@ -337,7 +352,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
                     
                     echo "
                     <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>
-                        <div class='card'>
+                        <div class='card shadow-lg'>
                             <img class='card-img-top img-fluid height-img' src='$img_src' alt='Card image cap'>
                             <div class='card-body'>
                                 <div class='d-flex justify-content-center'>
@@ -348,7 +363,7 @@ while ($row = $maintenance_result->fetch_assoc()) {
                                     </div>
                                 </div>
                                 <div class='d-flex justify-content-center'>
-                                    <a href='tenant-information.php?unit=$i' class='btn btn-primary w-100 custom-btn-font'>Info</a>
+                                    <a href='tenant-information.php?unit=$i' class='btn btn-ocean w-100 custom-btn-font'>Info</a>
                                 </div>
                             </div>
                         </div>

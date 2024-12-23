@@ -91,7 +91,7 @@ if (isset($_GET['tenant_id'])) {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -139,7 +139,7 @@ if (isset($_GET['tenant_id'])) {
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -149,7 +149,7 @@ if (isset($_GET['tenant_id'])) {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -202,6 +202,15 @@ if (isset($_GET['tenant_id'])) {
     }
 
     /* CARD STYLING */
+    .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
     .height-img {
     max-height: 220px; 
     width: auto;
@@ -267,7 +276,7 @@ if (isset($_GET['tenant_id'])) {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -320,7 +329,7 @@ if (isset($_GET['tenant_id'])) {
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -356,6 +365,12 @@ if (isset($_GET['tenant_id'])) {
             <a href="message-admin.php"> <i class="fa-solid fa-message"></i></a>
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
+
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
 
         <li class="items logout-btn">
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -491,7 +506,7 @@ if (isset($_GET['tenant_id'])) {
 
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100">Update</button>
+                <button type="submit" class="btn btn-ocean w-100">Update</button>
             </form>
         </div>
     </div>

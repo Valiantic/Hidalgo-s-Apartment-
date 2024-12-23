@@ -63,7 +63,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -111,7 +111,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -121,7 +121,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -185,6 +185,15 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
     }
 
     /* CARD STYLING */
+    .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
     .height-img {
     max-height: 220px; 
     width: auto;
@@ -246,7 +255,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -288,7 +297,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -325,6 +334,11 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -344,7 +358,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
           
 
         <a href="add-tenant.php"
-        class="btn btn-light mb-3">Add New Tenant</a>
+        class="btn btn-ocean mb-3">Add New Tenant</a>
 
         <a href="tenant-history.php"
         class="btn btn-dark mb-3">View Tenant History</a>
@@ -353,8 +367,8 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
           <form action="tenants.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
-        <button class="btn btn-primary" id="gBtn">
+        <input type="text" class="form-control shadow" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
+        <button class="btn btn-primary shadow" id="gBtn">
         Search
         <!-- Search button svg icon -->
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -381,7 +395,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
         <?php } ?>
 
         <!-- TABLE TO READ DATA FROM DATABASE -->
-        <div class="table-wrapper">
+        <div class="table-wrapper shadow-lg">
         <table class="table table-bordered table-striped table-rounded">
             <thead class="table-primary">
                 <tr>
@@ -427,7 +441,7 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
                             <td>{$formatted_move_in_date}</td>
                             <td>
                                  <div class='d-flex gap-2'>
-                                    <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-primary w-100'>Edit</a>
+                                    <a href='edit-tenant.php?tenant_id={$row['tenant_id']}' class='btn btn-ocean w-100'>Edit</a>
                                     <button class='btn btn-danger btn-sm' onclick='confirmDelete({$row['tenant_id']})'>Delete</button>
                                 </div>
                             </td>

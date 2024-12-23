@@ -8,6 +8,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 include '../connections.php';
 
+$current_page = basename($_SERVER['PHP_SELF']); 
+
+
 try {
     // Fetch all inquiries, ordered by latest first
     $stmt = $conn->query("SELECT email, full_name, message, created_at FROM contact_us ORDER BY created_at DESC");
@@ -62,7 +65,7 @@ try {
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: #4DA1A9;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -107,12 +110,11 @@ try {
     .para{
         opacity: 0;
         transition: opacity 0.5s ease;
-        color: #ffffff;
     }
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color:  #4DA1A9;;
+        color: #ffffff;
     }
     
     .logout-btn{
@@ -122,7 +124,7 @@ try {
     
     .logout-btn:hover{
         background-color: #B70202;
-        color:  #4DA1A9;;
+        color: #ffffff;
     }
     
     .toggler{
@@ -148,7 +150,6 @@ try {
     
     .active.toggler {
         left: 190px;
-        color: #ffffff;
     }
     
     .active.sidebar {
@@ -214,7 +215,7 @@ try {
         .sidebar{
         height: 100vh;
         width: 70px;
-        background:  #4DA1A9;;
+        background:  #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -266,7 +267,7 @@ try {
     #searchInput {
         width: 100%;
     }
-    }
+    
 
     </style>
 

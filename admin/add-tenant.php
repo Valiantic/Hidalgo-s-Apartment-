@@ -74,7 +74,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -122,7 +122,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -132,7 +132,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -185,6 +185,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
 
     /* CARD STYLING */
+    .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
     .height-img {
     max-height: 220px; 
     width: auto;
@@ -250,7 +259,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -303,7 +312,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -340,6 +349,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <p class="para"><a href="message-admin.php">Message</a></p>
         </li>
 
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
+
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -358,7 +373,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <div class="content">
     <div class="container-fluid ">
         <div class="row justify-content-center">
-            <form class="shadow p-4  mb-3 bg-light rounded" method="post" action="req/add-tenant.php" style="max-width: 600px; width: 100%;">
+            <form class="shadow-lg p-4  mb-3 bg-light rounded" method="post" action="req/add-tenant.php" style="max-width: 600px; width: 100%;">
                 <hr>
                 <h3 class="text-center">Add New Tenant</h3>
                 <hr>
@@ -464,7 +479,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100">Add</button>
+                <button type="submit" class="btn btn-ocean w-100">Add</button>
             </form>
         </div>
     </div>

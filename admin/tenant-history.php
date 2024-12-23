@@ -64,7 +64,7 @@ $result = $conn->query($query);
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -112,7 +112,7 @@ $result = $conn->query($query);
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -122,7 +122,7 @@ $result = $conn->query($query);
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -147,7 +147,7 @@ $result = $conn->query($query);
     }
     
     .active.toggler {
-        left: 170px;
+        left: 150px;
     }
     
     .active.sidebar {
@@ -183,6 +183,15 @@ $result = $conn->query($query);
     }
 
     /* CARD STYLING */
+    .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
     .height-img {
     max-height: 220px; 
     width: auto;
@@ -238,7 +247,7 @@ $result = $conn->query($query);
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -280,7 +289,7 @@ $result = $conn->query($query);
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -317,6 +326,12 @@ $result = $conn->query($query);
             <p class="para"><a href="message.php">Message</a></p>
         </li>
 
+        <li class="items <?php echo $current_page == 'mail.php' ? 'active-menu' : ''; ?>">
+            <a href="mail.php"> <i class="fa-solid fa-envelope"></i></a>
+            <p class="para"><a href="mail.php">Mails</a></p>
+        </li>
+
+
         <li class="items logout-btn">
             <!-- ENCLOSED THE ANCHOR TAG WITHIN THE LIST ITEM -->
             <a href="logout.php"> <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -336,7 +351,7 @@ $result = $conn->query($query);
           
 
         <a href="tenants.php"
-        class="btn btn-light mb-3">Back to Tenant List</a>
+        class="btn btn-ocean mb-3">Back to Tenant List</a>
         <button id="clearHistory" class="btn btn-danger mb-3" onclick="confirmClearHistory()">Clear Tenant History</button>
 
 
@@ -344,8 +359,8 @@ $result = $conn->query($query);
           <form action="tenant-history.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
-        <input type="text" class="form-control" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
-        <button class="btn btn-primary" id="gBtn">
+        <input type="text" class="form-control shadow" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
+        <button class="btn btn-primary shadow" id="gBtn">
         Search
         <!-- Search button svg icon -->
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -372,7 +387,7 @@ $result = $conn->query($query);
         <?php } ?>
 
         <!-- TABLE TO READ DATA FROM DATABASE -->
-        <div class="table-wrapper">
+        <div class="table-wrapper shadow-lg">
         <table class="table table-bordered table-striped table-rounded">
             <thead class="table-primary">
                 <tr>

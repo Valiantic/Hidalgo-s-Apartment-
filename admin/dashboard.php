@@ -57,7 +57,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     .sidebar{
         height: 100vh;
         width: 60px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -81,7 +81,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         display: flex;
         align-items: center;
         font-size: 1.3rem;
-        color: #000000CC;
+        color: #252525;
         margin-left: 0px;
         padding: 10px 0px;
         font-family: 'Poppins', 'sans-serif';
@@ -106,7 +106,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     
     .sidebar li:not(.logout-btn):hover {
         background: #000;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .logout-btn{
@@ -116,7 +116,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     
     .logout-btn:hover{
         background-color: #B70202;
-        color: aliceblue;
+        color: #ffffff;    
     }
     
     .toggler{
@@ -162,8 +162,19 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         text-decoration: none;
         color: inherit;
     }
+    
 
      /* CARD STYLING */
+     .btn-ocean {
+        background-color: #4DA1A9;
+        color: #ffffff;
+    }
+
+    .btn-ocean:hover {
+        background-color:rgb(125, 187, 205);
+        color: #ffffff;
+    }
+     
      .height-img {
     max-height: 220px; 
     width: auto;
@@ -207,7 +218,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         .sidebar{
         height: 100vh;
         width: 70px;
-        background: aliceblue;
+        background: #C6E7FF;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -226,7 +237,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         display: flex;
         align-items: center;
         font-size: 1.3rem;
-        color: #000000CC;
+        color: #ffffff;
         margin-left: 0px;
         margin-right: 10px;
         padding: 10px 0px;
@@ -236,7 +247,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
     }
     }
 
-     .sidebar .active-menu {
+    .sidebar .active-menu {
         background: black;
         color: white;
     }
@@ -246,10 +257,11 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
 
 
 
+
 </style>
 
 </head>
-<body>
+<body class="bg-light">
     
     <!-- ADMIN SIDEBAR COMPONENT -->
     <?php
@@ -309,39 +321,39 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
         <div class="container-fluid mt-4">
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
+                    <div class="card shadow-lg">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all_tenants.png" alt="Card image cap">
                         <div class="card-body">
                             <h1 class="card-title"><?php echo $total_tenants; ?></h1>
                             <p class="card-text">All Tenants</p>
                             <div class="d-flex justify-content-center">
-                            <a href="tenants.php" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+                            <a href="tenants.php" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
+                    <div class="card shadow-lg">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house-income.png" alt="Card image cap">
                         <div class="card-body">
                             <h1 class="card-title">₱25,000</h1>
                             <p class="card-text">Monthly Earnings</p>
                             <div class="d-flex justify-content-center">
-                            <a href="a" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+                            <a href="a" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
+                    <div class="card shadow-lg">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/deadline.png" alt="Card image cap">
                         <div class="card-body">
                             <h1 class="card-title">0</h1>
                             <p class="card-text">Today's Due Date</p>
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-primary w-100 custom-btn-font">See more Info</a>
+                            <a href="#" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
