@@ -139,3 +139,8 @@ CREATE TABLE pending_users (
     reset_token VARCHAR(255),  -- Column to store the reset token
     token_expiry DATETIME      -- Column to store the token expiration time
 );
+
+ALTER TABLE pending_users
+ADD valid_id_image VARCHAR(255),
+ADD unit_requested VARCHAR(50),
+ADD request_status ENUM('Pending', 'Approved', 'Cancelled') DEFAULT 'Pending';

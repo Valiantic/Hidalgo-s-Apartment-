@@ -309,76 +309,173 @@ while ($row = $result->fetch_assoc()) {
     </div>
 
     <div class="content">
-        <div class="container-fluid mt-4">
-            <div class="row justify-content-center">
-                <?php
-                for ($i = 1; $i <= 5; $i++) {
-                    $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
-                    if ($status == 'Available') {
-                        $max_occupancy = $i <= 2 ? '2-4 persons' : '3-5 persons';
-                        $building_type = $i <= 2 ? 'Single-Storey Building' : '2-Storey Building';
-                        $unitDetails = $i >= 3 ? ' <li>
-                                <ul class="card-subtitle fs-4">2 Bedrooms (located on the upper floor)</ul>
-                                <ul class="card-subtitle fs-4">1 Living Room</ul>
-                                <ul class="card-subtitle fs-4">1 Bathroom</ul>
-                                <ul class="card-subtitle fs-4">1 Kitchen/Dining Area</ul>
-                                </li>' : '
-                                <li>
-                                <ul class="card-subtitle fs-4">1 Bedroom</ul>
-                                <ul class="card-subtitle fs-4">1 Living Room</ul>
-                                <ul class="card-subtitle fs-4">1 Bathroom</ul>
-                                <ul class="card-subtitle fs-4">1 Kitchen/ Dining Area</ul>
-                                </li>
-                                ';
-                        $rentCost = $i >= 3 ? '₱6,500.00' : '₱3,500.00';
-                        
-                        if ($i >= 3) {
-                            $img_src = '../assets/images/icons/rent-house2.png';
-                        } else {
-                            $img_src = '../assets/images/icons/rent-house1.png';
-                        }
-                        
-                        echo "
-                        <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>
-                            <div class='card shadow-lg'>
-                                <img class='card-img-top img-fluid height-img' src='$img_src' alt='Card image cap'>
-                                <div class='card-body'>
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <?php
+            for ($i = 1; $i <= 5; $i++) {
+                $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
+                if ($status == 'Available') {
+                    $max_occupancy = $i <= 2 ? '2-4 persons' : '3-5 persons';
+                    $building_type = $i <= 2 ? 'Single-Storey Building' : '2-Storey Building';
+                    $unitDetails = $i >= 3 ? '
+                        <li>
+                            <ul class="card-subtitle fs-4">2 Bedrooms (located on the upper floor)</ul>
+                            <ul class="card-subtitle fs-4">1 Living Room</ul>
+                            <ul class="card-subtitle fs-4">1 Bathroom</ul>
+                            <ul class="card-subtitle fs-4">1 Kitchen/Dining Area</ul>
+                        </li>' : '
+                        <li>
+                            <ul class="card-subtitle fs-4">1 Bedroom</ul>
+                            <ul class="card-subtitle fs-4">1 Living Room</ul>
+                            <ul class="card-subtitle fs-4">1 Bathroom</ul>
+                            <ul class="card-subtitle fs-4">1 Kitchen/ Dining Area</ul>
+                        </li>';
+                    $rentCost = $i >= 3 ? '₱6,500.00' : '₱3,500.00';
+                    $img_src = $i >= 3 ? '../assets/images/icons/rent-house2.png' : '../assets/images/icons/rent-house1.png';
 
-                                    <div class='d-flex justify-content-center'>
-                                        <div class='d-block mb-2'>
-                                            <h1 class='card-title text-center'>Unit $i</h1>
-                                            <p class='card-text text-warning text-center'>$status</p>
-                                        </div>
+                    echo "
+                    <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>
+                        <div class='card shadow-lg'>
+                            <img class='card-img-top img-fluid height-img' src='$img_src' alt='Card image cap'>
+                            <div class='card-body'>
+                                <div class='d-flex justify-content-center'>
+                                    <div class='d-block mb-2'>
+                                        <h1 class='card-title text-center'>Unit $i</h1>
+                                        <p class='card-text text-warning text-center'>$status</p>
                                     </div>
-
-                                
-                                      <p class='card-text fs-3 text-primary text-center'>Unit Details</p>
-                                      <p class='card-subtitle fs-4 text-center'>$building_type</p>
-                                      <p class='card-subtitle fs-4  text-center'>Max Occupancy: $max_occupancy</p>
-                                      <p class='card-subtitle text-left'>$unitDetails</p>
-
-                                      <p class='card-text mt-2 fs-3 text-success text-center'>Security Deposit</p>
-                                      <p class='card-subtitle fs-4 text-left'>1 Month Deposit: $rentCost</p>
-                                      <p class='card-subtitle fs-4 text-left'>1 Month Advance: $rentCost</p>
-                                      <p class='card-subtitle fs-4 text-left'>Electricity Deposit: ₱1000.00 </p>
-                                      <p class='card-subtitle fs-4 text-left'>Water Deposit: ₱500.00 </p>
-
-                                       <div class='d-flex justify-content-center mt-2 mb-4'>
-                                      <a href='tenant-information.php?unit=$i' class='btn btn-ocean w-100 custom-btn-font'>Rent This Unit</a>
-                                      </div>
-
+                                </div>
+                                <p class='card-text fs-3 text-primary text-center'>Unit Details</p>
+                                <p class='card-subtitle fs-4 text-center'>$building_type</p>
+                                <p class='card-subtitle fs-4 text-center'>Max Occupancy: $max_occupancy</p>
+                                <p class='card-subtitle text-left'>$unitDetails</p>
+                                <p class='card-text mt-2 fs-3 text-success text-center'>Security Deposit</p>
+                                <p class='card-subtitle fs-4 text-left'>1 Month Deposit: $rentCost</p>
+                                <p class='card-subtitle fs-4 text-left'>1 Month Advance: $rentCost</p>
+                                <p class='card-subtitle fs-4 text-left'>Electricity Deposit: ₱1000.00</p>
+                                <p class='card-subtitle fs-4 text-left'>Water Deposit: ₱500.00</p>
+                                <div class='d-flex justify-content-center mt-2 mb-4'>
+                                    <button 
+                                        class='btn btn-ocean w-100 custom-btn-font' 
+                                        data-bs-toggle='modal' 
+                                        data-bs-target='#uploadModal' 
+                                        data-unit='$i'>Rent This Unit</button>
                                 </div>
                             </div>
-                        </div>";
-                    }
+                        </div>
+                    </div>";
                 }
-                ?>
-            </div>
+            }
+            ?>
         </div>
     </div>
+</div>
+
+
+
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload Valid ID</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="./req/upload-id.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="validId" class="form-label">Valid ID</label>
+                        <input type="file" class="form-control" id="validId" name="validId" required>
+                    </div>
+                    <input type="hidden" id="unitInput" name="unit">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const uploadModal = document.getElementById('uploadModal');
+    uploadModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Button that triggered the modal
+        const unit = button.getAttribute('data-unit'); // Extract info from data-* attributes
+        const unitInput = document.getElementById('unitInput');
+        unitInput.value = unit; // Update hidden input value
+    });
+});
+</script>
+
+
+<!-- UNIT RENT STATUS -->
+<script>
+    $(document).on('click', '.rent-unit', function () {
+        const unitId = $(this).data('unit');
+        $.ajax({
+            url: 'req/update-unit-status.php',
+            type: 'POST',
+            data: { unit: unitId },
+            success: function (response) {
+                if (response.success) {
+                    $(`#status-${unitId}`).text('Rented');
+                    alert('Unit ' + unitId + ' has been rented successfully.');
+                } else {
+                    alert('Failed to rent the unit. Please try again.');
+                }
+            },
+            error: function () {
+                alert('An error occurred. Please try again later.');
+            }
+        });
+    });
+</script>
+
+
+<!-- HANDLES VALID ID UPLOAD -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.rent-button');
+    const modal = new bootstrap.Modal(document.getElementById('uploadModal'));
+    const form = document.getElementById('uploadForm');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const unit = button.dataset.unit;
+            document.getElementById('selectedUnit').value = unit;
+            modal.show();
+        });
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        fetch('req/upload-id.php', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    modal.hide();
+                    location.reload(); // Refresh to update card state
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+});
+
+</script>
 
 <script>
     const toggler = document.querySelector('.toggler')
