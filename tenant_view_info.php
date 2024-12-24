@@ -53,16 +53,16 @@ $rent = rentButton($status);
 
 function buildingType($unitNumber) {
     return $unitNumber >= 3 ? ' <li>
-                                <ul class="card-text">2 Bedrooms (located on the upper floor)</ul>
-                                <ul class="card-text">1 Living Room</ul>
-                                <ul class="card-text">1 Bathroom</ul>
-                                <ul class="card-text">1 Kitchen/Dining Area</ul>
+                                <ul class="card-subtitle fs-4">2 Bedrooms (located on the upper floor)</ul>
+                                <ul class="card-subtitle fs-4">1 Living Room</ul>
+                                <ul class="card-subtitle fs-4">1 Bathroom</ul>
+                                <ul class="card-subtitle fs-4">1 Kitchen/Dining Area</ul>
                                 </li>' : '
                                 <li>
-                                <ul class="card-text">1 Bedroom</ul>
-                                <ul class="card-text">1 Living Room</ul>
-                                <ul class="card-text">1 Bathroom</ul>
-                                <ul class="card-text">1 Kitchen/ Dining Area</ul>
+                                <ul class="card-subtitle fs-4">1 Bedroom</ul>
+                                <ul class="card-subtitle fs-4">1 Living Room</ul>
+                                <ul class="card-subtitle fs-4">1 Bathroom</ul>
+                                <ul class="card-subtitle fs-4">1 Kitchen/ Dining Area</ul>
                                 </li>
                                 ';
 }
@@ -334,12 +334,12 @@ $building = buildingType($unit_number);
                         <a href="tenant_view.php">Back</a>
                         <img src="<?php echo $img_src; ?>" class="card-img-top height-img" alt="Unit Image">
                         <h1 class="card-title text-center"><?php echo $unit_name; ?></h1>
-                        <p class="card-text text-center">Status: <?php echo $status; ?></p>
+                        <p class="card-text text-center"> <?php echo $status; ?></p>
                         <?php echo $rent; ?>
+                        <h2 class="card-text fs-3 mt-4 mb-2 text-primary text-center">Unit Details</h2>
                         <h2 class="card-subtitle mt-4 mb-2 text-center"><?php echo $type; ?></h2>
                         <h2 class="card-subtitle mb-2 text-center">Maximum Occupancy: <?php echo $occupancy; ?></h2>
-                        <h2 class="card-text mb-2 text-center">Apartment Description:</h2>
-                        <p class="card-text text-left"><?php echo $building; ?></p>
+                        <p class="card-subtitle text-left"><?php echo $building; ?></p>
                     </div>
                 </div>
             </div>

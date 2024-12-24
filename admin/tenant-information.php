@@ -65,7 +65,7 @@ function rentButton($status, $tenant_id, $unit_number) {
             <form method='POST' action='update_billing_status.php' style='display: inline;'>
                 <input type='hidden' name='tenant_id' value='" . htmlspecialchars($tenant_id) . "'>
                 <input type='hidden' name='unit' value='" . htmlspecialchars($unit_number) . "'>
-                <button type='submit' class='btn btn-ocean custom-btn-font text-white text'>Update Details</button>
+                <button type='submit' class='btn btn-ocean custom-btn-font text-white text'>Update Payments</button>
             </form>
             <a href='contract-page.php?unit=" . htmlspecialchars($unit_number) . "' class='btn btn-success custom-btn-font text-white text'>View Contract</a>
             <a href='#' class='btn btn-danger custom-btn-font text-white text terminate-lease' data-tenant-id='" . htmlspecialchars($tenant_id) . "'>Terminate Lease</a>
