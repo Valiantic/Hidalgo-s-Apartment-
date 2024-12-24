@@ -139,3 +139,29 @@ CREATE TABLE pending_users (
     reset_token VARCHAR(255),  -- Column to store the reset token
     token_expiry DATETIME      -- Column to store the token expiration time
 );
+
+
+
+
+
+-- SCARAPED DATA
+
+-- -- Table structure for verification documents
+-- CREATE TABLE IF NOT EXISTS verification_documents (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     user_id INT NOT NULL,
+--     unit_number VARCHAR(10) NOT NULL,
+--     document_path VARCHAR(255) NOT NULL,
+--     upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'
+-- );
+
+-- -- Add foreign key constraint if needed (assuming users table exists)
+-- -- ALTER TABLE verification_documents
+-- -- ADD CONSTRAINT fk_user
+-- -- FOREIGN KEY (user_id) REFERENCES users(id)
+-- -- ON DELETE CASCADE;
+
+-- -- Optional indexes for better query performance
+-- CREATE INDEX idx_user_id ON verification_documents(user_id);
+-- CREATE INDEX idx_status ON verification_documents(status);
