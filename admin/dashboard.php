@@ -14,6 +14,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $query = "SELECT COUNT(*) AS total_tenants FROM tenant";
 $result = $conn->query($query);
 $total_tenants = $result->fetch_assoc()['total_tenants'];
+
+// Fetch today's due dates
+$query = "
+    SELECT 
+        t.unit,
+        MAX(t.transaction_date) as transaction_date
+    FROM transaction_info t
+    GROUP BY t.unit
+    HAVING DATE_ADD(MAX(t.transaction_date), INTERVAL 1 MONTH) = CURDATE()
+";
+$result = $conn->query($query);
+$todays_due_dates = $result->num_rows;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -340,7 +352,7 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
                             <h1 class="card-title">₱25,000</h1>
                             <p class="card-text">Monthly Earnings</p>
                             <div class="d-flex justify-content-center">
-                            <a href="a" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
+                            <a href="monthly-earnings.php" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>
@@ -350,10 +362,11 @@ $total_tenants = $result->fetch_assoc()['total_tenants'];
                     <div class="card shadow-lg">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/deadline.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">0</h1>
+                            <!-- MAKE THE VALUE OF THIS DYNAMIC -->
+                            <h1 class="card-title"><?php echo $todays_due_dates; ?></h1>
                             <p class="card-text">Today's Due Date</p>
                             <div class="d-flex justify-content-center">
-                            <a href="#" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
+                            <a href="due-date.php" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
                             </div>
 
                         </div>

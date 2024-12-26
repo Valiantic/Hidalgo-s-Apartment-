@@ -85,7 +85,7 @@ CREATE TABLE transaction_info (
     monthly_rent_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
     electricity_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
     water_status ENUM('Paid', 'Not Paid', 'No Bill Yet') DEFAULT 'No Bill Yet',
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
