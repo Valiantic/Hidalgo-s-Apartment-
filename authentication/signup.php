@@ -171,6 +171,13 @@ unset($_SESSION['rent_unit_access']);
             margin-right: 10px;
         }
 
+        /* Hide the spinner for Chrome, Safari, and Edge */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         @media (max-width: 768px) {
             .login-container {
                 flex-direction: column;

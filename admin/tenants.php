@@ -5,11 +5,12 @@ include '../connections.php';
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('Location: ../authentication/login.php');
     exit;
-
 }
+
 $current_page = basename($_SERVER['PHP_SELF']); 
 
 $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
+$filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 'ASC';
 
 ?>
 <!DOCTYPE html>
@@ -363,11 +364,12 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
         <a href="tenant-history.php"
         class="btn btn-dark mb-3">View Tenant History</a>
 
-          <!-- SEARCH BUTTON  -->
+          <!-- SEARCH AND FILTER FORM -->
           <form action="tenants.php" class="smt-3 n-table" method="get">
 
         <div class="input-group mb-3">
         <input type="text" class="form-control shadow" name="searchKey" placeholder="Search..." value="<?php echo htmlspecialchars($searchKey); ?>">
+       
         <button class="btn btn-primary shadow" id="gBtn">
         Search
         <!-- Search button svg icon -->
@@ -376,9 +378,16 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
         </svg> 
 
         </button>
+        <select class="form-select shadow ms-2" name="filterUnitOrder" onchange="this.form.submit();" style="max-width: 200px;">
+            <option value="ASC" <?php echo $filterUnitOrder == 'ASC' ? 'selected' : ''; ?>>View Unit 1-5</option>
+            <option value="DESC" <?php echo $filterUnitOrder == 'DESC' ? 'selected' : ''; ?>>View Unit 5-1</option>
+        </select>
+        
         </div>
 
         </form>
+
+        
 
          <!-- ERROR HANDLING  -->
          <?php if (isset($_GET['error'])) { ?>
@@ -414,8 +423,9 @@ $searchKey = isset($_GET['searchKey']) ? $_GET['searchKey'] : '';
             </thead>
             <tbody>
                 <?php
-                // Fetch tenant data
-                $sql = "SELECT * FROM tenant WHERE fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%'";
+                // Fetch tenant data with filters and sorting
+                $sql = "SELECT * FROM tenant WHERE (fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%')";
+                $sql .= " ORDER BY units $filterUnitOrder";
                 $result = $conn->query($sql);
 
                 // Check if query executed successfully
