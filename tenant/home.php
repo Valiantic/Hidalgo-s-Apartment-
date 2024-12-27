@@ -83,6 +83,21 @@ if ($maintenance_status) {
     }
 }
 
+// Fetch the latest transaction date by the tenant to determine the due date
+$transaction_query = "
+    SELECT MAX(transaction_date) as latest_transaction_date
+    FROM transaction_info
+    WHERE tenant_id = ?
+";
+$transaction_stmt = $conn->prepare($transaction_query);
+$transaction_stmt->bind_param("i", $tenant_id);
+$transaction_stmt->execute();
+$transaction_result = $transaction_stmt->get_result();
+$latest_transaction = $transaction_result->fetch_assoc();
+$latest_transaction_date = $latest_transaction['latest_transaction_date'] ?? null;
+$due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -393,10 +408,10 @@ if ($maintenance_status) {
                 <h5 class="card-text"><?php echo htmlspecialchars($fullname)?></h5>
                 <label>Tenant Phone number</label>
                 <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
-                <label>Start Date</label>
+                <label>Move in Date</label>
                 <h5 class="card-text"><?php echo date('m/d/Y', strtotime($start_date)); ?></h5>
-                <label>End Date</label>
-                <h5 class="card-text" id="end-date"></h5>
+                <label>Due Date</label>
+                <h5 class="card-text"><?php echo $due_date; ?></h5>
             </div>
             </div>
 
@@ -462,11 +477,12 @@ if ($maintenance_status) {
 
     showFull()
 
-    const startDate = new Date("<?php echo $start_date; ?>");
-    const endDate = new Date(startDate);
-    endDate.setMonth(startDate.getMonth() + 1);
-    const formattedEndDate = endDate.toLocaleDateString('en-US');
-    document.getElementById('end-date').textContent = formattedEndDate;
+    // JS END DATE CALCULATION
+    // const startDate = new Date("<?php echo $start_date; ?>");
+    // const endDate = new Date(startDate);
+    // endDate.setMonth(startDate.getMonth() + 1);
+    // const formattedEndDate = endDate.toLocaleDateString('en-US');
+    // document.getElementById('end-date').textContent = formattedEndDate;
 </script>
 
 </body>
