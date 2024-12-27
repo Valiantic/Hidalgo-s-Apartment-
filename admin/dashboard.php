@@ -26,6 +26,16 @@ $query = "
 ";
 $result = $conn->query($query);
 $todays_due_dates = $result->num_rows;
+
+// Fetch total monthly earnings for the current month
+$query = "
+    SELECT SUM(downpayment + advance) AS total_earnings 
+    FROM tenant 
+    WHERE MONTH(move_in_date) = MONTH(CURDATE()) 
+    AND YEAR(move_in_date) = YEAR(CURDATE())
+";
+$result = $conn->query($query);
+$total_earnings = $result->fetch_assoc()['total_earnings'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +51,7 @@ $todays_due_dates = $result->num_rows;
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
 
 <style>
@@ -349,7 +359,7 @@ $todays_due_dates = $result->num_rows;
                     <div class="card shadow-lg">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house-income.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">₱25,000</h1>
+                            <h1 class="card-title">₱<?php echo number_format($total_earnings, 2); ?></h1>
                             <p class="card-text">Monthly Earnings</p>
                             <div class="d-flex justify-content-center">
                             <a href="monthly-earnings.php" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
