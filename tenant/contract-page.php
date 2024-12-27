@@ -22,7 +22,7 @@ if ($unit_number !== $tenant_unit_number) {
 
 $unit_name = "Unit $unit_number";
 
-$sql = "SELECT fullname, phone_number, move_in_date FROM tenant WHERE units = ?";
+$sql = "SELECT tenant_id, fullname, phone_number, move_in_date FROM tenant WHERE units = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $unit_name);
 $stmt->execute();
@@ -32,9 +32,23 @@ if (!$tenant) {
     die("No tenant found for the specified unit.");
 }
 
+$tenant_id = $tenant['tenant_id'];
 $move_in_date = $tenant['move_in_date'];
 $move_in_date_formatted = date('m/d/y', strtotime($move_in_date));
-$end_of_month = date('m/d/y', strtotime($move_in_date . ' +1 month'));
+
+// Fetch the latest transaction date by the tenant to determine the due date
+$transaction_query = "
+    SELECT MAX(transaction_date) as latest_transaction_date
+    FROM transaction_info
+    WHERE tenant_id = ?
+";
+$transaction_stmt = $conn->prepare($transaction_query);
+$transaction_stmt->bind_param("i", $tenant_id);
+$transaction_stmt->execute();
+$transaction_result = $transaction_stmt->get_result();
+$latest_transaction = $transaction_result->fetch_assoc();
+$latest_transaction_date = $latest_transaction['latest_transaction_date'] ?? null;
+$due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
 
 if ($unit_number === 1 || $unit_number === 2) {
     $rent_amount = '3,500';
@@ -121,7 +135,7 @@ if ($unit_number === 1 || $unit_number === 2) {
         <p><strong>Type of Property:</strong> Apartment</p>
 
         <h2  class="fs-6 fw-bold">2. Lease Term</h2>
-        <p>The term of this lease shall begin on <span id="move-in-date"><?php echo $move_in_date_formatted; ?></span> until <span id="end-of-month"><?php echo $end_of_month; ?></span>.</p>
+        <p>The term of this lease shall begin on <span id="move-in-date"><?php echo $move_in_date_formatted; ?></span> until <span id="end-of-month"><?php echo $due_date; ?></span>.</p>
 
         <h2  class="fs-6 fw-bold">3. Rent</h2>
         <p>The Tenant agrees to pay rent in the amount of PHP <?php echo $rent_amount; ?> per month.</p>
