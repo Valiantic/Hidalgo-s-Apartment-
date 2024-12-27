@@ -29,6 +29,7 @@ $tenant_id = $tenant_info['tenant_id'] ?? null;
 $tenant_fullname = $tenant_info['fullname'] ?? 'N/A';
 $tenant_phone = $tenant_info['phone_number'] ?? 'N/A';
 $start_date = $tenant_info['move_in_date'] ?? 'N/A';
+$start_date = $start_date !== 'N/A' ? date('m/d/y', strtotime($start_date)) : 'N/A';
 
 // Fetch the latest transaction date by the tenant to determine the due date
 $transaction_query = "
@@ -42,7 +43,7 @@ $transaction_stmt->execute();
 $transaction_result = $transaction_stmt->get_result();
 $latest_transaction = $transaction_result->fetch_assoc();
 $latest_transaction_date = $latest_transaction['latest_transaction_date'] ?? null;
-$due_date = $latest_transaction_date ? date('Y-m-d', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
+$due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
 
 $status = ($result->num_rows > 0) ? '<p class="fs-4 text-muted text-center">Occupied</p>' : '<p class="fs-4 fw-bold text-center text-warning">Available</p>';
 
