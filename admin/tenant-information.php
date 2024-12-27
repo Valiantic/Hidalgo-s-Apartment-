@@ -29,7 +29,20 @@ $tenant_id = $tenant_info['tenant_id'] ?? null;
 $tenant_fullname = $tenant_info['fullname'] ?? 'N/A';
 $tenant_phone = $tenant_info['phone_number'] ?? 'N/A';
 $start_date = $tenant_info['move_in_date'] ?? 'N/A';
-$due_date = $start_date !== 'N/A' ? date('Y-m-d', strtotime($start_date . ' +1 month')) : 'N/A';
+
+// Fetch the latest transaction date by the tenant to determine the due date
+$transaction_query = "
+    SELECT MAX(transaction_date) as latest_transaction_date
+    FROM transaction_info
+    WHERE tenant_id = ?
+";
+$transaction_stmt = $conn->prepare($transaction_query);
+$transaction_stmt->bind_param("i", $tenant_id);
+$transaction_stmt->execute();
+$transaction_result = $transaction_stmt->get_result();
+$latest_transaction = $transaction_result->fetch_assoc();
+$latest_transaction_date = $latest_transaction['latest_transaction_date'] ?? null;
+$due_date = $latest_transaction_date ? date('Y-m-d', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
 
 $status = ($result->num_rows > 0) ? '<p class="fs-4 text-muted text-center">Occupied</p>' : '<p class="fs-4 fw-bold text-center text-warning">Available</p>';
 
@@ -477,7 +490,7 @@ if ($maintenance_status) {
                                             <input type="hidden" name="unit_number" value="<?php echo $unit_number; ?>">
                                             <p class="fs-4">Full Name: <?php echo $tenant_fullname; ?></p>
                                             <p class="fs-4">Phone Number: <?php echo $tenant_phone; ?></p>
-                                            <p class="fs-4">Start Date: <?php echo $start_date; ?></p>
+                                            <p class="fs-4">Movie in Date: <?php echo $start_date; ?></p>
                                             <p class="fs-4">Due Date: <?php echo $due_date; ?></p>
                                             <hr>
                                             <h3 class="text-center">Billing Information</h3>
