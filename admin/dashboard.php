@@ -15,18 +15,6 @@ $query = "SELECT COUNT(*) AS total_tenants FROM tenant";
 $result = $conn->query($query);
 $total_tenants = $result->fetch_assoc()['total_tenants'];
 
-// Fetch today's due dates
-$query = "
-    SELECT 
-        t.unit,
-        MAX(t.transaction_date) as transaction_date
-    FROM transaction_info t
-    GROUP BY t.unit
-    HAVING DATE_ADD(MAX(t.transaction_date), INTERVAL 1 MONTH) = CURDATE()
-";
-$result = $conn->query($query);
-$todays_due_dates = $result->num_rows;
-
 // Fetch total monthly earnings for the current month
 $query = "
     SELECT SUM(downpayment + advance) AS total_earnings 
@@ -58,6 +46,21 @@ while ($row = $result->fetch_assoc()) {
 
 // Add total paid rent to total earnings
 $total_earnings += $total_paid_rent;
+
+// Fetch all transaction dates and advance them by 1 month
+$query = "
+    SELECT 
+        t.unit,
+        DATE_ADD(t.transaction_date, INTERVAL 1 MONTH) as due_date
+    FROM transaction_info t
+";
+$result = $conn->query($query);
+$todays_due_dates = 0;
+while ($row = $result->fetch_assoc()) {
+    if (date('Y-m-d') == date('Y-m-d', strtotime($row['due_date']))) {
+        $todays_due_dates++;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
