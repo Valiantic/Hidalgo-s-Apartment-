@@ -36,6 +36,28 @@ $query = "
 ";
 $result = $conn->query($query);
 $total_earnings = $result->fetch_assoc()['total_earnings'];
+
+// Fetch total paid rent for the current month
+$query = "
+    SELECT t.unit, t.monthly_rent_status, t.transaction_date
+    FROM transaction_info t
+    WHERE t.monthly_rent_status = 'Paid'
+    AND MONTH(t.transaction_date) = MONTH(CURDATE())
+    AND YEAR(t.transaction_date) = YEAR(CURDATE())
+";
+$result = $conn->query($query);
+$total_paid_rent = 0;
+while ($row = $result->fetch_assoc()) {
+    $unit_number = (int) filter_var($row['unit'], FILTER_SANITIZE_NUMBER_INT);
+    if ($unit_number === 1 || $unit_number === 2) {
+        $total_paid_rent += 3500;
+    } elseif (in_array($unit_number, [3, 4, 5])) {
+        $total_paid_rent += 6500;
+    }
+}
+
+// Add total paid rent to total earnings
+$total_earnings += $total_paid_rent;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -359,7 +381,7 @@ $total_earnings = $result->fetch_assoc()['total_earnings'];
                     <div class="card shadow-lg">
                         <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/house-income.png" alt="Card image cap">
                         <div class="card-body">
-                            <h1 class="card-title">₱<?php echo number_format($total_earnings, 2); ?></h1>
+                            <h1 class="card-title">₱ <?php echo number_format($total_earnings, 2); ?></h1>
                             <p class="card-text">Monthly Earnings</p>
                             <div class="d-flex justify-content-center">
                             <a href="monthly-earnings.php" class="btn btn-ocean w-100 custom-btn-font">See more Info</a>
