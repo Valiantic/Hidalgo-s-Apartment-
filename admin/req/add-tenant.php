@@ -29,11 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // // Validate downpayment
-    // if ($downpayment < 0) {
-    //     die("Downpayment cannot be negative.");
-    // }
-
     // Check if a unit is selected
     if (empty($units)) {
         header('Location: ../add-tenant.php?error=' . urlencode('Error: Please select a unit.'));
@@ -70,6 +65,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt_tenant = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt_tenant->bind_param("sssddddssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $units, $move_in_date, $user_id);
         $stmt_tenant->execute();
+
+        // Get the newly inserted tenant ID
+        $tenant_id = $conn->insert_id;
+
+        // Extract unit number from the unit name
+        $unit_number = (int) filter_var($units, FILTER_SANITIZE_NUMBER_INT);
+
+        // Check if there is data inserted in downpayment, electricity, and water
+        if ($downpayment > 0 || $electricity > 0 || $water > 0) {
+            $monthly_rent_status = $downpayment > 0 ? 'Paid' : 'Not Paid';
+            $electricity_status = $electricity > 0 ? 'Paid' : 'Not Paid';
+            $water_status = $water > 0 ? 'Paid' : 'Not Paid';
+
+            // Insert data into `transaction_info` table
+            $stmt_transaction = $conn->prepare("INSERT INTO transaction_info (tenant_id, unit, monthly_rent_status, electricity_status, water_status) VALUES (?, ?, ?, ?, ?)");
+            $stmt_transaction->bind_param("iisss", $tenant_id, $unit_number, $monthly_rent_status, $electricity_status, $water_status);
+            $stmt_transaction->execute();
+        }
 
         // Commit the transaction
         $conn->commit();
