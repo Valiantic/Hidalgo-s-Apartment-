@@ -32,6 +32,10 @@ if (!$tenant) {
     die("No tenant found for the specified unit.");
 }
 
+$move_in_date = $tenant['move_in_date'];
+$move_in_date_formatted = date('m/d/y', strtotime($move_in_date));
+$end_of_month = date('m/d/y', strtotime($move_in_date . ' +1 month'));
+
 if ($unit_number === 1 || $unit_number === 2) {
     $rent_amount = '3,500';
     $description = 'Single-floor units rent is considered overdue if it is unpaid 3 days past the due date.';
@@ -49,21 +53,6 @@ if ($unit_number === 1 || $unit_number === 2) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hidalgo's Apartment</title>
     <link rel="shortcut icon" href="../assets/images/logov5.png">
-    <script>
-        function calculateEndOfMonth(moveInDate) {
-            const moveIn = new Date(moveInDate);
-            const endOfMonth = new Date(moveIn.getFullYear(), moveIn.getMonth() + 1, moveIn.getDate()); // Same day next month
-            return endOfMonth.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-        }
-
-        function updateEndDate() {
-            const moveInDate = document.getElementById("move-in-date").textContent.trim();
-            const endDate = calculateEndOfMonth(moveInDate);
-            document.getElementById("end-of-month").textContent = endDate;
-        }
-
-        window.onload = updateEndDate;
-    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -122,7 +111,7 @@ if ($unit_number === 1 || $unit_number === 2) {
 <body>
     <div class="contract">
         <h1 class="text-center">Lease Agreement</h1>
-        <p>This Lease Agreement ("Agreement") is entered into on this <span id="move-in-date"><?php echo $tenant['move_in_date']; ?></span> by and between the landlord and tenant:</p>
+        <p>This Lease Agreement ("Agreement") is entered into on this <span id="move-in-date"><?php echo $move_in_date_formatted; ?></span> by and between the landlord and tenant:</p>
         <p><strong>Tenant's Fullname:</strong> <?php echo htmlspecialchars($tenant['fullname']); ?></p>
         <p><strong>Phone number:</strong> <?php echo htmlspecialchars($tenant['phone_number']); ?></p>
 
@@ -132,7 +121,7 @@ if ($unit_number === 1 || $unit_number === 2) {
         <p><strong>Type of Property:</strong> Apartment</p>
 
         <h2  class="fs-6 fw-bold">2. Lease Term</h2>
-        <p>The term of this lease shall begin on <span id="move-in-date"><?php echo $tenant['move_in_date']; ?></span> until <span id="end-of-month"></span>.</p>
+        <p>The term of this lease shall begin on <span id="move-in-date"><?php echo $move_in_date_formatted; ?></span> until <span id="end-of-month"><?php echo $end_of_month; ?></span>.</p>
 
         <h2  class="fs-6 fw-bold">3. Rent</h2>
         <p>The Tenant agrees to pay rent in the amount of PHP <?php echo $rent_amount; ?> per month.</p>
