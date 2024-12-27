@@ -491,7 +491,7 @@ if ($maintenance_status) {
                                             <input type="hidden" name="unit_number" value="<?php echo $unit_number; ?>">
                                             <p class="fs-4">Full Name: <?php echo $tenant_fullname; ?></p>
                                             <p class="fs-4">Phone Number: <?php echo $tenant_phone; ?></p>
-                                            <p class="fs-4">Movie in Date: <?php echo $start_date; ?></p>
+                                            <p class="fs-4">Move in Date: <?php echo $start_date; ?></p>
                                             <p class="fs-4">Due Date: <?php echo $due_date; ?></p>
                                             <hr>
                                             <h3 class="text-center">Billing Information</h3>

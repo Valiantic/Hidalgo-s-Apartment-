@@ -15,7 +15,7 @@ if (!$unit_number) {
 
 $unit_name = "Unit $unit_number";
 
-$sql = "SELECT fullname, phone_number, move_in_date FROM tenant WHERE units = ?";
+$sql = "SELECT tenant_id, fullname, phone_number, move_in_date FROM tenant WHERE units = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $unit_name);
 $stmt->execute();
@@ -24,6 +24,24 @@ $tenant = $stmt->get_result()->fetch_assoc();
 if (!$tenant) {
     die("No tenant found for the specified unit.");
 }
+
+$tenant_id = $tenant['tenant_id'];
+$move_in_date = $tenant['move_in_date'];
+$move_in_date_formatted = date('m/d/y', strtotime($move_in_date));
+
+// Fetch the latest transaction date by the tenant to determine the end of month
+$transaction_query = "
+    SELECT MAX(transaction_date) as latest_transaction_date
+    FROM transaction_info
+    WHERE tenant_id = ?
+";
+$transaction_stmt = $conn->prepare($transaction_query);
+$transaction_stmt->bind_param("i", $tenant_id);
+$transaction_stmt->execute();
+$transaction_result = $transaction_stmt->get_result();
+$latest_transaction = $transaction_result->fetch_assoc();
+$latest_transaction_date = $latest_transaction['latest_transaction_date'] ?? null;
+$end_of_month = $latest_transaction_date ? date('m/d/y', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
 
 if ($unit_number === 1 || $unit_number === 2) {
     $rent_amount = '3,500';
@@ -42,21 +60,6 @@ if ($unit_number === 1 || $unit_number === 2) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Hidalgo's Apartment</title>
     <link rel="shortcut icon" href="../assets/images/logov5.png">
-    <script>
-        function calculateEndOfMonth(moveInDate) {
-            const moveIn = new Date(moveInDate);
-            const endOfMonth = new Date(moveIn.getFullYear(), moveIn.getMonth() + 1, moveIn.getDate()); // Same day next month
-            return endOfMonth.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-        }
-
-        function updateEndDate() {
-            const moveInDate = document.getElementById("move-in-date").textContent.trim();
-            const endDate = calculateEndOfMonth(moveInDate);
-            document.getElementById("end-of-month").textContent = endDate;
-        }
-
-        window.onload = updateEndDate;
-    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -115,7 +118,7 @@ if ($unit_number === 1 || $unit_number === 2) {
 <body>
     <div class="contract">
         <h1 class="text-center">Lease Agreement</h1>
-        <p>This Lease Agreement ("Agreement") is entered into on this <span id="move-in-date"><?php echo $tenant['move_in_date']; ?></span> by and between the landlord and tenant:</p>
+        <p>This Lease Agreement ("Agreement") is entered into on this <span id="move-in-date"><?php echo $move_in_date_formatted; ?></span> by and between the landlord and tenant:</p>
         <p><strong>Tenant's Fullname:</strong> <?php echo htmlspecialchars($tenant['fullname']); ?></p>
         <p><strong>Phone number:</strong> <?php echo htmlspecialchars($tenant['phone_number']); ?></p>
 
@@ -125,7 +128,7 @@ if ($unit_number === 1 || $unit_number === 2) {
         <p><strong>Type of Property:</strong> Apartment</p>
 
         <h2  class="fs-6 fw-bold">2. Lease Term</h2>
-        <p>The term of this lease shall begin on <span id="move-in-date"><?php echo $tenant['move_in_date']; ?></span> until <span id="end-of-month"></span>.</p>
+        <p>The term of this lease shall begin on <span id="move-in-date"><?php echo $move_in_date_formatted; ?></span> until <span id="end-of-month"><?php echo $end_of_month; ?></span>.</p>
 
         <h2  class="fs-6 fw-bold">3. Rent</h2>
         <p>The Tenant agrees to pay rent in the amount of PHP <?php echo $rent_amount; ?> per month.</p>
