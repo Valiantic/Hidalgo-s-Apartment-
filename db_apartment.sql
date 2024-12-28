@@ -126,16 +126,3 @@ ADD CONSTRAINT messages_ibfk_2
 FOREIGN KEY (receiver_id) 
 REFERENCES users(id) 
 ON DELETE CASCADE;
-
--- NEW TENANT OR PENDING TENANT REQUESTS
-CREATE TABLE pending_users (
-    pending_user_id INT AUTO_INCREMENT PRIMARY KEY,
-    fullname VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(15) NOT NULL,
-    work VARCHAR(255),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'user') DEFAULT 'user',
-    reset_token VARCHAR(255),  -- Column to store the reset token
-    token_expiry DATETIME      -- Column to store the token expiration time
-);

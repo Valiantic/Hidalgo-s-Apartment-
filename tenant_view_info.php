@@ -40,16 +40,15 @@ function getUnitImage($unitNumber, $status) {
 
 $img_src = getUnitImage($unit_number, $status);
 
-function rentButton($status) {
-    global $unit_number; // Ensure $unit_number is accessible within the function
+function rentButton($status, $unit_number) {
     if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
-        return "<a href='./authentication/signup_handler.php' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
+        return "<a href='./authentication/signup_handler.php?unit=$unit_number' class='btn btn-primary w-100 custom-btn-font'>Rent this Unit</a>";
     } else {
         return "";
     }
 }
 
-$rent = rentButton($status);
+$rent = rentButton($status, $unit_number);
 
 function buildingType($unitNumber) {
     return $unitNumber >= 3 ? ' <li>

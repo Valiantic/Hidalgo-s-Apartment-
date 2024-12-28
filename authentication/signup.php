@@ -8,6 +8,9 @@ if (!isset($_SESSION['rent_unit_access'])) {
     exit();
 }
 
+// Fetch the selected unit from the URL
+$selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
+
 // Clear the session variable after ensuring access
 unset($_SESSION['rent_unit_access']);
 
@@ -213,6 +216,9 @@ unset($_SESSION['rent_unit_access']);
             <div class="text-center mb-4">
                 <a href="../index.php"><img class="logo" src="../assets/images/logov5.png" alt="Logo"></a>
                 <h3 class="fw-bold">Let's Create your Account First!</h3>
+                <?php if ($selected_unit): ?>
+                    <p class="text-muted">You are about to Rent Unit <?php echo htmlspecialchars($selected_unit); ?></p>
+                <?php endif; ?>
             </div>
 
             <!-- Login Form -->
@@ -237,6 +243,7 @@ unset($_SESSION['rent_unit_access']);
                     <input type="password" id="password" name="password" placeholder="Password" required>
                     <i class="toggle-password bi bi-eye-slash"></i>
                 </div>    
+                <input type="hidden" name="unit" value="<?php echo htmlspecialchars($selected_unit); ?>">
 
                 <div class="d-flex justify-content-center mb-1 text-align-center">
                     <!-- ERROR AND SUCCESS HANDLING -->

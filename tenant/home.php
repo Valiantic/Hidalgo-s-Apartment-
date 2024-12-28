@@ -409,7 +409,7 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
                 <label>Tenant Phone number</label>
                 <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
                 <label>Move in Date</label>
-                <h5 class="card-text"><?php echo date('m/d/Y', strtotime($start_date)); ?></h5>
+                <h5 class="card-text"><?php echo date('m/d/y', strtotime($start_date)); ?></h5>
                 <label>Due Date</label>
                 <h5 class="card-text"><?php echo $due_date; ?></h5>
             </div>
