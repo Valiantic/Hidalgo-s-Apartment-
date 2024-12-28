@@ -516,6 +516,8 @@ if ($maintenance_status) {
                                                     <input type="radio" name="water_status" value="No Bill Yet" checked> no bill yet
                                                 </div>
                                             </p>
+                                            <!-- Display the fetch the latest transaction date by the tenant -->
+                                            <p class="fs-4">Latest Transaction Date: <?php echo $latest_transaction_date ? date('m/d/y', strtotime($latest_transaction_date)) : 'N/A'; ?></p>
                                             <hr/>
                                             <?php echo $rent; ?>
                                         </form>
