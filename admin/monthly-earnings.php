@@ -91,20 +91,47 @@ while ($row = $result->fetch_assoc()) {
     $transactions[] = $row;
 }
 
-// Clear Transaction History 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'clearTransactions') {
-    $conn = new mysqli('localhost', 'username', 'password', 'database_name');
+// Handle clear transactions AJAX request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    header('Content-Type: application/json');
     
-    if ($conn->connect_error) {
-        echo json_encode(['success' => false, 'message' => 'Connection failed']);
-        exit;
-    }
-    
-    $query = "DELETE FROM transaction_info";
-    if ($conn->query($query) === TRUE) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Error deleting records']);
+    try {
+        if ($_POST['action'] === 'clearTransactions') {
+            // Check connection
+            if ($conn->connect_error) {
+                throw new Exception("Connection failed: " . $conn->connect_error);
+            }
+            
+            // Begin transaction
+            $conn->begin_transaction();
+            
+            try {
+                // Delete all records
+                $query = "DELETE FROM transaction_info";
+                if (!$conn->query($query)) {
+                    throw new Exception("Error deleting records: " . $conn->error);
+                }
+                
+                // Commit transaction
+                $conn->commit();
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'All transactions successfully deleted'
+                ]);
+            } catch (Exception $e) {
+                // Rollback transaction on error
+                $conn->rollback();
+                throw $e;
+            }
+        } else {
+            throw new Exception("Invalid action specified");
+        }
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]);
     }
     
     $conn->close();
@@ -117,22 +144,24 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <!-- GOOGLE FONTS POPPINS  -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Hidalgo's Apartment</title>
     <link rel="shortcut icon" href="../assets/images/logov5.png">
 
+    <!-- BOOTSTRAP AND DATATABLES CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     
+    <!-- GOOGLE FONTS POPPINS AND FONT AWESOME  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- CHART.JS, JQUERY, DATATABLES, JSPDF, JSPDF-AUTOTABLE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
@@ -417,6 +446,8 @@ $conn->close();
 <body class="bg-light">
 
 <div class="menu">
+
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="logo items">
             <span class="mainHead para">
@@ -683,80 +714,105 @@ $conn->close();
             doc.save('transaction_history.pdf');
         }
 
-        // Previous chart initialization code remains the same...
+       
     </script>
 
     <!-- CLEAR HISTORY CONFIRMATION SWEET ALERT JS -->
     <script>
 
-    // Clear Transactions Function
-    function confirmClearTransactions() {
-        Swal.fire({
-            title: 'Clear Transaction History?',
-            text: "This will permanently delete all transaction records. This action cannot be undone!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete all!',
-            cancelButtonText: 'Cancel',
-            reverseButtons: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                clearTransactions();
-            }
-        });
-    }
+      // Global variable for DataTable instance
+        let transactionTable;
 
-    function clearTransactions() {
-        // Show loading state
-        Swal.fire({
-            title: 'Deleting...',
-            text: 'Please wait while we clear the transaction history.',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+        // Initialize DataTable when document is ready
+        $(document).ready(function() {
+            initializeDataTable();
         });
 
-        // Send delete request
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'action=clearTransactions'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    title: 'Deleted!',
-                    text: 'All transaction records have been cleared.',
-                    icon: 'success'
-                }).then(() => {
-                    // Reload the page to refresh the table
-                    window.location.reload();
-                });
-            } else {
+        // Function to initialize DataTable
+        function initializeDataTable() {
+            // Destroy existing DataTable if it exists
+            if ($.fn.DataTable.isDataTable('#transactionTable')) {
+                $('#transactionTable').DataTable().destroy();
+            }
+            
+            // Initialize new DataTable
+            transactionTable = $('#transactionTable').DataTable({
+                order: [[0, 'desc']],
+                pageLength: 10,
+                language: {
+                    search: "Search transactions:"
+                }
+            });
+        }
+
+        // Clear Transactions Function
+        function confirmClearTransactions() {
+            Swal.fire({
+                title: 'Clear Transaction History?',
+                text: "This will permanently delete all transaction records. This action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete all!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve, reject) => {
+                        const formData = new FormData();
+                        formData.append('action', 'clearTransactions');
+
+                        fetch(window.location.href, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                resolve(data);
+                            } else {
+                                reject(data.message || 'Failed to clear transactions');
+                            }
+                        })
+                        .catch(error => {
+                            reject('Network error occurred');
+                        });
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Destroy DataTable instance before clearing
+                    if (transactionTable) {
+                        transactionTable.destroy();
+                    }
+                    
+                    // Clear table body
+                    $('#transactionTable tbody').empty();
+                    
+                    // Show success message
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'All transaction records have been cleared.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Reinitialize the table with empty data
+                        initializeDataTable();
+                    });
+                }
+            }).catch(error => {
                 Swal.fire({
                     title: 'Error!',
-                    text: data.message || 'Failed to clear transaction history.',
+                    text: error || 'An unexpected error occurred',
                     icon: 'error'
                 });
-            }
-        })
-        .catch(error => {
-            Swal.fire({
-                title: 'Error!',
-                text: 'An unexpected error occurred.',
-                icon: 'error'
             });
-        });
-    }
+        }
 
-    // Previous chart initialization code remains the same...
+
     </script>
 
 </body>
