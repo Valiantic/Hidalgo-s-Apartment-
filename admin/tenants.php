@@ -387,8 +387,6 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
 
         </form>
 
-        
-
          <!-- ERROR HANDLING  -->
          <?php if (isset($_GET['error'])) { ?>
                 <div class="alert alert-danger mt-3 n-table" role="alert">
@@ -437,7 +435,7 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         $unit_number = str_replace('Unit ', '', $row['units']);
-                        $formatted_move_in_date = date('m/d/Y', strtotime($row['move_in_date']));
+                        $formatted_move_in_date = $row['move_in_date'] ? date('m/d/Y', strtotime($row['move_in_date'])) : 'N/A';
                         echo "<tr>
                             <td>{$row['tenant_id']}</td>
                             <td><a class='text-primary tenant-fullname' href='tenant-information.php?unit={$unit_number}'>{$row['fullname']}</a></td>

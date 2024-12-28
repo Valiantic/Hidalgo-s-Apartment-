@@ -20,7 +20,7 @@ $stmt = $pdo->prepare("SELECT tenant_id, move_in_date, units FROM tenant WHERE u
 $stmt->execute([$user_id]);
 $tenant = $stmt->fetch();
 $tenant_id = $tenant['tenant_id'];
-$start_date = $tenant['move_in_date'];
+$start_date = $tenant['move_in_date'] ? date('m/d/y', strtotime($tenant['move_in_date'])) : 'N/A';
 $unit = $tenant['units'];
 $unit_number = (int) filter_var($unit, FILTER_SANITIZE_NUMBER_INT);
 
@@ -409,7 +409,7 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
                 <label>Tenant Phone number</label>
                 <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
                 <label>Move in Date</label>
-                <h5 class="card-text"><?php echo date('m/d/y', strtotime($start_date)); ?></h5>
+                <h5 class="card-text"><?php echo $start_date; ?></h5>
                 <label>Due Date</label>
                 <h5 class="card-text"><?php echo $due_date; ?></h5>
             </div>

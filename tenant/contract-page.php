@@ -34,7 +34,7 @@ if (!$tenant) {
 
 $tenant_id = $tenant['tenant_id'];
 $move_in_date = $tenant['move_in_date'];
-$move_in_date_formatted = date('m/d/y', strtotime($move_in_date));
+$move_in_date_formatted = $move_in_date ? date('m/d/y', strtotime($move_in_date)): 'N/A';
 
 // Fetch the latest transaction date by the tenant to determine the due date
 $transaction_query = "
