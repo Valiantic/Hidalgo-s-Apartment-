@@ -418,35 +418,54 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
             <div class="card text-left text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Your Billings</div>
             <div class="card-body">
-                <label>Monthly Rent <span style="color: blue;">₱<?php echo htmlspecialchars($monthly_rent); ?></span></label>
-                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['monthly_rent_status']) : displayStatus(null); ?></p>
-                <label>Electricity Bill</label>
-                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['electricity_status']) : displayStatus(null); ?></p>
-                <label>Water Bill</label>
-                <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['water_status']) : displayStatus(null); ?></p>
-                </div>
+                <!-- YOUR BILLINGS DISPLAY IF THE TENANT IS OLD  -->
+                <?php if ($start_date !== 'N/A'): ?>
+                    <label>Monthly Rent <span style="color: blue;">₱<?php echo htmlspecialchars($monthly_rent); ?></span></label>
+                    <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['monthly_rent_status']) : displayStatus(null); ?></p>
+                    <label>Electricity Bill</label>
+                    <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['electricity_status']) : displayStatus(null); ?></p>
+                    <label>Water Bill</label>
+                    <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['water_status']) : displayStatus(null); ?></p>
+                <!-- YOUR BILLINGS DISPLAY IF THE TENANT IS NEW  -->
+                <?php else: ?>
+                    <label>Downpayment <span style="color: blue;">₱<?php echo $unit_number <= 2 ? '3500' : '6500'; ?></span></label>
+                    <p class="card-text"><span style="color: gray;">●</span> Not Paid</p>
+                    <label>Advance <span style="color: blue;">₱<?php echo $unit_number <= 2 ? '3500' : '6500'; ?></span></label>
+                    <p class="card-text"><span style="color: gray;">●</span> Not Paid</p>
+                    <label>Electricity Bill <span style="color: blue;">₱1000</span></label>
+                    <p class="card-text"><span style="color: gray;">●</span> Not Paid</p>
+                    <label>Water Bill <span style="color: blue;">₱500</span></label>
+                    <p class="card-text"><span style="color: gray;">●</span> Not Paid</p>
+                <?php endif; ?>
+            </div>
             </div>
 
             <div class="card text-left text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Actions</div>
             <div class="card-body d-flex flex-column gap-2">
-                <?php if ($maintenance_status): ?>
-                    <div class="alert alert-info text-center">
-                        Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?>
-                        <?php if ($maintenance_status['status'] == 'Resolved'): ?>
-                        <form action="req/confirm-maintenance.php" method="POST">
-                            <input type="hidden" name="tenant_id" value="<?php echo $tenant_id; ?>">
-                            <button type="submit" class="btn btn-success btn-lg">Confirm</button>
-                        </form>
+                <?php if ($start_date !== 'N/A'): ?>
+                    <?php if ($maintenance_status): ?>
+                        <div class="alert alert-info text-center">
+                            Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?>
+                            <?php if ($maintenance_status['status'] == 'Resolved'): ?>
+                            <form action="req/confirm-maintenance.php" method="POST">
+                                <input type="hidden" name="tenant_id" value="<?php echo $tenant_id; ?>">
+                                <button type="submit" class="btn btn-success btn-lg">Confirm</button>
+                            </form>
+                        <?php endif; ?>
+                        
+                        </div>
+                        
                     <?php endif; ?>
-                    
-                    </div>
-                    
+                    <br/>
+                    <br/>
+                    <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
+                    <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-ocean btn-lg">View Contract</a>
+                <?php else: ?>
+                    <h6>Hello <strong><?php echo htmlspecialchars($fullname)?>!</strong> Thank you for Choosing Hidalgo's Apartment</h6>
+                    <h6>Schedule an Appointment to Rent this Unit.</h6>
+                    <a href="make-appointment.php" class="btn btn-primary btn-lg">Make Appointment</a>
                 <?php endif; ?>
-                <br/>
-                <br/>
-                <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
-                <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-ocean btn-lg">View Contract</a>
             </div>
             </div>
 
