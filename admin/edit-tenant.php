@@ -505,7 +505,7 @@ if (isset($_GET['tenant_id'])) {
 
                         echo '<div class="form-check">';
                         echo '<input class="form-check-input" type="radio" name="units" value="' . $unit . '"'
-                            . ($isSelected ? ' checked' : '') . '>'; // Preselect if it matches the tenant's current unit
+                            . ($isSelected ? ' checked' : '') . ($isOccupied ? ' disabled' : '') . '>'; // Disable if occupied
                         echo '<label class="form-check-label' . ($isOccupied || $hasPending ? ' text-muted' : '') . '">' . $unit . '</label>';
                         echo '</div>';
                     }

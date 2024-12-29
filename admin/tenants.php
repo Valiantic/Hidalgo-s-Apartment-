@@ -436,9 +436,21 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                     while ($row = $result->fetch_assoc()) {
                         $unit_number = str_replace('Unit ', '', $row['units']);
                         $formatted_move_in_date = $row['move_in_date'] ? date('m/d/Y', strtotime($row['move_in_date'])) : 'N/A';
+
+                        // Check for pending appointments
+                        $appointment_check_query = "SELECT COUNT(*) as pending_count FROM appointments WHERE tenant_id = ? AND appointment_status = 'pending'";
+                        $appointment_check_stmt = $conn->prepare($appointment_check_query);
+                        $appointment_check_stmt->bind_param("i", $row['tenant_id']);
+                        $appointment_check_stmt->execute();
+                        $appointment_check_result = $appointment_check_stmt->get_result();
+                        $appointment_check_row = $appointment_check_result->fetch_assoc();
+                        $has_pending_appointment = $appointment_check_row['pending_count'] > 0;
+
+                        $link = $has_pending_appointment ? "appointment-overview.php?tenant_id={$row['tenant_id']}" : "tenant-information.php?unit={$unit_number}";
+
                         echo "<tr>
                             <td>{$row['tenant_id']}</td>
-                            <td><a class='text-primary tenant-fullname' href='tenant-information.php?unit={$unit_number}'>{$row['fullname']}</a></td>
+                            <td><a class='text-primary tenant-fullname' href='{$link}'>{$row['fullname']}</a></td>
                             <td>{$row['phone_number']}</td>
                             <td>{$row['work']}</td>
                             <td>{$row['downpayment']}</td>

@@ -11,7 +11,6 @@ include '../connections.php';
 
 $current_page = basename($_SERVER['PHP_SELF']); 
 
-
 // BAR GRAPH DATA FETCH 
 function getMonthlyEarnings($conn) {
     $monthlyData = array();
@@ -62,7 +61,6 @@ function getMonthlyEarnings($conn) {
     return array_reverse($monthlyData);
 }
 
-
 // TRANSACTION INFO TABLE DATA FETCH
 $earningsData = getMonthlyEarnings($conn);
 $months = array_column($earningsData, 'month');
@@ -93,20 +91,12 @@ while ($row = $result->fetch_assoc()) {
 
 // Clear Transaction History 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'clearTransactions') {
-    $conn = new mysqli('localhost', 'username', 'password', 'database_name');
-    
-    if ($conn->connect_error) {
-        echo json_encode(['success' => false, 'message' => 'Connection failed']);
-        exit;
-    }
-    
     $query = "DELETE FROM transaction_info";
     if ($conn->query($query) === TRUE) {
         echo json_encode(['success' => true]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error deleting records']);
     }
-    
     $conn->close();
     exit;
 }

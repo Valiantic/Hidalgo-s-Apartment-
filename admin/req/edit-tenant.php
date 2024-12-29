@@ -40,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user_stmt->bind_param("sssi", $fullname, $phone_number, $work, $tenant_id);
         $user_stmt->execute();
 
+        // Extract unit number from the unit name
+        $unit_number = (int) filter_var($unit, FILTER_SANITIZE_NUMBER_INT);
+
         // Update transaction_info table if there is data in advance, electricity, and water
         if ($advance > 0 || $electricity > 0 || $water > 0) {
             $monthly_rent_status = $advance > 0 ? 'Paid' : 'Not Paid';
@@ -49,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $transaction_query = "REPLACE INTO transaction_info (tenant_id, unit, monthly_rent_status, electricity_status, water_status) 
                                   VALUES (?, ?, ?, ?, ?)";
             $transaction_stmt = $conn->prepare($transaction_query);
-            $transaction_stmt->bind_param("iisss", $tenant_id, $unit, $monthly_rent_status, $electricity_status, $water_status);
+            $transaction_stmt->bind_param("iisss", $tenant_id, $unit_number, $monthly_rent_status, $electricity_status, $water_status);
             $transaction_stmt->execute();
         }
 

@@ -84,7 +84,7 @@ if ($tenant_id) {
                 <th>Valid ID Path</th>
                 <td><img src="../tenant/req/uploads/<?php echo htmlspecialchars($appointment_info['valid_id_path']); ?>" alt="Valid ID" style="max-width: 100%; height: auto;"></td>
             </tr>
-            <tr></tr>
+            <tr>
                 <th>Appointment Status</th>
                 <td><?php echo htmlspecialchars($appointment_info['appointment_status']); ?></td>
             </tr>
