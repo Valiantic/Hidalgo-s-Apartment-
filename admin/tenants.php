@@ -422,35 +422,37 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
             <tbody>
                 <?php
                 // Fetch tenant data with filters and sorting
-                $sql = "SELECT * FROM tenant WHERE (fullname LIKE '%$searchKey%' OR phone_number LIKE '%$searchKey%' OR work LIKE '%$searchKey%' OR units LIKE '%$searchKey%')";
-                $sql .= " ORDER BY units $filterUnitOrder";
+                $sql = "SELECT t.*, a.appointment_status 
+                       FROM tenant t 
+                       LEFT JOIN appointments a ON t.tenant_id = a.tenant_id 
+                       WHERE (t.fullname LIKE '%$searchKey%' 
+                       OR t.phone_number LIKE '%$searchKey%' 
+                       OR t.work LIKE '%$searchKey%' 
+                       OR t.units LIKE '%$searchKey%')";
+                $sql .= " ORDER BY t.units $filterUnitOrder";
                 $result = $conn->query($sql);
 
-                // Check if query executed successfully
                 if (!$result) {
                     die("Error executing query: " . $conn->error);
                 }
 
-                // Display tenants or no records message
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         $unit_number = str_replace('Unit ', '', $row['units']);
                         $formatted_move_in_date = $row['move_in_date'] ? date('m/d/Y', strtotime($row['move_in_date'])) : 'N/A';
 
-                        // Check for pending appointments
-                        $appointment_check_query = "SELECT COUNT(*) as pending_count FROM appointments WHERE tenant_id = ? AND appointment_status = 'pending'";
-                        $appointment_check_stmt = $conn->prepare($appointment_check_query);
-                        $appointment_check_stmt->bind_param("i", $row['tenant_id']);
-                        $appointment_check_stmt->execute();
-                        $appointment_check_result = $appointment_check_stmt->get_result();
-                        $appointment_check_row = $appointment_check_result->fetch_assoc();
-                        $has_pending_appointment = $appointment_check_row['pending_count'] > 0;
-
-                        $link = $has_pending_appointment ? "appointment-overview.php?tenant_id={$row['tenant_id']}" : "tenant-information.php?unit={$unit_number}";
+                        // Determine link and status color
+                        if ($row['appointment_status'] == 'pending' || $row['appointment_status'] == 'confirmed') {
+                            $link = "appointment-overview.php?tenant_id={$row['tenant_id']}";
+                            $status_color = $row['appointment_status'] == 'confirmed' ? 'text-success' : 'text-warning';
+                        } else {
+                            $link = "tenant-information.php?unit={$unit_number}";
+                            $status_color = '';
+                        }
 
                         echo "<tr>
                             <td>{$row['tenant_id']}</td>
-                            <td><a class='text-primary tenant-fullname' href='{$link}'>{$row['fullname']}</a></td>
+                            <td><a class='text-primary tenant-fullname {$status_color}' href='{$link}'>{$row['fullname']}</a></td>
                             <td>{$row['phone_number']}</td>
                             <td>{$row['work']}</td>
                             <td>{$row['downpayment']}</td>

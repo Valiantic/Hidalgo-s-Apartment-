@@ -36,12 +36,15 @@ while ($row = $tenant_result->fetch_assoc()) {
 }
 
 // Fetch appointment data
-$appointment_query = "SELECT tenant_id, units, appointment_status FROM appointments WHERE appointment_status = 'pending'";
+$appointment_query = "SELECT tenant_id, units, appointment_status FROM appointments WHERE appointment_status IN ('pending', 'confirmed')";
 $appointment_result = $conn->query($appointment_query);
 
 $appointment_status = [];
 while ($row = $appointment_result->fetch_assoc()) {
-    $appointment_status[$row['units']] = $row['tenant_id'];
+    $appointment_status[$row['units']] = [
+        'tenant_id' => $row['tenant_id'],
+        'status' => $row['appointment_status']
+    ];
 }
 ?>
 <!DOCTYPE html>
@@ -389,7 +392,11 @@ while ($row = $appointment_result->fetch_assoc()) {
                                 <div class='d-flex justify-content-center'>";
                                     
                                     if ($appointment) {
-                                        echo "<a href='appointment-overview.php?tenant_id=$appointment' class='btn btn-warning text-white w-100 custom-btn-font mt-2'>Pending Appointment</a>";
+                                        if ($appointment['status'] === 'pending') {
+                                            echo "<a href='appointment-overview.php?tenant_id={$appointment['tenant_id']}' class='btn btn-warning text-white w-100 custom-btn-font mt-2'>Pending Appointment</a>";
+                                        } elseif ($appointment['status'] === 'confirmed') {
+                                            echo "<a href='appointment-overview.php?tenant_id={$appointment['tenant_id']}' class='btn btn-success w-100 custom-btn-font mt-2'>Confirmed Appointment</a>";
+                                        }
                                     } 
                                     // Displays if there is no tenant in the unit
                                     elseif (!$tenant_info) {
