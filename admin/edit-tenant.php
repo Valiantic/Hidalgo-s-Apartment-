@@ -8,8 +8,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 include "../connections.php";
 
+// Fetch occupied units
 $query = "SELECT units FROM tenant";
 $result = $conn->query($query);
+
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
 
 $occupiedUnits = [];
 if ($result->num_rows > 0) {
@@ -17,6 +22,22 @@ if ($result->num_rows > 0) {
         $occupiedUnits[] = $row['units'];
     }
 }
+
+// Fetch units with pending appointments
+$pendingQuery = "SELECT units FROM appointments WHERE appointment_status = 'pending'";
+$pendingResult = $conn->query($pendingQuery);
+
+if ($pendingResult === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+$pendingUnits = [];
+if ($pendingResult->num_rows > 0) {
+    while ($row = $pendingResult->fetch_assoc()) {
+        $pendingUnits[] = $row['units'];
+    }
+}
+
 $current_page = basename($_SERVER['PHP_SELF']); 
 
 if (isset($_GET['tenant_id'])) {
@@ -62,7 +83,7 @@ if (isset($_GET['tenant_id'])) {
      <!-- GOOGLE FONTS POPPINS  -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
 
 
@@ -469,23 +490,28 @@ if (isset($_GET['tenant_id'])) {
                 <div class="d-flex flex-wrap gap-3">
                     <?php
                     $allUnits = ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'];
+                    $disableUpdate = false;
                     foreach ($allUnits as $unit) {
-                        // Determine if the unit is occupied and not the tenant's current unit
+                        // Determine if the unit is occupied or has a pending appointment and not the tenant's current unit
                         $isOccupied = in_array($unit, $occupiedUnits) && $unit !== $currentUnit;
+                        $hasPending = in_array($unit, $pendingUnits);
 
                         // Determine if the unit should be preselected
                         $isSelected = $unit === $currentUnit;
 
+                        if ($isSelected && $hasPending) {
+                            $disableUpdate = true;
+                        }
+
                         echo '<div class="form-check">';
                         echo '<input class="form-check-input" type="radio" name="units" value="' . $unit . '"'
-                            . ($isSelected ? ' checked' : '') // Preselect if it matches the tenant's current unit
-                            . ($isOccupied ? ' disabled' : '') . '>'; // Disable if it's occupied and not the current unit
-                        echo '<label class="form-check-label' . ($isOccupied ? ' text-muted' : '') . '">' . $unit . '</label>';
+                            . ($isSelected ? ' checked' : '') . '>'; // Preselect if it matches the tenant's current unit
+                        echo '<label class="form-check-label' . ($isOccupied || $hasPending ? ' text-muted' : '') . '">' . $unit . '</label>';
                         echo '</div>';
                     }
                     ?>
                 </div>
-                <sub>* Unit radio buttons are unclickable if occupied</sub>
+                <sub>* Unit radio buttons are unclickable if occupied or has a pending appointment</sub>
             </div>
 
 
@@ -506,7 +532,10 @@ if (isset($_GET['tenant_id'])) {
 
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-ocean w-100">Update</button>
+                <button type="submit" class="btn btn-ocean w-100" <?php echo $disableUpdate ? 'disabled' : ''; ?>>Update</button>
+                <?php if ($disableUpdate) { ?>
+                    <p class="text-danger text-center">* Pending appointment</p>
+                <?php } ?>
             </form>
         </div>
     </div>

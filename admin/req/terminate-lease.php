@@ -81,6 +81,12 @@ try {
     $delete_tenant_stmt->execute();
     $delete_tenant_stmt->close();
 
+    // Delete from appointment table
+    $delete_appointment_stmt = $conn->prepare("DELETE FROM appointments WHERE tenant_id = ?");
+    $delete_appointment_stmt->bind_param("i", $tenant_id);
+    $delete_appointment_stmt->execute();
+    $delete_appointment_stmt->close();
+
     // Delete from users table if user_id exists
     if ($tenant['user_id']) {
         $delete_user_stmt = $conn->prepare("DELETE FROM users WHERE id = ?");

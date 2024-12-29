@@ -40,6 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user_stmt->bind_param("sssi", $fullname, $phone_number, $work, $tenant_id);
         $user_stmt->execute();
 
+        // Update transaction_info table if there is data in advance, electricity, and water
+        if ($advance > 0 || $electricity > 0 || $water > 0) {
+            $monthly_rent_status = $advance > 0 ? 'Paid' : 'Not Paid';
+            $electricity_status = $electricity > 0 ? 'Paid' : 'Not Paid';
+            $water_status = $water > 0 ? 'Paid' : 'Not Paid';
+
+            $transaction_query = "REPLACE INTO transaction_info (tenant_id, unit, monthly_rent_status, electricity_status, water_status) 
+                                  VALUES (?, ?, ?, ?, ?)";
+            $transaction_stmt = $conn->prepare($transaction_query);
+            $transaction_stmt->bind_param("iisss", $tenant_id, $unit, $monthly_rent_status, $electricity_status, $water_status);
+            $transaction_stmt->execute();
+        }
+
         $conn->commit();
 
         header("Location: ../tenants.php?success=Record updated successfully!");

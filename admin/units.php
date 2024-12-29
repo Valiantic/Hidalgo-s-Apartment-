@@ -25,6 +25,24 @@ $maintenance_status = [];
 while ($row = $maintenance_result->fetch_assoc()) {
     $maintenance_status[$row['unit']] = $row['status'];
 }
+
+// Fetch all column data in the tenant table
+$tenant_query = "SELECT tenant_id, units, fullname, phone_number, work, downpayment, advance, electricity, water, move_in_date FROM tenant";
+$tenant_result = $conn->query($tenant_query);
+
+$tenant_details = [];
+while ($row = $tenant_result->fetch_assoc()) {
+    $tenant_details[$row['units']] = $row;
+}
+
+// Fetch appointment data
+$appointment_query = "SELECT tenant_id, units, appointment_status FROM appointments WHERE appointment_status = 'pending'";
+$appointment_result = $conn->query($appointment_query);
+
+$appointment_status = [];
+while ($row = $appointment_result->fetch_assoc()) {
+    $appointment_status[$row['units']] = $row['tenant_id'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -328,6 +346,12 @@ while ($row = $maintenance_result->fetch_assoc()) {
                 for ($i = 1; $i <= 5; $i++) {
                     $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
                     $maintenance = isset($maintenance_status["Unit $i"]) ? $maintenance_status["Unit $i"] : 'No Issues';
+                    $tenant_info = isset($tenant_details["Unit $i"]) ? $tenant_details["Unit $i"] : null;
+                    $move_in_date = $tenant_info['move_in_date'] ?? null;
+                    $fullname = $tenant_info['fullname'] ?? null;
+                    $phone_number = $tenant_info['phone_number'] ?? null;
+                    $work = $tenant_info['work'] ?? null;
+                    $appointment = isset($appointment_status["Unit $i"]) ? $appointment_status["Unit $i"] : null;
                     
                     switch ($maintenance) {
                         case 'Pending':
@@ -362,9 +386,23 @@ while ($row = $maintenance_result->fetch_assoc()) {
                                         <p class='card-text text-center'>$status</p>
                                     </div>
                                 </div>
-                                <div class='d-flex justify-content-center'>
-                                    <a href='tenant-information.php?unit=$i' class='btn btn-ocean w-100 custom-btn-font'>Info</a>
-                                </div>
+                                <div class='d-flex justify-content-center'>";
+                                    
+                                    if ($appointment) {
+                                        echo "<a href='appointment-overview.php?tenant_id=$appointment' class='btn btn-warning text-white w-100 custom-btn-font mt-2'>Pending Appointment</a>";
+                                    } 
+                                    // Displays if there is no tenant in the unit
+                                    elseif (!$tenant_info) {
+                                        echo "<a href='tenant-information.php?unit=$i' class='btn btn-warning text-white w-100 custom-btn-font mt-2'>Info</a>";
+                                    } 
+                                    // Displays if the unit is owned by a tenant but not yet moved in and no contract
+                                    elseif (!$move_in_date) {
+                                        echo "<a href='tenant-information.php?unit=$i' class='btn btn-danger w-100 custom-btn-font mt-2'>New Tenant</a>";
+                                    } else {
+                                        echo "<a href='tenant-information.php?unit=$i' class='btn btn-ocean w-100 custom-btn-font'>View</a>";
+                                    }
+                                    
+                    echo "      </div>
                             </div>
                         </div>
                     </div>";

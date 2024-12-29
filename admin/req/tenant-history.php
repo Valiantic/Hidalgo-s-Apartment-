@@ -68,7 +68,12 @@ if (isset($_GET['tenant_id'])) {
             $delete_tenant_stmt->bind_param("i", $tenant_id);
             $delete_tenant_stmt->execute();
             
-            // 5. Finally, delete from users
+            // 5. Delete from appointment
+            $delete_appointment_stmt = $conn->prepare("DELETE FROM appointments WHERE tenant_id = ?");
+            $delete_appointment_stmt->bind_param("i", $tenant_id);
+            $delete_appointment_stmt->execute();
+            
+            // 6. Finally, delete from users
             if ($tenant['user_id']) {
                 $delete_user_stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
                 $delete_user_stmt->bind_param("i", $tenant['user_id']);
@@ -94,6 +99,7 @@ if (isset($_GET['tenant_id'])) {
         if (isset($delete_transaction_stmt)) $delete_transaction_stmt->close();
         if (isset($delete_message_stmt)) $delete_message_stmt->close();
         if (isset($delete_tenant_stmt)) $delete_tenant_stmt->close();
+        if (isset($delete_appointment_stmt)) $delete_appointment_stmt->close();
         if (isset($delete_user_stmt)) $delete_user_stmt->close();
         $conn->close();
     }

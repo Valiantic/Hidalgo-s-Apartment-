@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$user['id']]);
             $tenant = $stmt->fetch();
 
-            
             if ($tenant) {
                 $_SESSION['tenant_id'] = $tenant['tenant_id'];
                 $_SESSION['move_in_date'] = date('m/d/Y', strtotime($tenant['move_in_date']));
@@ -33,13 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: ../../tenant/home.php');
             exit;
         } elseif ($user['role'] == 'admin') {
-            // For admin, fetch and set the tenant_id for administrative purposes
-            $stmt = $pdo->prepare("SELECT tenant_id FROM tenant LIMIT 1"); // Adjust query as needed
+            // For admin, fetch and set the tenant_id and unit for administrative purposes
+            $stmt = $pdo->prepare("SELECT tenant_id, units FROM tenant LIMIT 1"); // Adjust query as needed
             $stmt->execute();
             $adminTenant = $stmt->fetch();
 
             if ($adminTenant) {
                 $_SESSION['tenant_id'] = $adminTenant['tenant_id'];
+                $_SESSION['unit'] = $adminTenant['units'];
             }
 
             header('Location: ../../admin/dashboard.php');

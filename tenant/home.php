@@ -466,7 +466,7 @@ $pending_appointment = $appointment_stmt->fetch();
                     <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-ocean btn-lg">View Contract</a>
                 <?php else: ?>
                     <?php if ($pending_appointment): ?>
-                        <h6>Your Appointment Request is now pending to the Admin, We will notify you later for confirmation.</h6>
+                        <h6>Your <strong class="text-danger">Appointment Request</strong> is now pending to the Admin, We will notify you later for confirmation.</h6>
                         <button class="btn btn-primary btn-lg text-white fs-6">Pending Appointment ...</button>
                         <button class="btn btn-warning btn-lg text-white fs-6" id="pending-appointment-btn">Cancel Appointment</button>
                     <?php else: ?>
