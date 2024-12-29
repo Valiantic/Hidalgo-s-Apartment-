@@ -516,11 +516,6 @@ if (isset($_GET['tenant_id'])) {
 
 
 
-                 <!-- Calendar for Move-in Date -->
-                <div class="form-group mb-3">
-                    <label for="move_in_date" class="form-label">Move-in Date:</label>
-                    <input type="date" class="form-control" id="move_in_date" name="move_in_date" value="<?php echo htmlspecialchars($tenant['move_in_date']); ?>" required>
-                </div>
 
                     <!-- ERROR AND SUCCESS HANDLING -->
                     <?php if (isset($_GET['error'])) { ?>
@@ -536,6 +531,25 @@ if (isset($_GET['tenant_id'])) {
                 <?php if ($disableUpdate) { ?>
                     <p class="text-danger text-center">* Pending appointment</p>
                 <?php } ?>
+            </form>
+
+            <!-- Separate form for updating move-in date -->
+            <form class="shadow p-4  mb-3 bg-light rounded" method="post" action="req/edit-move-date.php" style="max-width: 600px; width: 100%;">
+                <hr>
+                <h3 class="text-center">Update Move-in Date</h3>
+                <hr>
+
+                <!-- Tenant ID To Pass -->
+                <input type="hidden" name="tenant_id" value="<?php echo htmlspecialchars($tenant_id); ?>">
+
+                <!-- Calendar for Move-in Date -->
+                <div class="form-group mb-3">
+                    <label for="move_in_date" class="form-label">Move-in Date:</label>
+                    <input type="date" class="form-control" id="move_in_date" name="move_in_date" value="<?php echo htmlspecialchars($tenant['move_in_date']); ?>" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-ocean w-100">Update Move-in Date</button>
             </form>
         </div>
     </div>

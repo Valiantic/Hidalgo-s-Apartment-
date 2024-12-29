@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_transaction'
             $conn->commit();
             
             $success_message = 'Transaction completed successfully!';
-            header("Location: tenants.php"); // Redirect to tenants page since appointment is deleted
+            header("Location: tenants.php?success=Transaction Complete! New Tenant Added"); // Redirect to tenants page since appointment is deleted
             exit;
         } else {
             throw new Exception('Unit information is missing.');
@@ -326,6 +326,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_transaction'
                 font-size: 0.9rem;
             }
         }
+
+        /* Add these new styles */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-buttons > * {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn-confirm, .btn-back, form {
+            margin: 0 !important;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-buttons > * {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -372,7 +398,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_transaction'
                     </div>
                 </div>
                 <div class="col-12 col-md-4 text-md-end">
-                    <span class="status-badge <?php echo ($appointment_info['appointment_status'] === 'confirmed') ? 'bg-success text-white' : 'bg-warning text-dark'; ?>">
+                    <span class="status-badge <?php echo ($appointment_info['appointment_status'] === 'confirmed') ? 'bg-success text-white' : 'bg-warning text-white'; ?>">
                         <?php echo htmlspecialchars($appointment_info['appointment_status']); ?>
                     </span>
                 </div>
@@ -424,22 +450,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_transaction'
             </div>
         </div>
 
-        <div class="mt-4 d-flex flex-column flex-md-row gap-3">
+        <!-- Replace the button group div with this -->
+        <div class="mt-4 action-buttons">
             <a href="tenants.php" class="btn btn-secondary btn-back">
                 <i class="bi bi-arrow-left me-2"></i>Back to Tenants
             </a>
             <?php if ($appointment_info['appointment_status'] === 'pending'): ?>
-                <form method="POST" style="display: inline-block; width: 100%;" id="confirmForm">
-                    <button type="submit" name="confirm_appointment" class="btn btn-success btn-confirm w-100">
+                <form method="POST" id="confirmForm">
+                    <button type="submit" name="confirm_appointment" class="btn btn-success btn-confirm">
                         <i class="bi bi-check-lg me-2"></i>Confirm Appointment
                     </button>
                 </form>
             <?php elseif ($appointment_info['appointment_status'] === 'confirmed'): ?>
-                <button type="button" class="btn btn-primary btn-confirm w-100" data-bs-toggle="modal" data-bs-target="#completeTransactionModal">
+                <button type="button" class="btn btn-primary btn-confirm" data-bs-toggle="modal" data-bs-target="#completeTransactionModal">
                     <i class="bi bi-check-circle me-2"></i>Complete Transaction
                 </button>
             <?php endif; ?>
+            <button type="button" class="btn btn-danger btn-confirm delete-appointment" data-tenant-id="<?php echo htmlspecialchars($tenant_id); ?>">
+                <i class="bi bi-trash me-2"></i>Delete Appointment
+            </button>
         </div>
+
+        <!-- Add this script before the closing body tag -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelector('.delete-appointment').addEventListener('click', function() {
+                    const tenantId = this.getAttribute('data-tenant-id');
+                    
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This will delete the appointment permanently!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `req/delete-appointment.php?tenant_id=${tenantId}`;
+                        }
+                    });
+                });
+            });
+        </script>
     </div>
 
     <!-- Complete Transaction Modal -->
@@ -502,6 +555,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_transaction'
         </div>
     </div>
 
+     <!-- SweetAlert2 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.0/sweetalert2.all.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

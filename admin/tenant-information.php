@@ -70,10 +70,11 @@ function getUnitImage($unitNumber, $status) {
 
 $img_src = getUnitImage($unit_number, $status);
 
-function rentButton($status, $tenant_id, $unit_number) {
+function rentButton($status, $tenant_id, $unit_number, $start_date) {
     if ($status == '<p class="fs-4 fw-bold text-center text-warning">Available</p>') {
         return ""; 
     } else {
+        $viewContractButton = $start_date !== 'N/A' ? "<a href='contract-page.php?unit=" . htmlspecialchars($unit_number) . "' class='btn btn-success custom-btn-font text-white text'>View Contract</a>" : "";
         return "
         <div class='button-group d-flex justify-content-center'>
             <form method='POST' action='update_billing_status.php' style='display: inline;'>
@@ -81,13 +82,13 @@ function rentButton($status, $tenant_id, $unit_number) {
                 <input type='hidden' name='unit' value='" . htmlspecialchars($unit_number) . "'>
                 <button type='submit' class='btn btn-ocean custom-btn-font text-white text'>Update Payments</button>
             </form>
-            <a href='contract-page.php?unit=" . htmlspecialchars($unit_number) . "' class='btn btn-success custom-btn-font text-white text'>View Contract</a>
+            $viewContractButton
             <a href='#' class='btn btn-danger custom-btn-font text-white text terminate-lease' data-tenant-id='" . htmlspecialchars($tenant_id) . "'>Terminate Lease</a>
         </div>";
     }
 }
 
-$rent = rentButton($status, $tenant_id, $unit_number);
+$rent = rentButton($status, $tenant_id, $unit_number, $start_date);
 
 
 $stmt = $pdo->prepare("SELECT monthly_rent_status, electricity_status, water_status 
