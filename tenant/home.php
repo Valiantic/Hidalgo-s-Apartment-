@@ -103,6 +103,15 @@ $appointment_stmt = $pdo->prepare($appointment_query);
 $appointment_stmt->execute([$tenant_id]);
 $pending_appointment = $appointment_stmt->fetch();
 
+// Check if the tenant has a confirmed appointment
+$confirmed_appointment_query = "SELECT * FROM appointments WHERE tenant_id = ? AND appointment_status = 'confirmed'";
+$confirmed_appointment_stmt = $pdo->prepare($confirmed_appointment_query);
+$confirmed_appointment_stmt->execute([$tenant_id]);
+$confirmed_appointment = $confirmed_appointment_stmt->fetch();
+
+// Check if the tenant has paid the monthly rent, electricity, and water bills
+$billing_paid = $billing_info && $billing_info['monthly_rent_status'] === 'Paid' && $billing_info['electricity_status'] === 'Paid' && $billing_info['water_status'] === 'Paid';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -421,15 +430,15 @@ $pending_appointment = $appointment_stmt->fetch();
             <div class="card text-left text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Your Billings</div>
             <div class="card-body">
-                <!-- YOUR BILLINGS DISPLAY IF THE TENANT IS OLD  -->
-                <?php if ($start_date !== 'N/A'): ?>
+                <!-- YOUR BILLINGS DISPLAY IF THE TENANT HAS PAID ALL BILLS -->
+                <?php if ($billing_paid): ?>
                     <label>Monthly Rent <span style="color: blue;">₱<?php echo htmlspecialchars($monthly_rent); ?></span></label>
-                    <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['monthly_rent_status']) : displayStatus(null); ?></p>
+                    <p class="card-text"><?php echo displayStatus($billing_info['monthly_rent_status']); ?></p>
                     <label>Electricity Bill</label>
-                    <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['electricity_status']) : displayStatus(null); ?></p>
+                    <p class="card-text"><?php echo displayStatus($billing_info['electricity_status']); ?></p>
                     <label>Water Bill</label>
-                    <p class="card-text"><?php echo $billing_info ? displayStatus($billing_info['water_status']) : displayStatus(null); ?></p>
-                <!-- YOUR BILLINGS DISPLAY IF THE TENANT IS NEW  -->
+                    <p class="card-text"><?php echo displayStatus($billing_info['water_status']); ?></p>
+                <!-- YOUR BILLINGS DISPLAY IF THE TENANT HAS NOT PAID ALL BILLS -->
                 <?php else: ?>
                     <label>Downpayment <span style="color: blue;">₱<?php echo $unit_number <= 2 ? '3500' : '6500'; ?></span></label>
                     <p class="card-text"><span style="color: gray;">●</span> Not Paid</p>
@@ -446,7 +455,11 @@ $pending_appointment = $appointment_stmt->fetch();
             <div class="card text-left text-dark shadow bg-light mb-3 p-3" style="max-width: 18rem;">
             <div class="card-title fs-4 text-center">Actions</div>
             <div class="card-body d-flex flex-column gap-2">
-                <?php if ($start_date !== 'N/A'): ?>
+                <?php if ($billing_paid && $start_date === 'N/A'): ?>
+                    <h6>Your payment has been received. you now rent <strong class="text-primary">Unit <?php echo $unit_number; ?>!</strong></h6>
+                    <h6>Please wait for the contract it will soon generate once you moved in to the unit!</h6>
+                    <button class="btn btn-success btn-lg text-white fs-6">Transaction Complete!</button>
+                <?php elseif ($start_date !== 'N/A'): ?>
                     <?php if ($maintenance_status): ?>
                         <div class="alert alert-info text-center">
                             Maintenance Status: <span style="color: <?php echo $maintenance_color; ?>;">●</span> <?php echo $maintenance_text; ?>
@@ -465,7 +478,11 @@ $pending_appointment = $appointment_stmt->fetch();
                     <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
                     <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-ocean btn-lg">View Contract</a>
                 <?php else: ?>
-                    <?php if ($pending_appointment): ?>
+                    <?php if ($confirmed_appointment): ?>
+                        <h6>Your <strong class="text-success">Appointment Request</strong> has been confirmed by the Admin.</h6>
+                        <h6>You can now go to the compound for transaction deposit located at <strong class="text-primary">Alunos Subdivision, Barangay Sto. Domingo in Biñan City.</strong></h6>
+                        <a href="https://www.google.com/maps/place/Bi%C3%B1an,+Laguna/@14.3377245,121.0812316,646m/data=!3m1!1e3!4m15!1m8!3m7!1s0x3397d9e2cd1290f7:0xddb7903b387fc1b5!2zQmnDsWFuLCBMYWd1bmE!3b1!8m2!3d14.3377788!4d121.0812494!16s%2Fg%2F11g5_vj73m!3m5!1s0x3397d9e2cd1290f7:0xddb7903b387fc1b5!8m2!3d14.3377788!4d121.0812494!16s%2Fg%2F11g5_vj73m?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-success btn-lg text-white fs-6">Show me the way</a>
+                    <?php elseif ($pending_appointment): ?>
                         <h6>Your <strong class="text-danger">Appointment Request</strong> is now pending to the Admin, We will notify you later for confirmation.</h6>
                         <button class="btn btn-primary btn-lg text-white fs-6">Pending Appointment ...</button>
                         <button class="btn btn-warning btn-lg text-white fs-6" id="pending-appointment-btn">Cancel Appointment</button>
