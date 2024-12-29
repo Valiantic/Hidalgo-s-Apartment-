@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Insert the new tenant into tenant table
                 $stmt = $pdo->prepare("INSERT INTO tenant (user_id, fullname, phone_number, work, units) VALUES (?, ?, ?, ?, ?)");
                 $stmt->execute([$user_id, $fullname, $phone_number, $work, "Unit $unit"]);
+                $tenant_id = $pdo->lastInsertId();
 
                 // Commit transaction
                 $pdo->commit();
@@ -57,8 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['fullname'] = $fullname;
                 $_SESSION['phone_number'] = $phone_number;
                 $_SESSION['email'] = $email;
-
-
+                $_SESSION['tenant_id'] = $tenant_id;
 
                 // Redirect to the tenant home page
                 header('Location: ../../tenant/home.php');

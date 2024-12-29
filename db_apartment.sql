@@ -126,3 +126,18 @@ ADD CONSTRAINT messages_ibfk_2
 FOREIGN KEY (receiver_id) 
 REFERENCES users(id) 
 ON DELETE CASCADE;
+
+-- APPOINTMENTS
+CREATE TABLE appointments (
+    appointment_id INT PRIMARY KEY AUTO_INCREMENT,
+    tenant_id INT NOT NULL,
+    units VARCHAR(255) NOT NULL,
+    appointment_date DATETIME NOT NULL,
+    valid_id_path VARCHAR(255) NOT NULL,
+    appointment_status ENUM('pending', 'confirmed', 'cancelled', 'completed') DEFAULT 'pending',
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id),
+    INDEX idx_appointment_date (appointment_date),
+    INDEX idx_status (appointment_status),
+    INDEX idx_tenant (tenant_id)
+);

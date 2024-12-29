@@ -97,6 +97,11 @@ $latest_transaction = $transaction_result->fetch_assoc();
 $latest_transaction_date = $latest_transaction['latest_transaction_date'] ?? null;
 $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transaction_date . ' +1 month')) : 'N/A';
 
+// Check if the tenant has a pending appointment
+$appointment_query = "SELECT * FROM appointments WHERE tenant_id = ? AND appointment_status = 'pending'";
+$appointment_stmt = $pdo->prepare($appointment_query);
+$appointment_stmt->execute([$tenant_id]);
+$pending_appointment = $appointment_stmt->fetch();
 
 ?>
 <!DOCTYPE html>
@@ -118,6 +123,9 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
 
      <!-- ANIMATE ON SCROLL -->
      <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+     <!-- SweetAlert2 -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/sweetalert2.min.css" rel="stylesheet">
 
 <style>
     *{
@@ -347,13 +355,7 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
 </head>
 <body class="bg-light">
     
-    <!-- ADMIN SIDEBAR COMPONENT -->
-    <?php
-
-    // include "../components/admin_sidebar.php";
-
-    ?> 
-
+   
 <div class="menu">
     <div class="sidebar">
         <div class="logo items">
@@ -408,6 +410,7 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
                 <h5 class="card-text"><?php echo htmlspecialchars($fullname)?></h5>
                 <label>Tenant Phone number</label>
                 <h5 class="card-text"><?php echo htmlspecialchars($phone_number)?></h5>
+                <h5>Unit: <?php echo $unit_number; ?></h5>
                 <label>Move in Date</label>
                 <h5 class="card-text"><?php echo $start_date; ?></h5>
                 <label>Due Date</label>
@@ -462,9 +465,15 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
                     <a href="report-issue.php" class="btn btn-warning btn-lg text-white">Report Issue</a>
                     <a href="contract-page.php?unit=<?php echo $unit_number; ?>" class="btn btn-ocean btn-lg">View Contract</a>
                 <?php else: ?>
-                    <h6>Hello <strong><?php echo htmlspecialchars($fullname)?>!</strong> Thank you for Choosing Hidalgo's Apartment</h6>
-                    <h6>Schedule an Appointment to Rent this Unit.</h6>
-                    <a href="make-appointment.php" class="btn btn-primary btn-lg">Make Appointment</a>
+                    <?php if ($pending_appointment): ?>
+                        <h6>Your Appointment Request is now pending to the Admin, We will notify you later for confirmation.</h6>
+                        <button class="btn btn-primary btn-lg text-white fs-6">Pending Appointment ...</button>
+                        <button class="btn btn-warning btn-lg text-white fs-6" id="pending-appointment-btn">Cancel Appointment</button>
+                    <?php else: ?>
+                        <h6>Hello <strong><?php echo htmlspecialchars($fullname)?>!</strong> Thank you for Choosing Hidalgo's Apartment</h6>
+                        <h6>Schedule an Appointment to Rent this Unit.</h6>
+                        <a href="make-appointment.php?unit=<?php echo $unit_number; ?>" class="btn btn-primary btn-lg">Make Appointment</a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             </div>
@@ -474,10 +483,14 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
     </div>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>    
 
 <!-- ANIMATE ON SCROLL -->
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.0/sweetalert2.all.min.js"></script>
 
 <script>
 
@@ -502,6 +515,56 @@ $due_date = $latest_transaction_date ? date('m/d/y', strtotime($latest_transacti
     // endDate.setMonth(startDate.getMonth() + 1);
     // const formattedEndDate = endDate.toLocaleDateString('en-US');
     // document.getElementById('end-date').textContent = formattedEndDate;
+
+    // SweetAlert2 for canceling appointment
+    document.getElementById('pending-appointment-btn').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Appointment is Pending',
+            text: "Would you want to cancel your appointment?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Make an AJAX request to cancel the appointment
+                fetch('./req/cancel-appointment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tenant_id: <?php echo $tenant_id; ?> })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire(
+                            'Cancelled!',
+                            'Your appointment has been cancelled.',
+                            'success'
+                        ).then(() => {
+                            location.reload(); // Reload the page to reflect changes
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'There was an error cancelling your appointment.',
+                            'error'
+                        );
+                    }
+                })
+                .catch(error => {
+                    Swal.fire(
+                        'Error!',
+                        'There was an error cancelling your appointment.',
+                        'error'
+                    );
+                });
+            }
+        });
+    });
 </script>
 
 </body>
