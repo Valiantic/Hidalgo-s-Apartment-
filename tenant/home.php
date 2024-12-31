@@ -350,7 +350,7 @@ $billing_paid = $billing_info && $billing_info['monthly_rent_status'] === 'Paid'
     }
 
      .sidebar .active-menu {
-        background: black;
+        background-color: #4DA1A9;
         color: white;
     }
     .sidebar .active-menu a {

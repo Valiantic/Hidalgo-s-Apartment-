@@ -370,7 +370,7 @@ if ($maintenance_status) {
     }
 
      .sidebar .active-menu {
-        background: black;
+        background-color: #4DA1A9;
         color: white;
     }
     .sidebar .active-menu a {
