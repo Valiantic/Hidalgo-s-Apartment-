@@ -561,10 +561,10 @@ if ($maintenance_status) {
                             <div class="d-flex justify-content-center mb-1">
                                 <!-- ERROR AND SUCCESS HANDLING FOR TENANT INFORMATION -->
                                 <?php if (isset($_GET['info_error'])) { ?>
-                                    <b style="color: #f00;"><?= htmlspecialchars($_GET['info_error']) ?></b><br>
+                                    <small class="text-danger fw-bold text-center"><?= htmlspecialchars($_GET['info_error']) ?></small>
                                 <?php } ?>
                                 <?php if (isset($_GET['info_success'])) { ?>
-                                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['info_success']) ?></b><br>
+                                    <small class="text-success fw-bold text-center"><?= htmlspecialchars($_GET['info_success']) ?></small>
                                 <?php } ?>
                             </div>
 
@@ -601,10 +601,10 @@ if ($maintenance_status) {
                             <div class="d-flex justify-content-center mb-1">
                                 <!-- ERROR AND SUCCESS HANDLING FOR ACCOUNT SETTINGS -->
                                 <?php if (isset($_GET['account_error'])) { ?>
-                                    <b style="color: #f00;"><?= htmlspecialchars($_GET['account_error']) ?></b><br>
+                                    <small class="text-danger fw-bold text-center"><?= htmlspecialchars($_GET['account_error']) ?></small>
                                 <?php } ?>
                                 <?php if (isset($_GET['account_success'])) { ?>
-                                    <b style="color: #0f0;"><?= htmlspecialchars($_GET['account_success']) ?></b><br>
+                                    <small class="text-success fw-bold text-center"><?= htmlspecialchars($_GET['account_success']) ?></small>
                                 <?php } ?>
                             </div>
 

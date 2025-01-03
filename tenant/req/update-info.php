@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $conn->commit();
 
-        header("Location: ../settings.php?info_success=Information updated successfully!");
+        header("Location: ../settings.php?info_success=Information updated successfully! Re-login to see changes.");
     } catch (Exception $e) {
         $conn->rollback();
         die("Error updating records: " . $e->getMessage());
