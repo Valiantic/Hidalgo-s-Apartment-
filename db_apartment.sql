@@ -102,6 +102,7 @@ CREATE TABLE maintenance_request (
     FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id) ON DELETE CASCADE
 );
 
+-- MESSAGING FUNCTIONALITY
 CREATE TABLE messages (
     message_id INT(11) NOT NULL AUTO_INCREMENT,
     sender_id INT(11) NOT NULL,
@@ -112,7 +113,6 @@ CREATE TABLE messages (
     PRIMARY KEY (message_id)
 );
 
--- Create a view to combine tenant and user data
 CREATE VIEW tenant_users AS
 SELECT 
     t.tenant_id,
