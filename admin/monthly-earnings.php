@@ -491,7 +491,7 @@ $conn->close();
                         Clear History
                     </button>
                     <button class="btn btn-export" onclick="exportToPDF()">
-                        Export to PDF
+                        Generate Reports
                     </button>
                 </div>
             </div>

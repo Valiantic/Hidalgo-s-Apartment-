@@ -59,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['phone_number'] = $phone_number;
                 $_SESSION['email'] = $email;
                 $_SESSION['tenant_id'] = $tenant_id;
+                $_SESSION['move_in_date'] = date('m/d/Y');
+                $_SESSION['unitS'] = "Unit $unit";
 
                 // Redirect to the tenant home page
                 header('Location: ../../tenant/home.php');

@@ -103,29 +103,28 @@ CREATE TABLE maintenance_request (
 );
 
 CREATE TABLE messages (
-    message_id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL,  -- User sending the message
-    receiver_id INT NOT NULL,  -- User receiving the message
-    message TEXT NOT NULL,  -- Message content
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp when message is sent
-    FOREIGN KEY (sender_id) REFERENCES users(id),
-    FOREIGN KEY (receiver_id) REFERENCES users(id)
+    message_id INT(11) NOT NULL AUTO_INCREMENT,
+    sender_id INT(11) NOT NULL,
+    receiver_id INT(11) NOT NULL,
+    message_text TEXT COLLATE utf8mb4_general_ci NOT NULL,
+    timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY (message_id)
 );
 
--- IN CASE MESSAGE TABLE FAILS 
-ALTER TABLE messages 
-DROP FOREIGN KEY messages_ibfk_1,
-ADD CONSTRAINT messages_ibfk_1 
-FOREIGN KEY (sender_id) 
-REFERENCES users(id) 
-ON DELETE CASCADE;
+-- Create a view to combine tenant and user data
+CREATE VIEW tenant_users AS
+SELECT 
+    t.tenant_id,
+    t.fullname,
+    t.phone_number,
+    t.units,
+    u.id as user_id,
+    u.email,
+    u.role
+FROM tenant t
+JOIN users u ON t.fullname = u.fullname AND t.phone_number = u.phone_number;
 
-ALTER TABLE messages 
-DROP FOREIGN KEY messages_ibfk_2,
-ADD CONSTRAINT messages_ibfk_2 
-FOREIGN KEY (receiver_id) 
-REFERENCES users(id) 
-ON DELETE CASCADE;
 
 -- APPOINTMENTS
 CREATE TABLE appointments (
