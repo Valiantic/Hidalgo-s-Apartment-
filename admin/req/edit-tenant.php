@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $electricity = htmlspecialchars(trim($_POST['electricity']));
     $water = htmlspecialchars(trim($_POST['water']));
     $unit = htmlspecialchars(trim($_POST['units']));
+    $residents = htmlspecialchars(trim($_POST['residents']));
   
 
     // Start a transaction to ensure atomicity
@@ -26,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         // Update tenant table
         $tenant_query = "UPDATE tenant 
-                         SET fullname = ?, phone_number = ?, work = ?, downpayment = ?, advance = ?, electricity = ?, water = ?, units = ?
+                         SET fullname = ?, phone_number = ?, work = ?, downpayment = ?, advance = ?, electricity = ?, water = ?, units = ?, residents = ?
                          WHERE tenant_id = ?";
         $tenant_stmt = $conn->prepare($tenant_query);
-        $tenant_stmt->bind_param("ssssssssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $unit, $tenant_id);
+        $tenant_stmt->bind_param("sssssssssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $unit, $residents, $tenant_id);
         $tenant_stmt->execute();
 
         // Update users table

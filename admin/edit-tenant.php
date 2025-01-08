@@ -43,7 +43,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 if (isset($_GET['tenant_id'])) {
     $tenant_id = $_GET['tenant_id'];
 
-    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date FROM tenant WHERE tenant_id = ?");
+    $stmt = $conn->prepare("SELECT fullname, phone_number, work, downpayment, advance, electricity, water, units, residents, move_in_date FROM tenant WHERE tenant_id = ?");
     $stmt->bind_param("i", $tenant_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -514,6 +514,12 @@ if (isset($_GET['tenant_id'])) {
                 <sub>* Unit radio buttons are unclickable if occupied or has a pending appointment</sub>
             </div>
 
+
+               <!-- Number of Residents -->
+               <div class="mb-3">
+                    <label class="form-label">Number of Residents</label>
+                    <input type="number" class="form-control" id="residents" name="residents" value="<?php echo htmlspecialchars($tenant['residents']); ?>" min="0" required>
+                </div>
 
 
 
