@@ -237,6 +237,10 @@ $selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
                     <i class='bx bx-current-location' ></i>
                 </div>        
                 <div class="input-box">
+                    <input type="number" name="residents" placeholder="Number of Residents" required>
+                    <i class='bx bx-child' ></i> 
+                </div> 
+                <div class="input-box">
                     <input type="email" name="email" placeholder="Email" required>
                     <i class='bx bxs-envelope' ></i>
                 </div>   

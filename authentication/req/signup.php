@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
         $unit = $_POST['unit'];
+        $resident = $_POST['residents'];
 
         // Fixed Signup Wrong Password Requirement Redirect Base 
         $redirect_base = "../signup.php?unit=" . urlencode($unit);
@@ -57,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $user_id = $pdo->lastInsertId();
 
                 // Insert the new tenant into tenant table
-                $stmt = $pdo->prepare("INSERT INTO tenant (user_id, fullname, phone_number, work, units) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$user_id, $fullname, $phone_number, $work, "Unit $unit"]);
+                $stmt = $pdo->prepare("INSERT INTO tenant (user_id, fullname, phone_number, work, units, residents) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$user_id, $fullname, $phone_number, $work, "Unit $unit", $resident]);
                 $tenant_id = $pdo->lastInsertId();
 
                 // Commit transaction
@@ -72,8 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['email'] = $email;
                 $_SESSION['tenant_id'] = $tenant_id;
                 $_SESSION['move_in_date'] = date('m/d/Y');
-                $_SESSION['unitS'] = "Unit $unit";
+                $_SESSION['units'] = "Unit $unit";
                 $_SESSION['rent_unit_access'] = true;
+                $_SESSION['residents'] = $resident;
 
                 // Redirect to the tenant home page
                 header('Location: ../../tenant/home.php');
