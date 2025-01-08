@@ -401,10 +401,14 @@ while ($row = $appointment_result->fetch_assoc()) {
                                     // Displays if there is no tenant in the unit
                                     elseif (!$tenant_info) {
                                         echo "<a href='tenant-information.php?unit=$i' class='btn btn-warning text-white w-100 custom-btn-font mt-2'>Info</a>";
-                                    } 
-                                    // Displays if the unit is owned by a tenant but not yet moved in and no contract
-                                    elseif (!$move_in_date) {
+                                    }
+                                    // Display New Tenant button if no downpayment, advance and move-in date
+                                    elseif (!$tenant_info['advance'] && !$move_in_date) {
                                         echo "<a href='tenant-information.php?unit=$i' class='btn btn-danger w-100 custom-btn-font mt-2'>New Tenant</a>";
+                                    }
+                                    // Displays if the unit is owned by a tenant but not yet moved in
+                                    elseif (!$move_in_date) {
+                                        echo "<a href='edit-tenant.php?tenant_id={$tenant_info['tenant_id']}' class='btn btn-danger w-100 custom-btn-font mt-2'>Set Move in Date</a>";
                                     } else {
                                         echo "<a href='tenant-information.php?unit=$i' class='btn btn-ocean w-100 custom-btn-font'>View</a>";
                                     }

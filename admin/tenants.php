@@ -447,9 +447,8 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                             $status_color = $row['appointment_status'] == 'confirmed' ? 'text-success' : 'text-warning';
                         }
                         else if ($row['appointment_status'] == '' && $row['move_in_date'] == '') {
-                            $link = "appointment.php?tenant_id={$row['tenant_id']}";
+                            $link = "edit-tenant.php?tenant_id={$row['tenant_id']}'";
                             $status_color = 'text-danger';
-
                         } else {
                             $link = "tenant-information.php?unit={$unit_number}";
                             $status_color = '';
