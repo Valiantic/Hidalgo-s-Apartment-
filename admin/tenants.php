@@ -39,6 +39,9 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
     <!-- SWEET ALERT MODAL -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- Add Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
     *{
         margin: 0;
@@ -406,7 +409,6 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
         <table class="table table-bordered table-striped table-rounded">
             <thead class="table-primary">
                 <tr>
-                    <th class="text-center">Tenant_ID</th>
                     <th class="text-center">Full Name</th>
                     <th class="text-center">Phone Number</th>
                     <th class="text-center">Work</th>
@@ -442,22 +444,35 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                         $unit_number = str_replace('Unit ', '', $row['units']);
                         $formatted_move_in_date = $row['move_in_date'] ? date('m/d/Y', strtotime($row['move_in_date'])) : 'N/A';
 
-                        // Determine link and status color
-                        if ($row['appointment_status'] == 'pending' || $row['appointment_status'] == 'confirmed') {
+                        
+                        if ($row['appointment_status'] == 'confirmed') {
                             $link = "appointment-overview.php?tenant_id={$row['tenant_id']}";
-                            $status_color = $row['appointment_status'] == 'confirmed' ? 'text-success' : 'text-warning';
+                            $status_color = 'text-success';
+                            $new_tenant_icon = '<i class="bi bi-calendar-check-fill ms-1"></i>';
                         }
+                        else if ($row['appointment_status'] == 'pending') {
+                            $link = "appointment-overview.php?tenant_id={$row['tenant_id']}";
+                            $status_color = 'text-warning';
+                            $new_tenant_icon = '<i class="bi bi-calendar-date ms-1"></i>';
+                        }
+                        else if (empty($row['advance']) && empty($row['move_in_date'])) {
+                            $link = "tenant-information.php?unit={$unit_number}";
+                            $status_color = 'text-danger';
+                            $new_tenant_icon = '<i class="bi bi-person-fill ms-1"></i>';
+                        } 
                         else if ($row['appointment_status'] == '' && $row['move_in_date'] == '') {
                             $link = "edit-tenant.php?tenant_id={$row['tenant_id']}'";
-                            $status_color = 'text-danger';
-                        } else {
+                            $status_color = 'text-info';
+                            $new_tenant_icon = '<i class="bi bi-arrow-right-circle-fill ms-1"></i>';
+                        }
+                        else {
                             $link = "tenant-information.php?unit={$unit_number}";
-                            $status_color = '';
+                            $status_color = 'text-primary';
+                            $new_tenant_icon = '';
                         }
 
                         echo "<tr>
-                            <td>{$row['tenant_id']}</td>
-                            <td><a class='text-primary tenant-fullname {$status_color}' href='{$link}'>{$row['fullname']}</a></td>
+                            <td><a class='tenant-fullname {$status_color}' href='{$link}'>{$row['fullname']}{$new_tenant_icon}</a></td>
                             <td>{$row['phone_number']}</td>
                             <td>{$row['work']}</td>
                             <td>{$row['downpayment']}</td>

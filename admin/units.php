@@ -408,7 +408,7 @@ while ($row = $appointment_result->fetch_assoc()) {
                                     }
                                     // Displays if the unit is owned by a tenant but not yet moved in
                                     elseif (!$move_in_date) {
-                                        echo "<a href='edit-tenant.php?tenant_id={$tenant_info['tenant_id']}' class='btn btn-danger w-100 custom-btn-font mt-2'>Set Move in Date</a>";
+                                        echo "<a href='edit-tenant.php?tenant_id={$tenant_info['tenant_id']}' class='btn btn-info w-100 custom-btn-font mt-2'>Set Move in Date</a>";
                                     } else {
                                         echo "<a href='tenant-information.php?unit=$i' class='btn btn-ocean w-100 custom-btn-font'>View</a>";
                                     }
