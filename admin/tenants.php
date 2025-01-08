@@ -414,7 +414,7 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                     <th class="text-center">Advance</th>
                     <th class="text-center">Electricity</th>
                     <th class="text-center">Water</th>
-                    <th class="text-center">Unit No.</th>
+                    <th class="text-center">Unit</th>
                     <th class="text-center">Move in Date</th>
                     <th class="text-center">Actions</th>
                 </tr>

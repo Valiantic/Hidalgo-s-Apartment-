@@ -436,6 +436,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <input type="number" class="form-control" id="water" name="water" min="0" >
                 </div>
 
+
                 <!-- Units -->
                 <div class="mb-3">
                     <label class="form-label">Unit:</label>
@@ -453,6 +454,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         ?>
                     </div>
                     <sub>* Unit radio buttons are unclickable if occupied</sub>
+                </div>
+
+                <!-- Number of Residents -->
+                <div class="mb-3">
+                    <label class="form-label">Number of Residents</label>
+                    <input type="number" class="form-control" id="residents" name="residents" min="0" required>
                 </div>
 
 

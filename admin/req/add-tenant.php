@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $electricity = $_POST['electricity'];
     $water = $_POST['water'];
     $units = isset($_POST['units']) ? $_POST['units'] : '';
+    $residents = $_POST['residents'];
     $move_in_date = $_POST['move_in_date'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -62,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_id = $conn->insert_id;
 
         // Insert data into `tenant` table
-        $stmt_tenant = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, advance, electricity, water, units, move_in_date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt_tenant->bind_param("sssddddssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $units, $move_in_date, $user_id);
+        $stmt_tenant = $conn->prepare("INSERT INTO tenant (fullname, phone_number, work, downpayment, advance, electricity, water, units, residents, move_in_date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt_tenant->bind_param("sssddddsssi", $fullname, $phone_number, $work, $downpayment, $advance, $electricity, $water, $units, $residents, $move_in_date, $user_id);
         $stmt_tenant->execute();
 
         // Get the newly inserted tenant ID
@@ -116,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 });
 
                 setTimeout(() => {
-                    window.location.href = '../add-tenant.php';
+                    window.location.href = '../tenants.php?success=New Tenant Added!';
                 }, 2500);
             </script>";
         } catch (Exception $e) {

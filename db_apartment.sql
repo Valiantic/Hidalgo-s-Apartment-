@@ -36,6 +36,7 @@ CREATE TABLE tenant (
     advance DECIMAL(10, 2) NOT NULL,
     electricity DECIMAL(10, 2) NOT NULL,
     water DECIMAL(10, 2) NOT NULL,
+    residents INT(11),
     units VARCHAR(255),
     move_in_date DATE
 );
