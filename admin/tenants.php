@@ -415,6 +415,7 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                     <th class="text-center">Electricity</th>
                     <th class="text-center">Water</th>
                     <th class="text-center">Unit</th>
+                    <th class="text-center">Residents</th>
                     <th class="text-center">Move in Date</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -464,6 +465,7 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                             <td>{$row['electricity']}</td>  
                             <td>{$row['water']}</td>
                             <td>{$row['units']}</td>
+                            <td class='text-center'>{$row['residents']}</td>
                             <td>{$formatted_move_in_date}</td>
                             <td>
                                  <div class='d-flex gap-2'>
@@ -474,7 +476,7 @@ $filterUnitOrder = isset($_GET['filterUnitOrder']) ? $_GET['filterUnitOrder'] : 
                         </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='11' class='text-center'>No tenants found.</td></tr>";
+                    echo "<tr><td colspan='12' class='text-center'>No tenants found.</td></tr>";
                 }
                 ?>
             </tbody>
