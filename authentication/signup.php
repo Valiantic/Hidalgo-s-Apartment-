@@ -1,18 +1,19 @@
 <?php
 session_start();
 
-// Check if the user came from the "Rent this Unit" button
+// If coming from unit selection, set the access flag
+if (isset($_GET['unit'])) {
+    $_SESSION['rent_unit_access'] = true;
+}
+
+// Check if the user has access
 if (!isset($_SESSION['rent_unit_access'])) {
-    // Redirect to the tenant view info page
     header("Location: login.php"); 
     exit();
 }
 
 // Fetch the selected unit from the URL
 $selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
-
-// Clear the session variable after ensuring access
-unset($_SESSION['rent_unit_access']);
 
 ?>
 

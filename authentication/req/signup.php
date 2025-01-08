@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../../connections.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,12 +14,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = $_POST['password'];
         $unit = $_POST['unit'];
 
-        // Check password strength
-        if (strlen($password) <= 7) {
-            header('Location: ../signup.php?error=' . urlencode('Password must be longer than 7 characters.'));
-            exit;
-        } elseif (!preg_match('/[\W_]/', $password)) {
-            header('Location: ../signup.php?error=' . urlencode('Password must include special character.'));
+        // Fixed Signup Wrong Password Requirement Redirect Base 
+        $redirect_base = "../signup.php?unit=" . urlencode($unit);
+        $_SESSION['rent_unit_access'] = true; 
+
+        // Enhanced password validation
+        $errors = [];
+        if (strlen($password) < 8) {
+            $errors[] = 'Password must be at least 8 characters long.';
+        }
+        if (!preg_match('/[\W_]/', $password)) {
+            $errors[] = 'Password must include at least one special character.';
+        }
+        if (!preg_match('/[A-Z]/', $password)) {
+            $errors[] = 'Password must include at least one uppercase letter.';
+        }
+
+        if (!empty($errors)) {
+            header('Location: ' . $redirect_base . '&error=' . urlencode(implode(' ', $errors)));
             exit;
         }
 
@@ -31,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailExists = $checkStmt->fetchColumn();
 
         if ($emailExists > 0) {
-            // Redirect back to the form with an error message
-            header('Location: ../signup.php?error=' . urlencode('The email is already registered. Please use a different email.'));
+            // Redirect back to signup with error and preserve unit number
+            header('Location: ' . $redirect_base . '&error=' . urlencode('The email is already registered. Please use a different email.'));
             exit;
         } else {
             // Begin transaction
@@ -51,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Commit transaction
                 $pdo->commit();
 
-                session_start();
                 // Set session variables
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['role'] = 'user';
@@ -61,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['tenant_id'] = $tenant_id;
                 $_SESSION['move_in_date'] = date('m/d/Y');
                 $_SESSION['unitS'] = "Unit $unit";
+                $_SESSION['rent_unit_access'] = true;
 
                 // Redirect to the tenant home page
                 header('Location: ../../tenant/home.php');
@@ -68,13 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } catch (Exception $e) {
                 // Rollback transaction
                 $pdo->rollBack();
-                // Redirect back to the form with an error message
-                header('Location: ../signup.php?error=' . urlencode('Signup failed. Please try again.'));
+                // Redirect back with error and preserve unit number
+                header('Location: ' . $redirect_base . '&error=' . urlencode('Signup failed. Please try again.'));
                 exit;
             }
         }
     } else {
-        // Redirect back to the form with an error message for missing fields
+        $_SESSION['rent_unit_access'] = true; // Maintain access flag
         header('Location: ../signup.php?error=' . urlencode('All Fields are required.'));
         exit;
     }
