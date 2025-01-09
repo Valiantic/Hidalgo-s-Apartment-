@@ -372,9 +372,9 @@ while ($row = $appointment_result->fetch_assoc()) {
                     }
                     
                     if ($i >= 3) {
-                        $img_src = $status == 'Occupied' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent-house2.png';
+                        $img_src = $status == 'Occupied' ? '../assets/images/icons/house2.png' : '../assets/images/icons/rent_house2.png';
                     } else {
-                        $img_src = $status == 'Occupied' ? '../assets/images/icons/house1.png' : '../assets/images/icons/rent-house1.png';
+                        $img_src = $status == 'Occupied' ? '../assets/images/icons/house1.png' : '../assets/images/icons/rent_house1.png';
                     }
                     
                     echo "

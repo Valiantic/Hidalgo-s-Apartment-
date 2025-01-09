@@ -286,9 +286,9 @@ while ($row = $result->fetch_assoc()) {
                 for ($i = 1; $i <= 5; $i++) {
                     $status = isset($units_status["Unit $i"]) ? $units_status["Unit $i"] : 'Available';
                     if ($i >= 3) {
-                        $img_src = $status == 'Occupied' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
+                        $img_src = $status == 'Occupied' ? './assets/images/icons/house2.png' : './assets/images/icons/rent_house2.png';
                     } else {
-                        $img_src = $status == 'Occupied' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
+                        $img_src = $status == 'Occupied' ? './assets/images/icons/house1.png' : './assets/images/icons/rent_house1.png';
                     }
                     echo "
                     <div class='col-sm-12 col-md-6 col-lg-4 mb-3'>

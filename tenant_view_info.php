@@ -32,9 +32,9 @@ $occupancy = maxOccupancy($unit_number);
 
 function getUnitImage($unitNumber, $status) {
     if ($unitNumber >= 3) {
-        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house2.png' : './assets/images/icons/rent-house2.png';
+        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house2.png' : './assets/images/icons/rent_house2.png';
     } else {
-        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house1.png' : './assets/images/icons/rent-house1.png';
+        return $status == '<p class="fs-4 text-muted text-center">Occupied</p>' ? './assets/images/icons/house1.png' : './assets/images/icons/rent_house1.png';
     }
 }
 

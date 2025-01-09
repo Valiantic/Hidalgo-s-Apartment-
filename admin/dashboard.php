@@ -369,7 +369,7 @@ while ($row = $result->fetch_assoc()) {
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                     <div class="card shadow-lg">
-                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all_tenants.png" alt="Card image cap">
+                        <img class="card-img-top img-fluid height-img"  src="../assets/images/icons/all-tenants.png" alt="Card image cap">
                         <div class="card-body">
                             <h1 class="card-title"><?php echo $total_tenants; ?></h1>
                             <p class="card-text">All Tenants</p>
