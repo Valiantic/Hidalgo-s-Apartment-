@@ -202,6 +202,16 @@ $selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
                 font-size: 30px;
             }
         }
+
+        .password-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        .input-box.error input {
+            border: 1px solid #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -223,7 +233,7 @@ $selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
             </div>
 
             <!-- Login Form -->
-            <form action="./req/signup.php" method="POST">
+            <form id="signupForm" action="./req/signup.php" method="POST">
                 <div class="input-box">
                     <input type="text" name="fullname" placeholder="Full Name" required>
                     <i class='bx bxs-user'></i> 
@@ -247,6 +257,7 @@ $selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
                 <div class="input-box">
                     <input type="password" id="password" name="password" placeholder="Password" required>
                     <i class="toggle-password bi bi-eye-slash"></i>
+                    <div class="password-error mt-5"></div>
                 </div>    
                 <input type="hidden" name="unit" value="<?php echo htmlspecialchars($selected_unit); ?>">
 
@@ -422,6 +433,46 @@ $selected_unit = isset($_GET['unit']) ? (int)$_GET['unit'] : '';
             passwordField.setAttribute('type', type);
             this.classList.toggle('bi-eye');
             this.classList.toggle('bi-eye-slash');
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const passwordInput = document.getElementById('password');
+            const errorDiv = passwordInput.parentElement.querySelector('.password-error');
+            
+            // Password validation
+            let errors = [];
+            if (password.length < 8) {
+                errors.push('Password must be at least 8 characters long');
+            }
+            if (!/[\W_]/.test(password)) {
+                errors.push('Password must include at least one special character');
+            }
+            if (!/[A-Z]/.test(password)) {
+                errors.push('Password must include at least one uppercase letter');
+            }
+
+            // Show or clear errors
+            if (errors.length > 0) {
+                errorDiv.textContent = errors.join('. ');
+                errorDiv.style.display = 'block';
+                passwordInput.parentElement.classList.add('error');
+                passwordInput.focus();
+            } else {
+                errorDiv.style.display = 'none';
+                passwordInput.parentElement.classList.remove('error');
+                // If validation passes, submit the form
+                this.submit();
+            }
+        });
+
+        // Clear error message when user starts typing
+        document.getElementById('password').addEventListener('input', function() {
+            const errorDiv = this.parentElement.querySelector('.password-error');
+            const inputBox = this.parentElement;
+            errorDiv.style.display = 'none';
+            inputBox.classList.remove('error');
         });
     </script>
 </body>

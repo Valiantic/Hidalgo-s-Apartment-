@@ -19,23 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $redirect_base = "../signup.php?unit=" . urlencode($unit);
         $_SESSION['rent_unit_access'] = true; 
 
-        // Enhanced password validation
-        $errors = [];
-        if (strlen($password) < 8) {
-            $errors[] = 'Password must be at least 8 characters long.';
-        }
-        if (!preg_match('/[\W_]/', $password)) {
-            $errors[] = 'Password must include at least one special character.';
-        }
-        if (!preg_match('/[A-Z]/', $password)) {
-            $errors[] = 'Password must include at least one uppercase letter.';
-        }
-
-        if (!empty($errors)) {
-            header('Location: ' . $redirect_base . '&error=' . urlencode(implode(' ', $errors)));
-            exit;
-        }
-
         // Hash the password after passing validation
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
