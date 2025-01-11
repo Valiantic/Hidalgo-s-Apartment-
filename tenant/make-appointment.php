@@ -73,7 +73,7 @@
                             <p><strong>Phone number:</strong> <?php echo htmlspecialchars($tenant['phone_number']); ?></p>
                         </div>
 
-                        <form action="./req/process-appointment.php" method="POST" enctype="multipart/form-data">
+                        <form action="./req/process-appointment.php" method="POST" enctype="multipart/form-data" id="appointmentForm">
                             <input type="hidden" name="tenant_id" value="<?php echo $tenant_id; ?>">
                             <input type="hidden" name="units" value="<?php echo htmlspecialchars($tenant['units']); ?>">
                             
@@ -89,7 +89,7 @@
                                 <div class="form-text">Please upload a clear image of your valid ID</div>
                             </div>
                             
-                            <button type="submit" class="btn btn-primary">Submit Appointment</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Submit Appointment</button>
                         </form>
                     </div>
                 </div>
@@ -102,6 +102,7 @@
     <script>
         const bookedDates = <?php echo json_encode($booked_dates); ?>;
         const statusDiv = document.getElementById('appointment-status');
+        const submitBtn = document.getElementById('submitBtn');
 
         flatpickr("#appointment_date", {
             enableTime: true,
@@ -129,9 +130,13 @@
                     if (bookedDates.includes(dateStr)) {
                         statusDiv.innerHTML = '<span class="text-danger">This date is already booked. Please select another.</span>';
                         this.clear();
+                        submitBtn.disabled = true;
                     } else {
                         statusDiv.innerHTML = '<span class="text-success">Date available!</span>';
+                        submitBtn.disabled = false;
                     }
+                } else {
+                    submitBtn.disabled = true;
                 }
             },
             onOpen: function() {
@@ -144,8 +149,18 @@
                     if (endDate.getDate() !== selected.getDate()) {
                         statusDiv.innerHTML = '<span class="text-danger">Appointment duration cannot exceed 8 hours. Please select another time.</span>';
                         this.clear();
+                        submitBtn.disabled = true;
                     }
                 }
+            }
+        });
+
+        // Add form validation
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            const appointmentDate = document.getElementById('appointment_date').value;
+            if (!appointmentDate) {
+                e.preventDefault();
+                statusDiv.innerHTML = '<span class="text-danger">Please select an appointment date.</span>';
             }
         });
     </script>
