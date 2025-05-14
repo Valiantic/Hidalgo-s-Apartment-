@@ -1,19 +1,16 @@
-# Apartment Management System 
-A Final Project Client Based Requirement for System Design 
+# 🏡 Hidalgo Apartment Management System  
 
-# Tech Stack
+## 📌 Description  
+The **Hidalgo Apartment Management System** is a web-based solution designed for **Hidalgo's Apartment**, located in **Alunos Subdivision, Barangay Sto. Domingo, Biñan City**. Built using **HTML, CSS, JavaScript, PHP, MySQL, and Bootstrap**, this system streamlines tenant tracking and apartment monitoring.  
 
-HTML/CSS JAVASCRIPT PHP AND MYSQL 
+## 🚀 Features  
+- **Tenant Registration & Management** – Easily add, update, and remove tenants.  
+- **Apartment Availability Checker** – Displays available units dynamically.  
+- **Secure Admin Dashboard** – Manage all apartment operations efficiently.  
+- **Responsive UI with Bootstrap** – Ensures smooth experience across devices.  
 
-must have a XAMPP or Laragon to Run 
-
-# Steps To Run The System 
-
-1. Download this in a ZIP File or Clone it using git
-2. Open your XAMPP and run the APACHE and MYSQL server
-3. Search on your Internet Browser 
-http://localhost/Apartment_Management_System/index.php
-
-4. After that your all set! 
-
--valiantic 
+## 🔧 Installation  
+Clone the repository:  
+```sh
+git clone https://github.com/your-repo/hidalgo-apartment.git
+cd hidalgo-apartment
