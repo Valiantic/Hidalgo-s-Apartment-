@@ -1,7 +1,7 @@
 # 🏡 Hidalgo Apartment Management System  
 
 ## 📌 Description  
-The **Hidalgo Apartment Management System** is a web-based solution designed for **Hidalgo's Apartment**, located in **Alunos Subdivision, Barangay Sto. Domingo, Biñan City**. Built using **HTML, CSS, JavaScript, PHP, MySQL, and Bootstrap**, this system streamlines tenant tracking and apartment monitoring.  
+The **Hidalgo Apartment Management System** is a web-based solution designed for **Hidalgo's Apartment**, located in **Alunos Subdivision, Barangay Sto. Domingo, Biñan City**. Built using **HTML5, CSS, JavaScript, PHP, MySQL, and Bootstrap5**, this system streamlines tenant tracking and apartment monitoring.  
 
 ## 🚀 Features  
 - **Tenant Registration & Management** – Easily add, update, and remove tenants.  
